@@ -1,6 +1,8 @@
 import express from 'express';
-import { apiRouter } from './routes';
 import cors from 'cors';
+
+import { apiRouter } from './routes';
+import { client } from './models/connection'
 
 const app = express();
 
