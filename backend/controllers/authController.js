@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 
 import userModels from '../models/user';
 import { checkBody } from '../utils/checkBody';
+import jwt from '../utils/jwt';
 
 const hashPassword = async (password) => {
     try {
@@ -39,7 +40,8 @@ const login = async (req, res) => {
             return
         }
         if (hashPass == true) {
-            res.status(200).json({ 'token': 'des barres' });
+            const jwtToken = jwt.createToken(user.username, user.email);
+            res.status(200).json({ 'token': jwtToken });
         } else {
             res.status(200).json({ 'error': 1, 'message': 'Bad password' });
         }
