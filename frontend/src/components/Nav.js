@@ -9,6 +9,9 @@ const Nav = () => {
             <NavLink extact to='/login'>
                 Login
             </NavLink>
+            <NavLink extact to='/register'>
+                Register
+            </NavLink>
         </nav>
     );
 }

@@ -5,3 +5,4 @@ export const authRouter = Router();
 
 authRouter.post('/login', async (req, res) => authController.login(req, res));
 authRouter.post('/register', async (req, res) => authController.register(req, res));
+authRouter.post('/check', async (req, res) => authController.check(req, res));

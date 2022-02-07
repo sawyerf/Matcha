@@ -14,7 +14,7 @@ client.query(`CREATE TABLE users (
   email varchar,
   username varchar,
   password varchar,
-  age int
+  age varchar
 );`, (err, res) => {
   if (err) {
     console.error(err);

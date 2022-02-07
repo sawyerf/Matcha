@@ -22,5 +22,6 @@ const checkToken = (token) => {
 }
 
 export default {
-    createToken
+    createToken,
+    checkToken
 };

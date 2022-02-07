@@ -41,6 +41,7 @@ const login = async (req, res) => {
         }
         if (hashPass == true) {
             const jwtToken = jwt.createToken(user.username, user.email);
+            res.cookie('token', jwtToken)
             res.status(200).json({ 'token': jwtToken });
         } else {
             res.status(200).json({ 'error': 1, 'message': 'Bad password' });
@@ -51,10 +52,10 @@ const login = async (req, res) => {
 const register = async (req, res) => {
     console.log('req : ', req.body);
     const isCheck = checkBody({
-        "email": "string",
+        "email": "email",
         "username": "string",
-        "password": "string",
-        "age": 'number'
+        "password": "password",
+        "age": 'date'
     }, req.body);
     if (isCheck == false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content'})
@@ -80,7 +81,16 @@ const register = async (req, res) => {
     }
 };
 
+const check = async (req, res) => {
+    console.log('req : ', req.body);
+    console.log('cookies: ', req.cookies);
+    const isConnect = jwt.checkToken(req.cookies.token);
+    if (isConnect == false) console.log('Bad Token');
+    res.status(200).json(isConnect);
+}
+
 export default {
     login,
     register,
+    check
 }
