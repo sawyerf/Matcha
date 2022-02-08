@@ -1,18 +1,7 @@
-import bcrypt from 'bcrypt';
-
 import userModels from '../models/user';
+import { hashPassword } from '../utils/hash';
 import { checkBody } from '../utils/checkBody';
 import jwt from '../utils/jwt';
-
-const hashPassword = async (password) => {
-    try {
-        const salt = await bcrypt.genSalt(10);
-        return await bcrypt.hash(password, salt);
-    } catch (error) {
-        console.log(error);
-    }
-    return null;
-}
 
 const login = async (req, res) => {
     console.log('req : ', req.body);

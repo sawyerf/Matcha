@@ -39,7 +39,7 @@ const LoginForm = () => {
     }
 
     return (
-        <Box>
+        <Box className='box-form'>
             <p> { msgError } </p>
             <TextField
                 required

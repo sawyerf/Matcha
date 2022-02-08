@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { Box, TextField, Button } from '@mui/material';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { LocalizationProvider, DatePicker } from '@mui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+
+import '../styles/index.scss'
 
 
 const RegisterForm = () => {
@@ -53,10 +55,11 @@ const RegisterForm = () => {
     }
 
     return (
-        <Box>
+        <Box className='box-form'>
             <p> { msgError } </p>
             <TextField
                 required
+                className='input-form'
                 id="outlined-input"
                 type="text"
                 label="Username"
@@ -65,22 +68,25 @@ const RegisterForm = () => {
             />
             <TextField
                 required
+                className='input-form'
                 id="outlined-input"
                 type="text"
-                label="email"
+                label="Email"
                 value={email}
                 onChange={handleChangeEmail}
             />
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <LocalizationProvider
+                className='input-form'
+                dateAdapter={AdapterDateFns}>
                 <DatePicker
-                    label="Basic example"
+                    label="Birth Date"
                     value={age}
                     onChange={handleChangeAge}
                     renderInput={(params) => <TextField {...params} />}
                 />
             </LocalizationProvider>
-
             <TextField
+                className='input-form'
                 id="outlined-password-input"
                 label="Password"
                 type="password"
@@ -88,9 +94,10 @@ const RegisterForm = () => {
                 onChange={handleChangePasswd}
             />
             <Button
+                className='input-form'
                 variant="contained"
                 onClick={handleSubmit}
-            >Login</Button>
+            >Register</Button>
         </Box>
     );
 };

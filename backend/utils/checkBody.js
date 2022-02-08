@@ -15,7 +15,7 @@ const testPassword = (password) => {
 }
 
 const testDate = (date) => {
-    const regex = /19[0-9]{2}-[0-1][0-9]-[0-3][0-9]T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}Z/;
+    const regex = /[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}Z/;
     return regex.test(date);
 }
 
@@ -24,7 +24,10 @@ export const checkBody = (check, body) => {
     for (let key in check) {
         if (!(key in body)) return false;
         type = whatType(check[key]);
-        if (type != typeof body[key]) return false;
+        if (type != typeof body[key]) {
+            console.log(key, ' : Bad type');
+            return false;
+        }
         if (check[key] == 'email') {
             if (testEmail(body[key]) == false) return false;
         } else if (check[key] == 'password') {
@@ -34,8 +37,6 @@ export const checkBody = (check, body) => {
         } else if (check[key] == 'string') {
             if (body[key] == '') return false;
         }
-
-
     }
     return true;
 }
