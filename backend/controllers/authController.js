@@ -11,30 +11,27 @@ const login = async (req, res) => {
         'password': 'string'
     }, req.body);
     if (isCheck == false) {
-        res.status(400).json({ 'error': 1, 'message': 'Bad Content'})
-        return
-    }
-
-    const user = await userModels.selectUser(req.body.username);
-    if (user == false) {
-        res.status(500);
-    } else if (user == null) {
-        res.status(200).json({ 'error': 1, 'message': 'User not found' });
+        res.status(400).json({ 'error': 1, 'message': 'Bad Content' })
     } else {
-        let hashPass;
-        try {
-            hashPass = await bcrypt.compare(req.body.password, user.password);
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ 'error': 1, 'message': 'Error hash' });
-            return
-        }
-        if (hashPass == true) {
-            const jwtToken = jwt.createToken(user.uid, user.username, user.email);
-            res.cookie('token', jwtToken)
-            res.status(200).json({ 'token': jwtToken });
+        const user = await userModels.selectUser(req.body.username);
+        if (user == false) {
+            res.status(500);
+        } else if (user == null) {
+            res.status(404).json({ 'error': 1, 'message': 'User not found' });
         } else {
-            res.status(200).json({ 'error': 1, 'message': 'Bad password' });
+            try {
+                const hashPass = await bcrypt.compare(req.body.password, user.password);
+                if (hashPass == true) {
+                    const jwtToken = jwt.createToken(user.uid, user.username, user.email);
+                    res.cookie('token', jwtToken)
+                    res.status(200).json({ 'token': jwtToken });
+                } else {
+                    res.status(200).json({ 'error': 1, 'message': 'Bad password' });
+                }
+            } catch (error) {
+                console.log(error);
+                res.status(500).json({ 'error': 1, 'message': 'Error hash' });
+            }
         }
     }
 };
@@ -48,28 +45,27 @@ const register = async (req, res) => {
         "age": 'date'
     }, req.body);
     if (isCheck == false) {
-        res.status(400).json({ 'error': 1, 'message': 'Bad Content'})
-        return
-    }
-
-    const isExist = await userModels.existUser(req.body.email, req.body.username);
-    if (isExist == true) {
-        res.status(200).json({ 'error': 1, 'message': 'Email or Username is already use' });
+        res.status(400).json({ 'error': 1, 'message': 'Bad Content' })
     } else {
-        const hashPass = await hashPassword(req.body.password);
-        if (hashPass == null) {
-            res.status(500).json({ 'error': 1, 'message': 'Error hash' });
+        const isExist = await userModels.existUser(req.body.email, req.body.username);
+        if (isExist == true) {
+            res.status(200).json({ 'error': 1, 'message': 'Email or Username is already use' });
         } else {
-            const ret = userModels.insertUser(
-                req.body.email,
-                req.body.username,
-                hashPass,
-                req.body.age
-            );
-            if (ret == true) {
-                res.status(201).json();
+            const hashPass = await hashPassword(req.body.password);
+            if (hashPass == null) {
+                res.status(500).json({ 'error': 1, 'message': 'Error hash' });
             } else {
-                res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+                const ret = await userModels.insertUser(
+                    req.body.email,
+                    req.body.username,
+                    hashPass,
+                    req.body.age
+                );
+                if (ret == true) {
+                    res.status(201).json();
+                } else {
+                    res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+                }
             }
         }
     }
