@@ -1,7 +1,7 @@
 import { client } from './connection'
 import { v4 as uuidv4 }  from 'uuid'
 
-const insertUser = async (email, username, password, age) => {
+const insert = async (email, username, password, age) => {
     let res;
     try {
         res = await client.query(
@@ -16,7 +16,7 @@ const insertUser = async (email, username, password, age) => {
     return true;
 }
 
-const selectUser = async (username) => {
+const select = async (username) => {
     let res;
     try {
         res = await client.query(
@@ -32,7 +32,7 @@ const selectUser = async (username) => {
     return res.rows[0];
 }
 
-const existUser = async (email, username) => {
+const exist = async (email, username) => {
     let res;
     try {
         res = await client.query(
@@ -41,7 +41,7 @@ const existUser = async (email, username) => {
         );
     } catch (error) {
         console.log(error);
-        return false;
+        return null;
     }
     if (res.rowCount == 0) {
         return (false);
@@ -51,7 +51,7 @@ const existUser = async (email, username) => {
 }
 
 export default {
-    insertUser,
-    selectUser,
-    existUser
+    insert,
+    select,
+    exist
 };

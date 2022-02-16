@@ -13,7 +13,7 @@ const login = async (req, res) => {
     if (isCheck == false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' })
     } else {
-        const user = await userModels.selectUser(req.body.username);
+        const user = await userModels.select(req.body.username);
         if (user == false) {
             res.status(500);
         } else if (user == null) {
@@ -47,15 +47,17 @@ const register = async (req, res) => {
     if (isCheck == false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' })
     } else {
-        const isExist = await userModels.existUser(req.body.email, req.body.username);
-        if (isExist == true) {
+        const isExist = await userModels.exist(req.body.email, req.body.username);
+        if (isExist == null) {
+            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+        } else if (isExist == true) {
             res.status(200).json({ 'error': 1, 'message': 'Email or Username is already use' });
         } else {
             const hashPass = await hashPassword(req.body.password);
             if (hashPass == null) {
                 res.status(500).json({ 'error': 1, 'message': 'Error hash' });
             } else {
-                const ret = await userModels.insertUser(
+                const ret = await userModels.insert(
                     req.body.email,
                     req.body.username,
                     hashPass,

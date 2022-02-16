@@ -26,11 +26,29 @@ const select = async (id_liker, id_liked) => {
         console.log('error: ', error);
         return false;
     }
-    // console.log(res.rows)
     if (res.rowCount == 0) {
         return null;
     }
-    return res.rows;
+    return res.rows[0];
+}
+
+const isMatch = async (id_liker, id_liked) => {
+    let res;
+    try {
+        res = await client.query(
+            `SELECT * FROM likes WHERE (id_liker=$1 AND id_liked=$2) OR (id_liker=$2 AND id_liked=$1)`,
+            [id_liker, id_liked]
+        );
+    } catch (error) {
+        console.log('error: ', error);
+        return null;
+    }
+    console.log('isMatch: ', res.rowCount)
+    if (res.rowCount == 2) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 const update = async (id_liker, id_liked, like) => {
@@ -49,5 +67,6 @@ const update = async (id_liker, id_liked, like) => {
 export default {
     select,
     insert,
-    update
+    update,
+    isMatch
 }
