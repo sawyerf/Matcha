@@ -22,6 +22,7 @@ const testDate = (date) => {
 export const checkBody = (check, body) => {
     let type;
     for (let key in check) {
+        console.log(key, body);
         if (!(key in body)) return false;
         type = whatType(check[key]);
         if (type != typeof body[key]) {

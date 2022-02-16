@@ -2,6 +2,7 @@ import userModels from '../models/user';
 import { hashPassword } from '../utils/hash';
 import { checkBody } from '../utils/checkBody';
 import jwt from '../utils/jwt';
+import bcrypt from 'bcrypt'
 
 const login = async (req, res) => {
     console.log('req : ', req.body);
@@ -29,7 +30,7 @@ const login = async (req, res) => {
             return
         }
         if (hashPass == true) {
-            const jwtToken = jwt.createToken(user.username, user.email);
+            const jwtToken = jwt.createToken(user.uid, user.username, user.email);
             res.cookie('token', jwtToken)
             res.status(200).json({ 'token': jwtToken });
         } else {
@@ -59,13 +60,17 @@ const register = async (req, res) => {
         if (hashPass == null) {
             res.status(500).json({ 'error': 1, 'message': 'Error hash' });
         } else {
-            userModels.insertUser(
+            const ret = userModels.insertUser(
                 req.body.email,
                 req.body.username,
                 hashPass,
                 req.body.age
             );
-            res.status(201).json();
+            if (ret == true) {
+                res.status(201).json();
+            } else {
+                res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+            }
         }
     }
 };

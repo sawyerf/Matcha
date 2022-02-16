@@ -1,21 +1,19 @@
-import { replicationStart } from 'pg-protocol/dist/messages';
 import { client } from './connection'
-
+import { v4 as uuidv4 }  from 'uuid'
 
 const insertUser = async (email, username, password, age) => {
     let res;
     try {
         res = await client.query(
-            `INSERT INTO users (email, username, password, age)
-            VALUES ($1, $2, $3, $4)`,
-            [email, username, password, age]
+            `INSERT INTO users (uid, email, username, password, age)
+            VALUES ($1, $2, $3, $4, $5)`,
+            [uuidv4(), email, username, password, age]
         );
     } catch (error) {
         console.log(error);
         return false;
     }
-    console.log(res.rows);
-    return res.rows;
+    return true;
 }
 
 const selectUser = async (username) => {
