@@ -32,6 +32,25 @@ const select = async (username) => {
     return res.rows[0];
 }
 
+const selectByUids = async (uids) => {
+    let res;
+    console.log("'" + uids.join("', '") + "'");
+    try {
+        res = await client.query(
+            // `SELECT uid, username, age FROM users WHERE uid IN ('359aaf5c-5610-42a7-a422-2248e7fcc410', '4151fdff-f827-47a3-8f05-b27416fc9f9e')`
+            `SELECT uid, username, age FROM users WHERE uid IN ($1)`,
+            // [('359aaf5c-5610-42a7-a422-2248e7fcc410',  'f5d28c71-17ad-4df5-a642-50495c31bd73', '4151fdff-f827-47a3-8f05-b27416fc9f9e')]
+            [uids]
+            // ["'" + uids.join("', '") + "'"]
+        );
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+    console.log(res.rows);
+    return res.rows;
+}
+
 const exist = async (email, username) => {
     let res;
     try {
@@ -53,5 +72,6 @@ const exist = async (email, username) => {
 export default {
     insert,
     select,
-    exist
+    exist,
+    selectByUids
 };

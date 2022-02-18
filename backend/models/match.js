@@ -35,9 +35,11 @@ const isExist = async (uid1, uid2) => {
 
 const selectByUser = async (uid) => {
     let res;
+    let ret = [];
+
     try {
         res = await client.query(
-            `SELECT (id_user1, id_user2) FROM matchs
+            `SELECT id_user1, id_user2 FROM matchs
                 WHERE id_user1=$1 OR id_user2=$1`,
             [uid]
         );
@@ -45,7 +47,15 @@ const selectByUser = async (uid) => {
         console.log(error);
         return null;
     }
-    return res.rows;
+    for (const match of res.rows) {
+        if (uid != match.id_user1) {
+            ret.push(match.id_user1);
+        } else if (uid != match.id_user2) {
+            ret.push(match.id_user2);
+        }
+    }
+    console.log(ret)
+    return ret;
 }
 
 export default {

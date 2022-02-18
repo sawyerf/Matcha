@@ -29,19 +29,20 @@ const match = async (req, res, user) => {
 }
 
 const like = async (req, res) => {
+    const user = jwt.checkToken(req.cookies.token);
+
     const isCheck = checkBody({
         'id_liked': 'string',
         'islike': 'boolean'
     }, req.body);
-    if (isCheck == false) res.status(400).json({ 'error': 1, 'message': 'Bad Content' })
-
-    const user = jwt.checkToken(req.cookies.token);
-    if (isCheck != false) {
-        let ret;
+    if (isCheck == false || req.body.id_liked == user.uid) {
+        res.status(400).json({ 'error': 1, 'message': 'Bad Content' })
+    } else {
         const preLike = await likeModels.select(user.uid, req.body.id_liked);
         if (preLike === false) {
-            res.status(404).json();
+            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
+            let ret;
             if (preLike === null) {
                 ret = await likeModels.insert(user.uid, req.body.id_liked, req.body.islike);
             } else if (preLike.islike != req.body.islike) {
