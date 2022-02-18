@@ -15,7 +15,7 @@ const login = async (req, res) => {
     } else {
         const user = await userModels.select(req.body.username);
         if (user == false) {
-            res.status(500);
+            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else if (user == null) {
             res.status(404).json({ 'error': 1, 'message': 'User not found' });
         } else {

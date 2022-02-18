@@ -33,7 +33,23 @@ const isExist = async (uid1, uid2) => {
     return true;
 }
 
+const selectByUser = async (uid) => {
+    let res;
+    try {
+        res = await client.query(
+            `SELECT (id_user1, id_user2) FROM matchs
+                WHERE id_user1=$1 OR id_user2=$1`,
+            [uid]
+        );
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+    return res.rows;
+}
+
 export default {
     insert,
-    isExist
+    isExist,
+    selectByUser
 }

@@ -29,17 +29,14 @@ const match = async (req, res, user) => {
 }
 
 const like = async (req, res) => {
-    console.log('req: ', req.body)
-    const user = jwt.checkToken(req.cookies.token);
-    if (user == false) res.status(403).json({ 'error': 1, 'message': 'Bad Token' })
-
     const isCheck = checkBody({
         'id_liked': 'string',
         'islike': 'boolean'
     }, req.body);
     if (isCheck == false) res.status(400).json({ 'error': 1, 'message': 'Bad Content' })
 
-    if (user != false && isCheck != false) {
+    const user = jwt.checkToken(req.cookies.token);
+    if (isCheck != false) {
         let ret;
         const preLike = await likeModels.select(user.uid, req.body.id_liked);
         if (preLike === false) {
@@ -50,10 +47,10 @@ const like = async (req, res) => {
             } else if (preLike.islike != req.body.islike) {
                 ret = await likeModels.update(user.uid, req.body.id_liked, req.body.islike);
             } else {
-                ret = true
+                ret = true;
             }
             if (ret == false) {
-                res.status(500).json({ 'error': 1, 'message': 'SQL Error' })
+                res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
             } else {
                 if (req.body.islike == true) {
                     await match(req, res, user);
