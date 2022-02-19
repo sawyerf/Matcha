@@ -1,42 +1,21 @@
 import { makeStyles } from "@mui/styles";
 import { useNavigate } from "react-router-dom";
-import ArrowForwardIcon from "../Icons/ArrowForwardIcon";
+import Disconnection from "@mui/icons-material/NoMeetingRoom";
+import Match from "@mui/icons-material/Favorite";
+import { useState } from "react";
 
 const useStyles = makeStyles({
   root: {
     position: "relative",
-    backgroundColor: "pink",
-    borderRight: "solid 2px black",
+    backgroundColor: "white",
     width: "250px",
     height: "100vh",
   },
-  bottomMenu: {
-    position: "absolute",
-    bottom: "30px",
-    justifyContent: "center",
-    marginLeft: "20px",
-    width: "80%",
-  },
-  bottomMenuText: {
-    fontSize: "16px",
-    marginBottom: "10px",
-    fontWeight: "600",
-    border: "solid 1px black",
-    borderRadius: "8px",
-    padding: "5px",
-
-    cursor: "pointer",
-    "&:hover, &:focus": {
-      color: "white",
-      borderColor: "white",
-    },
-  },
   topMenu: {
-    position: "absolute",
-    top: "60px",
-    justifyContent: "center",
-    marginLeft: "20px",
-    width: "80%",
+    height: "50px",
+    background: "linear-gradient(135deg, #EB58A2, orange)",
+    width: "100%",
+    position: "relative",
   },
   topMenuText: {
     fontSize: "20px",
@@ -51,47 +30,111 @@ const useStyles = makeStyles({
       borderColor: "white",
     },
   },
-  arrowIcon: {
-    marginLeft: "5px",
-    marginTop: "5px",
-    cursor: "pointer",
-  },
 });
 
 const UserMenu = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const [matchDisplay, setMatchDisplay] = useState(true);
 
   function navigateToMyProfile() {
     navigate("/myprofile");
   }
 
-  function navigateToMatchList() {
-    navigate("/matchlist");
-  }
-
-  function navigateToNotification() {
-    navigate("/notification");
+  function navigateToUserHome() {
+    navigate("/userhome");
   }
 
   return (
     <div className={classes.root}>
-      <div className={classes.arrowIcon} onClick={() => navigate(-1)}>
-        <ArrowForwardIcon />
-      </div>
       <div className={classes.topMenu}>
-        <p className={classes.topMenuText} onClick={navigateToNotification}>
-          Notifications
-        </p>
-        <p className={classes.topMenuText} onClick={navigateToMatchList}>
-          Liste de match
-        </p>
+        <Disconnection
+          style={{
+            position: "absolute",
+            color: "#EEEEEE",
+            borderRadius: "16px",
+            background: "rgba(50, 50, 50, 0.2)",
+            padding: "3px",
+            right: "10px",
+            top: "9px",
+            cursor: "pointer",
+          }}
+        />
+        <Match
+          style={{
+            position: "absolute",
+            color: "#EEEEEE",
+            borderRadius: "16px",
+            background: "rgba(50, 50, 50, 0.2)",
+            padding: "3px",
+            right: "50px",
+            top: "9px",
+            cursor: "pointer",
+          }}
+          onClick={navigateToUserHome}
+        />
+        <div
+          style={{
+            display: "flex",
+            top: "9px",
+            position: "absolute",
+            left: "10px",
+            cursor: "pointer",
+          }}
+          onClick={navigateToMyProfile}
+        >
+          <img
+            style={{ height: "30px", width: "30px", borderRadius: "16px" }}
+            src="https://media.istockphoto.com/photos/designer-is-picking-up-a-tie-for-light-jacket-picture-id1163491245"
+            alt="ImageUser"
+          />
+          <p
+            style={{
+              marginLeft: "5px",
+              marginTop: "8px",
+              color: "white",
+              fontSize: "10px",
+              fontWeight: "600",
+            }}
+          >
+            Johnny
+          </p>
+        </div>
       </div>
-      <div className={classes.bottomMenu}>
-        <p className={classes.bottomMenuText} onClick={navigateToMyProfile}>
-          Mon Profil
+      <div
+        style={{
+          marginTop: "10px",
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-evenly",
+        }}
+      >
+        <p
+          style={{
+            cursor: "pointer",
+            fontWeight: "600",
+            fontSize: "14px",
+            paddingRight: "10px",
+            paddingLeft: "10px",
+            borderBottom: matchDisplay ? "solid 3px #EB58A2" : "",
+          }}
+          onClick={() => setMatchDisplay(!matchDisplay)}
+        >
+          Match
         </p>
-        <p className={classes.bottomMenuText}>Déconnexion</p>
+        <p
+          style={{
+            paddingRight: "10px",
+            paddingLeft: "10px",
+            borderBottom: matchDisplay ? "" : "solid 3px #EB58A2",
+            cursor: "pointer",
+            fontWeight: "600",
+            fontSize: "14px",
+          }}
+          onClick={() => setMatchDisplay(!matchDisplay)}
+        >
+          Message
+        </p>
       </div>
     </div>
   );
