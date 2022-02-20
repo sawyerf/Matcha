@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import UserMenu from "../components/UserHome/UserMenu";
 import Profile from "../components/Profile";
 import { makeStyles, withTheme } from "@mui/styles";
@@ -79,9 +79,14 @@ const UserHome = () => {
                 <RightArrow rotate="rotate(180deg)" />
               </div>
               <img
-                style={{ height: "500px" }}
-                src="https://media.istockphoto.com/photos/designer-is-picking-up-a-tie-for-light-jacket-picture-id1163491245"
+                src="https://previews.123rf.com/images/luismolinero/luismolinero1909/luismolinero190917934/130592146-.jpg"
                 alt="ImageUser"
+                style={{
+                  height: "500px",
+                  width: "350px",
+                  objectFit: "cover",
+                  objectPosition: "50% 50%",
+                }}
               />
               <div
                 style={{
