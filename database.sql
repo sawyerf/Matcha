@@ -9,12 +9,12 @@ CREATE TABLE users (
     username varchar UNIQUE,
     password varchar,
     age timestamp,
-    gender varchar(2),
+    gender varchar(1),
     sexuality varchar(2),
-    bio varchar
+    bio varchar,
+    tags varchar
     -- popularity int,
     -- localisation varchar,
-    -- tags varchar
 );
 -- CREATE UNIQUE INDEX uid ON users (uid); 
 

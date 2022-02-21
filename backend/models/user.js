@@ -16,6 +16,22 @@ const insert = async (email, username, password, age) => {
     return true;
 }
 
+const setInfo = async (uid, gender, sexuality, tags, bio) => {
+    let res;
+    try {
+        res = await client.query(
+            `UPDATE users
+            SET gender=$2, sexuality=$3, tags=$4, bio=$5
+            WHERE uid=$1`,
+            [uid, gender, sexuality, tags, bio]
+        );
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+    return true;
+}
+
 const select = async (username) => {
     let res;
     try {
@@ -106,5 +122,6 @@ export default {
     exist,
     selectByUids,
     selectMe,
-    selectOffer
+    selectOffer,
+    setInfo
 };

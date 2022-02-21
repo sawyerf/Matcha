@@ -5,7 +5,6 @@ import jwt from '../utils/jwt';
 import bcrypt from 'bcrypt'
 
 const login = async (req, res) => {
-    console.log('req : ', req.body);
     const isCheck = checkBody({
         'username': 'string',
         'password': 'string'
@@ -37,7 +36,6 @@ const login = async (req, res) => {
 };
 
 const register = async (req, res) => {
-    console.log('req : ', req.body);
     const isCheck = checkBody({
         "email": "email",
         "username": "string",

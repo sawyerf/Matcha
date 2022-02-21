@@ -1,5 +1,5 @@
 const whatType = (type) => {
-    if (['email', 'password', 'date'].indexOf(type) >= 0) {
+    if (['email', 'password', 'date', 'sexuality', 'gender', 'tags'].indexOf(type) >= 0) {
         return 'string';
     }
     return type;
@@ -19,12 +19,28 @@ const testDate = (date) => {
     return regex.test(date);
 }
 
+const testSexuality = (sexuality) => {
+    const regex = /[HF]{1,2}/;
+    return regex.test(sexuality);
+}
+
+const testGender = (gender) => {
+    const regex = /[HF]/;
+    return regex.test(gender);
+}
+
+const testTags = (tags) => {
+    const regex = /\#[a-z]*([a-z]*)*/;
+    return regex.test(tags);
+}
+
 export const checkBody = (check, body) => {
+    console.log('req: ', body)
     let type;
     for (let key in check) {
         if (!(key in body)) return false;
         type = whatType(check[key]);
-        console.log(typeof body[key])
+        console.log(key, ' : ', typeof body[key])
         if (type != typeof body[key]) {
             console.log(key, ' : Bad type');
             return false;
@@ -35,6 +51,12 @@ export const checkBody = (check, body) => {
             if (testPassword(body[key]) == false) return false;
         } else if (check[key] == 'date') {
             if (testDate(body[key]) == false) return false;
+        } else if (check[key] == 'sexuality') {
+            if (testSexuality(body[key]) == false) return false;
+        } else if (check[key] == 'gender') {
+            if (testGender(body[key]) == false) return false;
+        } else if (check[key] == 'tags') {
+            if (testTags(body[key]) == false) return false;
         } else if (check[key] == 'string') {
             if (body[key] == '') return false;
         }
