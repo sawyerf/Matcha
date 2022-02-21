@@ -9,33 +9,35 @@ const match = async (req, res, user) => {
     const isMatch = await likeModels.isMatch(user.uid, req.body.id_liked);
     if (isMatch == null) {
         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-    } else if (isMatch == false) {
+    } else if (isMatch === false) {
         res.status(200).json({'match': false});
-    } else if (isMatch == true) {
+    } else if (isMatch === true) {
         const isMatchExist = await matchModels.isExist(user.uid, req.body.id_liked);
         if (isMatchExist == null) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-        } else if (isMatchExist == false) {
+        } else if (isMatchExist === false) {
             ret = await matchModels.insert(user.uid, req.body.id_liked);
-            if (ret == false) {
+            if (ret === false) {
                 res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-            } else if (ret == true) {
+            } else if (ret === true) {
                 res.status(200).json({'match': true});
             }
-        } else if (isMatchExist == true) {
+        } else if (isMatchExist === true) {
             res.status(200).json({'match': true});
         }
     }
 }
 
+// check if user exist (uid)
+
 const like = async (req, res) => {
     const user = jwt.checkToken(req.cookies.token);
 
     const isCheck = checkBody({
-        'id_liked': 'string',
+        'id_liked': 'number',
         'islike': 'boolean'
     }, req.body);
-    if (isCheck == false || req.body.id_liked == user.uid) {
+    if (isCheck === false || req.body.id_liked == user.uid) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' })
     } else {
         const preLike = await likeModels.select(user.uid, req.body.id_liked);
@@ -50,7 +52,7 @@ const like = async (req, res) => {
             } else {
                 ret = true;
             }
-            if (ret == false) {
+            if (ret === false) {
                 res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
             } else {
                 if (req.body.islike == true) {

@@ -10,11 +10,11 @@ const login = async (req, res) => {
         'username': 'string',
         'password': 'string'
     }, req.body);
-    if (isCheck == false) {
+    if (isCheck === false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' })
     } else {
         const user = await userModels.select(req.body.username);
-        if (user == false) {
+        if (user === false) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else if (user == null) {
             res.status(404).json({ 'error': 1, 'message': 'User not found' });
@@ -44,13 +44,13 @@ const register = async (req, res) => {
         "password": "password",
         "age": 'date'
     }, req.body);
-    if (isCheck == false) {
+    if (isCheck === false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' })
     } else {
         const isExist = await userModels.exist(req.body.email, req.body.username);
         if (isExist == null) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-        } else if (isExist == true) {
+        } else if (isExist === true) {
             res.status(200).json({ 'error': 1, 'message': 'Email or Username is already use' });
         } else {
             const hashPass = await hashPassword(req.body.password);
@@ -63,7 +63,7 @@ const register = async (req, res) => {
                     hashPass,
                     req.body.age
                 );
-                if (ret == true) {
+                if (ret === true) {
                     res.status(201).json();
                 } else {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
@@ -77,7 +77,7 @@ const check = async (req, res) => {
     console.log('req : ', req.body);
     console.log('cookies: ', req.cookies);
     const isConnect = jwt.checkToken(req.cookies.token);
-    if (isConnect == false) console.log('Bad Token');
+    if (isConnect === false) console.log('Bad Token');
     res.status(200).json(isConnect);
 }
 

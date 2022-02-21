@@ -5,9 +5,9 @@ const insert = async (email, username, password, age) => {
     let res;
     try {
         res = await client.query(
-            `INSERT INTO users (uid, email, username, password, age)
-            VALUES ($1, $2, $3, $4, $5)`,
-            [uuidv4(), email, username, password, age]
+            `INSERT INTO users (email, username, password, age)
+            VALUES ($1, $2, $3, $4)`,
+            [email, username, password, age]
         );
     } catch (error) {
         console.log(error);
@@ -27,27 +27,58 @@ const select = async (username) => {
         console.log(error);
         return false;
     }
-    console.log(res.rows);
     if (res.rowCount == 0) return null;
     return res.rows[0];
 }
 
 const selectByUids = async (uids) => {
     let res;
-    console.log("'" + uids.join("', '") + "'");
+    const sql = `SELECT uid, username, date_part('year', age(age))
+        FROM users WHERE uid IN (${uids.map((val, index) => `$${index + 1}`).join(',')})`;
+
+    if (uids.length == 0) return ([]);
     try {
         res = await client.query(
-            // `SELECT uid, username, age FROM users WHERE uid IN ('359aaf5c-5610-42a7-a422-2248e7fcc410', '4151fdff-f827-47a3-8f05-b27416fc9f9e')`
-            `SELECT uid, username, age FROM users WHERE uid IN ($1)`,
-            // [('359aaf5c-5610-42a7-a422-2248e7fcc410',  'f5d28c71-17ad-4df5-a642-50495c31bd73', '4151fdff-f827-47a3-8f05-b27416fc9f9e')]
-            [uids]
-            // ["'" + uids.join("', '") + "'"]
+            sql,
+            uids
         );
     } catch (error) {
         console.log(error);
         return null;
     }
-    console.log(res.rows);
+    return res.rows;
+}
+
+const selectMe = async (uid) => {
+    let res;
+
+    try {
+        res = await client.query(
+            `SELECT * FROM users WHERE uid=$1`,
+            [uid]
+        );
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+    // if (res.rowCount == 0) return null;
+    return res.rows[0];
+}
+
+const selectOffer = async (myGender, mySexuality) => {
+    let res;
+
+    try {
+        res = await client.query(
+            `SELECT username, date_part('year', age(age)), gender, sexuality, bio FROM users 
+            WHERE (position($1 in sexuality) > 0 AND position(gender in $2) > 0)`,
+            [myGender, mySexuality]
+        );
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+    console.log(res.rows)
     return res.rows;
 }
 
@@ -73,5 +104,7 @@ export default {
     insert,
     select,
     exist,
-    selectByUids
+    selectByUids,
+    selectMe,
+    selectOffer
 };
