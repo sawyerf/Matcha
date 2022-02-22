@@ -1,7 +1,8 @@
 import { checkBody } from '../utils/checkBody';
 import matchModels from '../models/match';
-import userModels from '../models/user'
-import likeModels from '../models/like'
+import userModels from '../models/user';
+import likeModels from '../models/like';
+import { scoreMatch } from '../utils/score';
 import jwt from '../utils/jwt';
 
 const matchs = async (req, res) => {
@@ -20,24 +21,6 @@ const matchs = async (req, res) => {
     }
 }
 
-const offer = async (req, res) => {
-    const user = jwt.checkToken(req.cookies.token);
-
-    const me = await userModels.selectMe(user.uid);
-    console.log('me: ', me)
-    if (me == false) { 
-        res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-    } else {
-        const offers = await userModels.selectOffer(me.gender, me.sexuality);
-        console.log('offers', offers)
-        if (offers === false) {
-            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-        } else {
-            res.status(200).json(offers);
-        }
-    }
-}
-
 const likes = async (req, res) => {
     const user = jwt.checkToken(req.cookies.token);
     const uidsMyLiker = await likeModels.selectMyLiker(user.uid);
@@ -50,6 +33,34 @@ const likes = async (req, res) => {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
             res.status(200).json(myLiker);
+        }
+    }
+}
+
+const offer = async (req, res) => {
+    const user = jwt.checkToken(req.cookies.token);
+    const me = await userModels.selectMe(user.uid);
+
+    if (me == false) { 
+        res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+    } else {
+        const offers = await userModels.selectOffer(me.uid, me.gender, me.sexuality);
+        if (offers === false) {
+            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+        } else {
+            scoreMatch(me, offers);
+            let maxScore = 0;
+            let retOffer = null;
+            for (const offer of offers) {
+                if (offer.score > maxScore) {
+                    maxScore = offer.score;
+                    retOffer = offer;
+                }
+            }
+            res.status(200).json({
+                'The Offer': retOffer,
+                'offers': offers
+            });
         }
     }
 }

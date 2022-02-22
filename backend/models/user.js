@@ -5,8 +5,8 @@ const insert = async (email, username, password, age) => {
     let res;
     try {
         res = await client.query(
-            `INSERT INTO users (email, username, password, age)
-            VALUES ($1, $2, $3, $4)`,
+            `INSERT INTO users (email, username, password, birthday, bio, tags)
+            VALUES ($1, $2, $3, $4, "", "")`,
             [email, username, password, age]
         );
     } catch (error) {
@@ -49,7 +49,7 @@ const select = async (username) => {
 
 const selectByUids = async (uids) => {
     let res;
-    const sql = `SELECT uid, username, date_part('year', age(age))
+    const sql = `SELECT uid, username, date_part('year', age(birthday)) AS age
         FROM users WHERE uid IN (${uids.map((val, index) => `$${index + 1}`).join(',')})`;
 
     if (uids.length == 0) return ([]);
@@ -70,7 +70,8 @@ const selectMe = async (uid) => {
 
     try {
         res = await client.query(
-            `SELECT * FROM users WHERE uid=$1`,
+            `SELECT uid, email, username, password, birthday, gender, sexuality, bio, tags, popularity, date_part('year', age(birthday)) AS age
+            FROM users WHERE uid=$1`,
             [uid]
         );
     } catch (error) {
@@ -81,20 +82,20 @@ const selectMe = async (uid) => {
     return res.rows[0];
 }
 
-const selectOffer = async (myGender, mySexuality) => {
+const selectOffer = async (uid, myGender, mySexuality) => {
     let res;
 
     try {
         res = await client.query(
-            `SELECT username, date_part('year', age(age)), gender, sexuality, bio FROM users 
-            WHERE (position($1 in sexuality) > 0 AND position(gender in $2) > 0)`,
-            [myGender, mySexuality]
+            `SELECT username, date_part('year', age(birthday)) AS age, gender, sexuality, bio, tags, popularity
+            FROM users
+            WHERE (uid!=$1 AND position($2 in sexuality) > 0 AND position(gender in $3) > 0)`,
+            [uid, myGender, mySexuality]
         );
     } catch (error) {
         console.log(error);
         return false;
     }
-    console.log(res.rows)
     return res.rows;
 }
 
