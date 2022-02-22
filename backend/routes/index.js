@@ -9,5 +9,5 @@ export const apiRouter = Router();
 
 apiRouter.use('/auth', authRouter);
 apiRouter.use('/action', jwtMiddleware, actionRouter);
-apiRouter.use('/users', jwtMiddleware, usersRouter)
-apiRouter.use('/profil', jwtMiddleware, profilRouter)
+apiRouter.use('/users', jwtMiddleware, usersRouter);
+apiRouter.use('/profil', jwtMiddleware, profilRouter);

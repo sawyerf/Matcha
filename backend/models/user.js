@@ -117,6 +117,26 @@ const exist = async (email, username) => {
     }
 }
 
+const search = async (uid, myGender, mySexuality, body) => {
+    let res;
+
+    console.log([uid, myGender, mySexuality, body.minAge, body.maxAge, body.minPopularity, body.maxPopularity]);
+    try {
+        res = await client.query(
+            `SELECT username, date_part('year', age(birthday)) AS age, gender, sexuality, bio, tags, popularity
+            FROM users
+            WHERE uid!=$1 AND position($2 in sexuality) > 0 AND position(gender in $3) > 0
+                AND $4 <= date_part('year', age(birthday)) AND date_part('year', age(birthday)) <= $5
+                AND $6 <= popularity AND popularity <= $7`,
+            [uid, myGender, mySexuality, body.minAge, body.maxAge, body.minPopularity, body.maxPopularity]
+        );
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+    return res.rows;
+}
+
 export default {
     insert,
     select,
@@ -124,5 +144,6 @@ export default {
     selectByUids,
     selectMe,
     selectOffer,
-    setInfo
+    setInfo,
+    search
 };

@@ -65,8 +65,30 @@ const offer = async (req, res) => {
     }
 }
 
+const search = async (req, res) => {
+    const isCheck = checkBody({
+        'minAge': 'number',
+        'maxAge': 'number',
+        'minPopularity': 'number',
+        'maxPopularity': 'number',
+        'localisation': 'string',
+        'tags': 'object' // changer ca pour list
+    }, req.body);
+    const user = jwt.checkToken(req.cookies.token);
+    const me = await userModels.selectMe(user.uid);
+    console.log(me)
+    if (isCheck == false) {
+        res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
+    } else {
+        const users = await userModels.search(me.uid, me.gender, me.sexuality, req.body);
+        console.log(users);
+        res.status(200).json(users);
+    }
+}
+
 export default {
     matchs,
     likes,
-    offer
+    offer,
+    search
 }
