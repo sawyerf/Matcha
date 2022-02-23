@@ -79,7 +79,7 @@ const UserHome = () => {
                 <RightArrow rotate="rotate(180deg)" />
               </div>
               <img
-                src="https://previews.123rf.com/images/luismolinero/luismolinero1909/luismolinero190917934/130592146-.jpg"
+                src="https://static1.purepeople.com/articles/9/36/74/09/@/5297138-aymeric-bonnery-devoile-un-selfie-sur-in-950x0-2.jpg"
                 alt="ImageUser"
                 style={{
                   height: "500px",
