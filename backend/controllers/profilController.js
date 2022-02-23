@@ -18,6 +18,7 @@ const setInfo = async (req, res) => {
         if (ret == false) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
+            userModels.setIsOK(user.uid, true);
             res.status(200).json();
         }
     }

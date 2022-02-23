@@ -87,9 +87,9 @@ const selectOffer = async (uid, myGender, mySexuality) => {
 
     try {
         res = await client.query(
-            `SELECT username, date_part('year', age(birthday)) AS age, gender, sexuality, bio, tags, popularity
+            `SELECT uid, username, date_part('year', age(birthday)) AS age, gender, sexuality, bio, tags, popularity, latitude, longitude
             FROM users
-            WHERE (uid!=$1 AND position($2 in sexuality) > 0 AND position(gender in $3) > 0)`,
+            WHERE (uid!=$1 AND isOK=TRUE AND position($2 in sexuality) > 0 AND position(gender in $3) > 0)`,
             [uid, myGender, mySexuality]
         );
     } catch (error) {
@@ -117,15 +117,28 @@ const exist = async (email, username) => {
     }
 }
 
+const setIsOK = async (uid, isOK) => {
+    let res;
+    try {
+        res = await client.query(
+            `UPDATE users SET isOK=$2 WHERE uid=$1`,
+            [uid, isOK]
+        );
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+    return true;
+}
+
 const search = async (uid, myGender, mySexuality, body) => {
     let res;
 
-    console.log([uid, myGender, mySexuality, body.minAge, body.maxAge, body.minPopularity, body.maxPopularity]);
     try {
         res = await client.query(
             `SELECT username, date_part('year', age(birthday)) AS age, gender, sexuality, bio, tags, popularity
             FROM users
-            WHERE uid!=$1 AND position($2 in sexuality) > 0 AND position(gender in $3) > 0
+            WHERE uid!=$1 AND isok=TRUE AND position($2 in sexuality) > 0 AND position(gender in $3) > 0
                 AND $4 <= date_part('year', age(birthday)) AND date_part('year', age(birthday)) <= $5
                 AND $6 <= popularity AND popularity <= $7`,
             [uid, myGender, mySexuality, body.minAge, body.maxAge, body.minPopularity, body.maxPopularity]
@@ -145,5 +158,6 @@ export default {
     selectMe,
     selectOffer,
     setInfo,
-    search
+    search,
+    setIsOK
 };

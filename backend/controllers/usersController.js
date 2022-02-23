@@ -4,6 +4,7 @@ import userModels from '../models/user';
 import likeModels from '../models/like';
 import { scoreMatch } from '../utils/score';
 import jwt from '../utils/jwt';
+import { locationByIp, distance } from '../utils/location';
 
 const matchs = async (req, res) => {
     const user = jwt.checkToken(req.cookies.token);
@@ -41,18 +42,20 @@ const offer = async (req, res) => {
     const user = jwt.checkToken(req.cookies.token);
     const me = await userModels.selectMe(user.uid);
 
-    if (me == false) { 
+    if (me == false) {
         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
     } else {
         const offers = await userModels.selectOffer(me.uid, me.gender, me.sexuality);
-        if (offers === false) {
+        const likes = await likeModels.selectMyLike(me.uid);
+        if (offers === false || likes === false) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
             scoreMatch(me, offers);
+            console.log(offers);
             let maxScore = 0;
             let retOffer = null;
             for (const offer of offers) {
-                if (offer.score > maxScore) {
+                if (offer.score > maxScore && likes.indexOf(offer.uid) == -1) {
                     maxScore = offer.score;
                     retOffer = offer;
                 }
@@ -71,18 +74,40 @@ const search = async (req, res) => {
         'maxAge': 'number',
         'minPopularity': 'number',
         'maxPopularity': 'number',
-        'localisation': 'string',
+        'maxDistance': 'number',
         'tags': 'object' // changer ca pour list
     }, req.body);
     const user = jwt.checkToken(req.cookies.token);
     const me = await userModels.selectMe(user.uid);
-    console.log(me)
+    // distance(locationByIp('82.64.133.36'),
+    // locationByIp('80.215.207.91'));
+    // console.log('me: ', me);
     if (isCheck == false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
     } else {
         const users = await userModels.search(me.uid, me.gender, me.sexuality, req.body);
         console.log(users);
-        res.status(200).json(users);
+        if (users === false) {
+            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+        } else {
+            const newUsers = [];
+            for (const ouser of users) {
+                if (distance([me.latitude, me.longitude], [ouser.latitude, ouser.longitude]) > req.body.maxDistance) continue;
+                const Tags = ouser.tags.split(',');
+                let isIn = true;
+                for (const tag of req.body.tags) {
+                    console.log(tag, Tags);
+                    if (Tags.indexOf(tag) < 0) {
+                        isIn = false;
+                        break;
+                    }
+                }
+                if (isIn == true) {
+                    newUsers.push(ouser);
+                }
+            }
+            res.status(200).json(newUsers);
+        }
     }
 }
 

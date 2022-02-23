@@ -51,6 +51,25 @@ const selectMyLiker = async (id_liked) => {
     return ret;
 }
 
+const selectMyLike = async (id_liker) => {
+    let res;
+    let ret = [];
+
+    try {
+        res = await client.query(
+            `SELECT id_liked FROM likes WHERE id_liker=$1`,
+            [id_liker]
+        );
+    } catch (error) {
+        console.log('error: ', error);
+        return false;
+    }
+    for (const liker of res.rows) {
+        ret.push(liker.id_liked);
+    }
+    return ret;
+}
+
 const isMatch = async (id_liker, id_liked) => {
     let res;
     try {
@@ -88,5 +107,6 @@ export default {
     insert,
     update,
     isMatch,
-    selectMyLiker
+    selectMyLiker,
+    selectMyLike
 }

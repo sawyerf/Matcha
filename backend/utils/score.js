@@ -1,3 +1,6 @@
+import { distance } from '../utils/location';
+
+
 export const scoreMatch = (me, matchs) => {
     console.log(me);
     for (const match of matchs) {
@@ -13,6 +16,10 @@ export const scoreMatch = (me, matchs) => {
                 }
             }
         }
+        match.distance = distance([me.latitude, me.longitude], [match.latitude, match.longitude]);
+        match.score += 20 - match.distance;
+        delete match.latitude;
+        delete match.longitude;
         match.score += 10 - Math.abs(match.popularity - me.popularity) / 10;
     }
 }
