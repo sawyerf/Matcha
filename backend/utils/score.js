@@ -12,7 +12,7 @@ export const scoreMatch = (me, matchs) => {
             for (const myTag of myTags) {
                 if (tags.indexOf(myTag) >= 0) {
                     // console.log('tags: ', myTag)
-                    match.score += 2;
+                    match.score += 5;
                 }
             }
         }

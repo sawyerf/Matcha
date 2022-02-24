@@ -19,7 +19,6 @@ CREATE TABLE users (
     latitude float DEFAULT 48.8582,
     longitude float DEFAULT 2.3387,
     isOK boolean DEFAULT FALSE
-    -- localisation varchar,
 );
 -- CREATE UNIQUE INDEX uid ON users (uid); 
 

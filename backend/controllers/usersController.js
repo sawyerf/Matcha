@@ -43,6 +43,7 @@ const likes = async (req, res) => {
 const offer = async (req, res) => {
     const user = jwt.checkToken(req.cookies.token);
     const me = await userModels.selectMe(user.uid);
+    let retOffers = [];
 
     if (me == false) {
         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
@@ -54,17 +55,18 @@ const offer = async (req, res) => {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
             scoreMatch(me, offers);
-            let maxScore = 0;
-            let retOffer = null;
-            for (const offer of offers) {
-                if (offer.score > maxScore && likes.indexOf(offer.uid) == -1 && blocks.indexOf(offer.uid) == -1) {
-                    maxScore = offer.score;
-                    retOffer = offer;
+            let index = 0;
+            for (const offer of offers.sort((a, b) => {return b.score - a.score})) {
+                if (likes.indexOf(offer.uid) == -1 && blocks.indexOf(offer.uid) == -1) {
+                    delete offer.uid
+                    retOffers.push(offer);
+                    index++
                 }
+                if (index >= 10) break;
             }
             res.status(200).json({
-                'The Offer': retOffer,
-                'offers': offers
+                'me': me, // To delete
+                'offers': retOffers
             });
         }
     }
