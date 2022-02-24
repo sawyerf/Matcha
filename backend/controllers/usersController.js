@@ -2,6 +2,8 @@ import { checkBody } from '../utils/checkBody';
 import matchModels from '../models/match';
 import userModels from '../models/user';
 import likeModels from '../models/like';
+import blockModels from  '../models/block';
+import reportModels from '../models/report';
 import { scoreMatch } from '../utils/score';
 import jwt from '../utils/jwt';
 import { locationByIp, distance } from '../utils/location';
@@ -46,16 +48,16 @@ const offer = async (req, res) => {
         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
     } else {
         const offers = await userModels.selectOffer(me.uid, me.gender, me.sexuality);
-        const likes = await likeModels.selectMyLike(me.uid);
-        if (offers === false || likes === false) {
+        const likes  = await likeModels.selectMyLike(me.uid);
+        const blocks = await blockModels.selectBlocked(me.uid);
+        if (offers === false || likes === false || blocks === false) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
             scoreMatch(me, offers);
-            console.log(offers);
             let maxScore = 0;
             let retOffer = null;
             for (const offer of offers) {
-                if (offer.score > maxScore && likes.indexOf(offer.uid) == -1) {
+                if (offer.score > maxScore && likes.indexOf(offer.uid) == -1 && blocks.indexOf(offer.uid) == -1) {
                     maxScore = offer.score;
                     retOffer = offer;
                 }
@@ -85,9 +87,9 @@ const search = async (req, res) => {
     if (isCheck == false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
     } else {
-        const users = await userModels.search(me.uid, me.gender, me.sexuality, req.body);
-        console.log(users);
-        if (users === false) {
+        const users  = await userModels.search(me.uid, me.gender, me.sexuality, req.body);
+        const blocks = await blockModels.selectBlocked(me.uid);
+        if (users === false || blocks === false) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
             const newUsers = [];
@@ -102,7 +104,8 @@ const search = async (req, res) => {
                         break;
                     }
                 }
-                if (isIn == true) {
+                if (isIn == true && blocks.indexOf(ouser.uid) == -1) {
+                    delete ouser['uid'];
                     newUsers.push(ouser);
                 }
             }
@@ -111,9 +114,75 @@ const search = async (req, res) => {
     }
 }
 
+const report = async (req, res) => {
+    const isCheck = checkBody({
+        'username': 'string',
+    }, req.body);
+    const user = jwt.checkToken(req.cookies.token);
+
+    if (isCheck === false) {
+        res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
+    } else {
+        const reported = await userModels.selectByName(req.body.username);
+        if (reported === false) {
+            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+        } else if (reported == null) {
+            res.status(404).json({ 'error': 1, 'message': 'User not found' });
+        } else {
+            const isExist = await reportModels.isExist(user.uid, reported.uid);
+            if (isExist === null) {
+                res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+            } else if (isExist == true) {
+                res.status(200).json({ 'message': 'Already reported' });
+            } else {
+                const isAdd = await reportModels.insert(user.uid, reported.uid);
+                if (isAdd === false) {
+                    res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+                } else {
+                    res.status(200).json()
+                }
+            }
+        }
+    }
+}
+
+const block = async (req, res) => {
+    const isCheck = checkBody({
+        'username': 'string',
+    }, req.body);
+    const user = jwt.checkToken(req.cookies.token);
+
+    if (isCheck === false) {
+        res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
+    } else {
+        const blocked = await userModels.selectByName(req.body.username);
+        if (blocked === false) {
+            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+        } else if (blocked == null) {
+            res.status(404).json({ 'error': 1, 'message': 'User not found' });
+        } else {
+            const isExist = await blockModels.isExist(user.uid, blocked.uid);
+            if (isExist === null) {
+                res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+            } else if (isExist == true) {
+                res.status(200).json({ 'message': 'Already Blocked' });
+            } else {
+                const isAdd = await blockModels.insert(user.uid, blocked.uid);
+                if (isAdd === false) {
+                    res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+                } else {
+                    res.status(200).json()
+                }
+            }
+        }
+    }
+}
+
 export default {
     matchs,
     likes,
     offer,
-    search
+    search,
+    report,
+    block
 }

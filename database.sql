@@ -1,6 +1,8 @@
 DROP TABLE IF EXISTS "users";
 DROP TABLE IF EXISTS "likes";
 DROP TABLE IF EXISTS "matchs";
+DROP TABLE IF EXISTS "blocks";
+DROP TABLE IF EXISTS "reports";
 
 CREATE TABLE users (
     -- uid varchar NOT NULL,
@@ -32,6 +34,15 @@ CREATE TABLE likes (
     islike boolean
 );
 
+CREATE TABLE blocks (
+    id_blocker int,
+    id_blocked int
+);
+
+CREATE TABLE reports (
+    id_reporter int,
+    id_reported int
+);
 
 INSERT INTO users (email, username, password, birthday, gender, sexuality, tags, popularity, isOK) VALUES ('user1@lol.com', 'user1', '$2b$10$i2mzQl6vU59t53eXp3ZlxueyiVTLeQTRhrHB3zq.kabbDduUD7BH.', '1992-02-02T00:00:00.000Z', 'H', 'HF', '#bite,#barres,#lolipop' , 20, TRUE);
 INSERT INTO users (email, username, password, birthday, gender, sexuality, tags, popularity, isOK) VALUES ('user2@lol.com', 'user2', '$2b$10$i2mzQl6vU59t53eXp3ZlxueyiVTLeQTRhrHB3zq.kabbDduUD7BH.', '1995-02-02T00:00:00.000Z', 'F', 'HF', '#des,#barres,#vaches'   , 10, TRUE);
