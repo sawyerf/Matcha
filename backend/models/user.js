@@ -32,6 +32,22 @@ const setInfo = async (uid, gender, sexuality, tags, bio) => {
     return true;
 }
 
+const updatePassword = async (uid, password) => {
+    let res;
+    try {
+        res = await client.query(
+            `UPDATE users
+            SET password=$2
+            WHERE uid=$1`,
+            [uid, password]
+        );
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+    return true;
+}
+
 const selectByName = async (username) => {
     let res;
     try {
@@ -160,5 +176,6 @@ export default {
     setInfo,
     search,
     selectByName,
-    setIsOK
+    setIsOK,
+    updatePassword
 };

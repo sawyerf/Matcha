@@ -38,11 +38,11 @@ const likes = async (req, res) => {
 }
 
 const offer = async (req, res) => {
-    let retOffers = [];
-
     const offers = await userModels.selectOffer(req.me.uid, req.me.gender, req.me.sexuality);
     const likes = await likeModels.selectMyLike(req.me.uid);
     const blocks = await blockModels.selectBlocked(req.me.uid);
+    let retOffers = [];
+
     if (offers === false || likes === false || blocks === false) {
         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
     } else {
@@ -126,7 +126,7 @@ const report = async (req, res) => {
                 if (isAdd === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else {
-                    res.status(200).json()
+                    res.status(200).json();
                 }
             }
         }
@@ -157,7 +157,7 @@ const block = async (req, res) => {
                 if (isAdd === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else {
-                    res.status(200).json()
+                    res.status(200).json();
                 }
             }
         }
