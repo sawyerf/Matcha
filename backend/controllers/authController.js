@@ -3,6 +3,7 @@ import { hashPassword } from '../utils/hash';
 import { checkBody } from '../utils/checkBody';
 import jwt from '../utils/jwt';
 import bcrypt from 'bcrypt'
+import { sendmail }  from '../utils/mail';
 
 const login = async (req, res) => {
     const isCheck = checkBody({
@@ -74,6 +75,7 @@ const register = async (req, res) => {
 const check = async (req, res) => {
     console.log('req : ', req.body);
     console.log('cookies: ', req.cookies);
+    sendmail('trash123@yopmail.fr', 'title', '<p> des barres </p>');
     const isConnect = jwt.checkToken(req.cookies.token);
     if (isConnect === false) console.log('Bad Token');
     res.status(200).json(isConnect);
