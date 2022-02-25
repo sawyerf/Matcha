@@ -2,7 +2,6 @@ import { checkBody } from '../utils/checkBody';
 import likeModels from '../models/like.js';
 import matchModels from '../models/match.js';
 import userModels from '../models/user.js';
-import jwt from '../utils/jwt';
 
 const match = async (req, res, user, liked) => {
     let ret;
@@ -29,16 +28,14 @@ const match = async (req, res, user, liked) => {
     }
 }
 
-// check if user exist (uid)
 
 const like = async (req, res) => {
-    const user = jwt.checkToken(req.cookies.token);
     const isCheck = checkBody({
         'username': 'string',
         'islike': 'boolean'
     }, req.body);
 
-    if (isCheck === false || user.username == req.body.username) {
+    if (isCheck === false || req.me.username == req.body.username) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' })
     } else {
         const liked = await userModels.selectByName(req.body.username);
@@ -47,15 +44,15 @@ const like = async (req, res) => {
         } else if (like === null) {
             res.status(404).json({ 'error': 1, 'message': 'Username not found' });
         } else {
-            const preLike = await likeModels.select(user.uid, liked.uid);
+            const preLike = await likeModels.select(req.me.uid, liked.uid);
             if (preLike === false) {
                 res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
             } else {
                 let ret;
                 if (preLike === null) {
-                    ret = await likeModels.insert(user.uid, liked.uid, req.body.islike);
+                    ret = await likeModels.insert(req.me.uid, liked.uid, req.body.islike);
                 } else if (preLike.islike != req.body.islike) {
-                    ret = await likeModels.update(user.uid, liked.uid, req.body.islike);
+                    ret = await likeModels.update(req.me.uid, liked.uid, req.body.islike);
                 } else {
                     ret = true;
                 }
@@ -63,7 +60,7 @@ const like = async (req, res) => {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else {
                     if (req.body.islike == true) {
-                        await match(req, res, user, liked);
+                        await match(req, res, req.me, liked);
                     } else {
                         res.status(200).json();
                     }

@@ -1,4 +1,3 @@
-// import casual from 'casual';
 const casual = require('casual').fr_FR;
 import { client } from '../models/connection'
 
@@ -17,8 +16,8 @@ const generateUser = () => {
         'bio': casual.sentences,
         'popularity': (Math.random() * 100) | 0,
         'tags': ['#' + casual.word, '#' + casual.word, '#' + casual.word].join(),
-        'latitude':  48.0 + Math.random(),//casual.latitude,
-        'longitude': 2.0 + Math.random(),//casual.longitude,
+        'latitude':  48.0 + Math.random(),
+        'longitude': 2.0 + Math.random(),
         'isOK': true,
     };
     return user;

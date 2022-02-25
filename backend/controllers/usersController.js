@@ -2,15 +2,13 @@ import { checkBody } from '../utils/checkBody';
 import matchModels from '../models/match';
 import userModels from '../models/user';
 import likeModels from '../models/like';
-import blockModels from  '../models/block';
+import blockModels from '../models/block';
 import reportModels from '../models/report';
 import { scoreMatch } from '../utils/score';
-import jwt from '../utils/jwt';
 import { locationByIp, distance } from '../utils/location';
 
 const matchs = async (req, res) => {
-    const user = jwt.checkToken(req.cookies.token);
-    const uidMatchs = await matchModels.selectByUser(user.uid);
+    const uidMatchs = await matchModels.selectByUser(req.me.uid);
 
     if (uidMatchs == null) {
         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
@@ -25,8 +23,7 @@ const matchs = async (req, res) => {
 }
 
 const likes = async (req, res) => {
-    const user = jwt.checkToken(req.cookies.token);
-    const uidsMyLiker = await likeModels.selectMyLiker(user.uid);
+    const uidsMyLiker = await likeModels.selectMyLiker(req.me.uid);
 
     if (uidsMyLiker === false) {
         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
@@ -41,34 +38,28 @@ const likes = async (req, res) => {
 }
 
 const offer = async (req, res) => {
-    const user = jwt.checkToken(req.cookies.token);
-    const me = await userModels.selectMe(user.uid);
     let retOffers = [];
 
-    if (me == false) {
+    const offers = await userModels.selectOffer(req.me.uid, req.me.gender, req.me.sexuality);
+    const likes = await likeModels.selectMyLike(req.me.uid);
+    const blocks = await blockModels.selectBlocked(req.me.uid);
+    if (offers === false || likes === false || blocks === false) {
         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
     } else {
-        const offers = await userModels.selectOffer(me.uid, me.gender, me.sexuality);
-        const likes  = await likeModels.selectMyLike(me.uid);
-        const blocks = await blockModels.selectBlocked(me.uid);
-        if (offers === false || likes === false || blocks === false) {
-            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-        } else {
-            scoreMatch(me, offers);
-            let index = 0;
-            for (const offer of offers.sort((a, b) => {return b.score - a.score})) {
-                if (likes.indexOf(offer.uid) == -1 && blocks.indexOf(offer.uid) == -1) {
-                    delete offer.uid
-                    retOffers.push(offer);
-                    index++
-                }
-                if (index >= 10) break;
+        scoreMatch(req.me, offers);
+        let index = 0;
+        for (const offer of offers.sort((a, b) => { return b.score - a.score })) {
+            if (likes.indexOf(offer.uid) == -1 && blocks.indexOf(offer.uid) == -1) {
+                delete offer.uid
+                retOffers.push(offer);
+                index++
             }
-            res.status(200).json({
-                'me': me, // To delete
-                'offers': retOffers
-            });
+            if (index >= 10) break;
         }
+        res.status(200).json({
+            'me': req.me, // To delete
+            'offers': retOffers
+        });
     }
 }
 
@@ -81,26 +72,21 @@ const search = async (req, res) => {
         'maxDistance': 'number',
         'tags': 'object' // changer ca pour list
     }, req.body);
-    const user = jwt.checkToken(req.cookies.token);
-    const me = await userModels.selectMe(user.uid);
-    // distance(locationByIp('82.64.133.36'),
-    // locationByIp('80.215.207.91'));
-    // console.log('me: ', me);
+
     if (isCheck == false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
     } else {
-        const users  = await userModels.search(me.uid, me.gender, me.sexuality, req.body);
-        const blocks = await blockModels.selectBlocked(me.uid);
+        const users = await userModels.search(req.me.uid, req.me.gender, req.me.sexuality, req.body);
+        const blocks = await blockModels.selectBlocked(req.me.uid);
         if (users === false || blocks === false) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
             const newUsers = [];
             for (const ouser of users) {
-                if (distance([me.latitude, me.longitude], [ouser.latitude, ouser.longitude]) > req.body.maxDistance) continue;
+                if (distance([req.me.latitude, req.me.longitude], [ouser.latitude, ouser.longitude]) > req.body.maxDistance) continue;
                 const Tags = ouser.tags.split(',');
                 let isIn = true;
                 for (const tag of req.body.tags) {
-                    console.log(tag, Tags);
                     if (Tags.indexOf(tag) < 0) {
                         isIn = false;
                         break;
@@ -120,7 +106,6 @@ const report = async (req, res) => {
     const isCheck = checkBody({
         'username': 'string',
     }, req.body);
-    const user = jwt.checkToken(req.cookies.token);
 
     if (isCheck === false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
@@ -131,13 +116,13 @@ const report = async (req, res) => {
         } else if (reported == null) {
             res.status(404).json({ 'error': 1, 'message': 'User not found' });
         } else {
-            const isExist = await reportModels.isExist(user.uid, reported.uid);
+            const isExist = await reportModels.isExist(req.me.uid, reported.uid);
             if (isExist === null) {
                 res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
             } else if (isExist == true) {
                 res.status(200).json({ 'message': 'Already reported' });
             } else {
-                const isAdd = await reportModels.insert(user.uid, reported.uid);
+                const isAdd = await reportModels.insert(req.me.uid, reported.uid);
                 if (isAdd === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else {
@@ -152,7 +137,6 @@ const block = async (req, res) => {
     const isCheck = checkBody({
         'username': 'string',
     }, req.body);
-    const user = jwt.checkToken(req.cookies.token);
 
     if (isCheck === false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
@@ -163,13 +147,13 @@ const block = async (req, res) => {
         } else if (blocked == null) {
             res.status(404).json({ 'error': 1, 'message': 'User not found' });
         } else {
-            const isExist = await blockModels.isExist(user.uid, blocked.uid);
+            const isExist = await blockModels.isExist(req.me.uid, blocked.uid);
             if (isExist === null) {
                 res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
             } else if (isExist == true) {
                 res.status(200).json({ 'message': 'Already Blocked' });
             } else {
-                const isAdd = await blockModels.insert(user.uid, blocked.uid);
+                const isAdd = await blockModels.insert(req.me.uid, blocked.uid);
                 if (isAdd === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else {

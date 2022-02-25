@@ -2,7 +2,6 @@ import { distance } from '../utils/location';
 
 
 export const scoreMatch = (me, matchs) => {
-    console.log(me);
     for (const match of matchs) {
         match.score = 0;
         match.score += 10 - Math.abs(me.age - match.age);
@@ -11,7 +10,6 @@ export const scoreMatch = (me, matchs) => {
             const myTags = me.tags.split(',');
             for (const myTag of myTags) {
                 if (tags.indexOf(myTag) >= 0) {
-                    // console.log('tags: ', myTag)
                     match.score += 5;
                 }
             }

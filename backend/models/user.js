@@ -78,7 +78,7 @@ const selectMe = async (uid) => {
         console.log(error);
         return false;
     }
-    // if (res.rowCount == 0) return null;
+    if (res.rowCount == 0) return null;
     return res.rows[0];
 }
 
