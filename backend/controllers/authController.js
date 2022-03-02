@@ -1,8 +1,10 @@
+import bcrypt from 'bcrypt'
+import {v4 as uuidv4} from 'uuid';
+
 import userModels from '../models/user';
 import { hashPassword } from '../utils/hash';
 import { checkBody } from '../utils/checkBody';
 import jwt from '../utils/jwt';
-import bcrypt from 'bcrypt'
 import { sendmail }  from '../utils/mail';
 
 const login = async (req, res) => {
@@ -38,10 +40,10 @@ const login = async (req, res) => {
 
 const register = async (req, res) => {
     const isCheck = checkBody({
-        "email": "email",
-        "username": "string",
-        "password": "password",
-        "age": 'date'
+        'email':    'email',
+        'username': 'string',
+        'password': 'password',
+        'age': 'date'
     }, req.body);
     if (isCheck === false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' })
@@ -56,13 +58,20 @@ const register = async (req, res) => {
             if (hashPass == null) {
                 res.status(500).json({ 'error': 1, 'message': 'Error hash' });
             } else {
+                const keymail = uuidv4();
+                const keypass = uuidv4();
                 const ret = await userModels.insert(
                     req.body.email,
                     req.body.username,
                     hashPass,
-                    req.body.age
+                    req.body.age,
+                    keymail,
+                    keypass
                 );
                 if (ret === true) {
+                    sendmail(req.body.email,
+                        'Welcome ' + req.body.username,
+                        `Hi ${req.body.username},\nhttp://localhost:3000/profil/validmail/${keymail}\nBye !`);
                     res.status(201).json();
                 } else {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });

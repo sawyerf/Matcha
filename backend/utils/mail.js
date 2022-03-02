@@ -19,5 +19,12 @@ export const sendmail = async (email, title, content) => {
         subject: title,
         text: content,
         html: content
+    }, (error, response) => {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log("Preview URL: %s", nodemailer.getTestMessageUrl(response));
+        }
+        smtpTransport.close();
     });
 }

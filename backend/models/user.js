@@ -1,13 +1,13 @@
 import { client } from './connection'
 import { v4 as uuidv4 }  from 'uuid'
 
-const insert = async (email, username, password, age) => {
+const insert = async (email, username, password, age, keymail, keypass) => {
     let res;
     try {
         res = await client.query(
-            `INSERT INTO users (email, username, password, birthday, bio, tags)
-            VALUES ($1, $2, $3, $4, "", "")`,
-            [email, username, password, age]
+            `INSERT INTO users (email, username, password, birthday, keymail, keypass)
+            VALUES ($1, $2, $3, $4, $5, $6)`,
+            [email, username, password, age, keymail, keypass]
         );
     } catch (error) {
         console.log(error);
@@ -147,6 +147,36 @@ const setIsOK = async (uid, isOK) => {
     return true;
 }
 
+const setVal = async (uid, name, value) => {
+    let res;
+    try {
+        res = await client.query(
+            `UPDATE users SET ${name}=$2 WHERE uid=$1`,
+            [uid, value]
+        );
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+    return true;
+}
+
+const selectBy = async (name, value) => {
+    let res;
+
+    try {
+        res = await client.query(
+            `SELECT * FROM users WHERE ${name}=$1`,
+            [value]
+        );
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+    if (res.rowCount == 0) return null;
+    return res.rows[0];
+}
+
 const search = async (uid, myGender, mySexuality, body) => {
     let res;
 
@@ -177,5 +207,7 @@ export default {
     search,
     selectByName,
     setIsOK,
-    updatePassword
+    updatePassword,
+    selectBy,
+    setVal
 };

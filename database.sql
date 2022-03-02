@@ -18,7 +18,10 @@ CREATE TABLE users (
     tags varchar,
     latitude float DEFAULT 48.8582,
     longitude float DEFAULT 2.3387,
-    isOK boolean DEFAULT FALSE
+    isOK boolean DEFAULT FALSE,
+    keymail varchar UNIQUE,
+    keypass varchar UNIQUE,
+    validmail boolean
 );
 -- CREATE UNIQUE INDEX uid ON users (uid); 
 

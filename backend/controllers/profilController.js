@@ -1,7 +1,8 @@
-import { checkBody } from '../utils/checkBody';
-import userModels from '../models/user';
-import { hashPassword } from '../utils/hash';
 import bcrypt from 'bcrypt';
+
+import { checkBody } from '../utils/checkBody';
+import { hashPassword } from '../utils/hash';
+import userModels from '../models/user';
 
 const setInfo = async (req, res) => {
     let ret;
@@ -54,5 +55,5 @@ const changePassword = async (req, res) => {
 
 export default {
     setInfo,
-    changePassword
+    changePassword,
 }
