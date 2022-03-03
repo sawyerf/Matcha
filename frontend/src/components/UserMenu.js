@@ -2,6 +2,7 @@ import { makeStyles } from "@mui/styles";
 import { useNavigate } from "react-router-dom";
 import Disconnection from "@mui/icons-material/NoMeetingRoom";
 import Match from "@mui/icons-material/Favorite";
+import UserMenuMatch from "./UserMenuMatch";
 import { useState } from "react";
 
 const useStyles = makeStyles({
@@ -29,6 +30,14 @@ const useStyles = makeStyles({
       color: "white",
       borderColor: "white",
     },
+  },
+  matchCard: {
+    width: "100px",
+    height: "150px",
+    backgroundColor: "red",
+    marginBottom: "10px",
+    position: "relative",
+    cursor: "pointer",
   },
 });
 
@@ -103,38 +112,45 @@ const UserMenu = () => {
       </div>
       <div
         style={{
-          marginTop: "10px",
-          display: "flex",
-          width: "100%",
-          justifyContent: "space-evenly",
+          height: `calc(100% - 60px)`,
         }}
       >
-        <p
+        <div
           style={{
-            cursor: "pointer",
-            fontWeight: "600",
-            fontSize: "14px",
-            paddingRight: "10px",
-            paddingLeft: "10px",
-            borderBottom: matchDisplay ? "solid 3px #EB58A2" : "",
+            marginTop: "10px",
+            display: "flex",
+            width: "100%",
+            justifyContent: "space-evenly",
           }}
-          onClick={() => setMatchDisplay(!matchDisplay)}
         >
-          Match
-        </p>
-        <p
-          style={{
-            paddingRight: "10px",
-            paddingLeft: "10px",
-            borderBottom: matchDisplay ? "" : "solid 3px #EB58A2",
-            cursor: "pointer",
-            fontWeight: "600",
-            fontSize: "14px",
-          }}
-          onClick={() => setMatchDisplay(!matchDisplay)}
-        >
-          Message
-        </p>
+          <p
+            style={{
+              cursor: "pointer",
+              fontWeight: "600",
+              fontSize: "14px",
+              paddingRight: "10px",
+              paddingLeft: "10px",
+              borderBottom: matchDisplay ? "solid 3px #EB58A2" : "",
+            }}
+            onClick={() => setMatchDisplay(!matchDisplay)}
+          >
+            Match
+          </p>
+          <p
+            style={{
+              paddingRight: "10px",
+              paddingLeft: "10px",
+              borderBottom: matchDisplay ? "" : "solid 3px #EB58A2",
+              cursor: "pointer",
+              fontWeight: "600",
+              fontSize: "14px",
+            }}
+            onClick={() => setMatchDisplay(!matchDisplay)}
+          >
+            Message
+          </p>
+        </div>
+        <UserMenuMatch matchDisplay={matchDisplay} />
       </div>
     </div>
   );
