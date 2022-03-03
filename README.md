@@ -25,6 +25,10 @@ docker-compose -f docker-compose.yml up -d
 |        |                             |                         |
 | POST   | [/profil/setinfo        ]() | Set Info after register |
 | POST   | [/profil/changepassword ]() | Change Password         |
+|        |                             |                         |
+| GET    | [/no/validmail/:key     ]() | Valid Mail              |
+| POST   | [/no/resetpass/:key     ]() | Reset Password          |
+| POST   | [/no/askreset           ]() | Ask Reset Password      |
 
 ### /auth/login
 ```json
@@ -80,5 +84,19 @@ docker-compose -f docker-compose.yml up -d
 ```json
 {
     "username": "user2"
+}
+```
+
+### /no/resetpass/:key
+```json
+{
+    "new_password": "Password*0"
+}
+```
+
+### /api/no/askreset
+```json
+{
+    "email": "user@lol.com"
 }
 ```

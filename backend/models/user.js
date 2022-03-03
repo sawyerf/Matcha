@@ -18,6 +18,7 @@ const insert = async (email, username, password, age, keymail, keypass) => {
 
 const setInfo = async (uid, gender, sexuality, tags, bio) => {
     let res;
+
     try {
         res = await client.query(
             `UPDATE users
