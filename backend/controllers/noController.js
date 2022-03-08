@@ -20,6 +20,7 @@ const validMail = async (req, res) => {
     }
 }
 
+// change keypass after
 const resetPass = async (req, res) => {
     const isCheck = checkBody({
         'new_password': 'password'
@@ -38,7 +39,7 @@ const resetPass = async (req, res) => {
             if (hashPass == null) {
                 res.status(500).json({ 'error': 1, 'message': 'Error hash' });
             } else {
-                const isOK = await userModels.updatePassword(user.uid, hashPass);
+                const isOK = await userModels.setVal(user.uid, 'password', hashPass);
                 if (isOK === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else if (isOK === true) {

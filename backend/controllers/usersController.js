@@ -110,7 +110,7 @@ const report = async (req, res) => {
     if (isCheck === false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
     } else {
-        const reported = await userModels.selectByName(req.body.username);
+        const reported = await userModels.selectBy('username', req.body.username);
         if (reported === false) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else if (reported == null) {
@@ -141,7 +141,7 @@ const block = async (req, res) => {
     if (isCheck === false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
     } else {
-        const blocked = await userModels.selectByName(req.body.username);
+        const blocked = await userModels.selectBy('username', req.body.username);
         if (blocked === false) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else if (blocked == null) {

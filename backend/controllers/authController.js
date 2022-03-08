@@ -15,7 +15,7 @@ const login = async (req, res) => {
     if (isCheck === false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' })
     } else {
-        const user = await userModels.selectByName(req.body.username);
+        const user = await userModels.selectBy('username', req.body.username);
         if (user === false) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else if (user == null) {
@@ -43,7 +43,9 @@ const register = async (req, res) => {
         'email':    'email',
         'username': 'string',
         'password': 'password',
-        'age': 'date'
+        'age': 'date',
+        'firstname': 'string',
+        'lastname': 'string',
     }, req.body);
     if (isCheck === false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' })

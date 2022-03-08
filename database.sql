@@ -9,6 +9,8 @@ CREATE TABLE users (
     -- uid varchar NOT NULL,
     uid SERIAL PRIMARY KEY,
     email varchar UNIQUE,
+    firstname varchar,
+    lastname varchar,
     username varchar UNIQUE,
     password varchar,
     birthday timestamp,
@@ -22,7 +24,7 @@ CREATE TABLE users (
     isOK boolean DEFAULT FALSE,
     keymail varchar UNIQUE,
     keypass varchar UNIQUE,
-    validmail boolean,
+    validmail boolean DEFAULT FALSE,
     images text ARRAY[5]
 );
 -- CREATE UNIQUE INDEX uid ON users (uid); 

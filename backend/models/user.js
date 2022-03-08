@@ -1,13 +1,13 @@
 import { client } from './connection'
 import { v4 as uuidv4 }  from 'uuid'
 
-const insert = async (email, username, password, age, keymail, keypass) => {
+const insert = async (email, username, password, age, keymail, keypass, firstname, lastname) => {
     let res;
     try {
         res = await client.query(
-            `INSERT INTO users (email, username, password, birthday, keymail, keypass)
-            VALUES ($1, $2, $3, $4, $5, $6)`,
-            [email, username, password, age, keymail, keypass]
+            `INSERT INTO users (email, username, password, birthday, keymail, keypass, firstname, lastname)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+            [email, username, password, age, keymail, keypass, firstname, lastname]
         );
     } catch (error) {
         console.log(error);
@@ -16,52 +16,21 @@ const insert = async (email, username, password, age, keymail, keypass) => {
     return true;
 }
 
-const setInfo = async (uid, gender, sexuality, tags, bio) => {
+const setInfo = async (uid, gender, sexuality, tags, bio, firstname, lastname) => {
     let res;
 
     try {
         res = await client.query(
             `UPDATE users
-            SET gender=$2, sexuality=$3, tags=$4, bio=$5
+            SET gender=$2, sexuality=$3, tags=$4, bio=$5, firstname=$6, lastname=$7
             WHERE uid=$1`,
-            [uid, gender, sexuality, tags, bio]
+            [uid, gender, sexuality, tags, bio, firstname, lastname]
         );
     } catch (error) {
         console.log(error);
         return false;
     }
     return true;
-}
-
-const updatePassword = async (uid, password) => {
-    let res;
-    try {
-        res = await client.query(
-            `UPDATE users
-            SET password=$2
-            WHERE uid=$1`,
-            [uid, password]
-        );
-    } catch (error) {
-        console.log(error);
-        return false;
-    }
-    return true;
-}
-
-const selectByName = async (username) => {
-    let res;
-    try {
-        res = await client.query(
-            `SELECT * FROM users WHERE username=$1`,
-            [username]
-        );
-    } catch (error) {
-        console.log(error);
-        return false;
-    }
-    if (res.rowCount == 0) return null;
-    return res.rows[0];
 }
 
 const selectByUids = async (uids) => {
@@ -134,12 +103,12 @@ const exist = async (email, username) => {
     }
 }
 
-const setIsOK = async (uid, isOK) => {
+const setVal = async (uid, name, value) => {
     let res;
     try {
         res = await client.query(
-            `UPDATE users SET isOK=$2 WHERE uid=$1`,
-            [uid, isOK]
+            `UPDATE users SET ${name}=$2 WHERE uid=$1`,
+            [uid, value]
         );
     } catch (error) {
         console.log(error);
@@ -148,12 +117,14 @@ const setIsOK = async (uid, isOK) => {
     return true;
 }
 
-const setVal = async (uid, name, value) => {
+const updateMail = async (uid, mail, keymail) => {
     let res;
     try {
         res = await client.query(
-            `UPDATE users SET ${name}=$2 WHERE uid=$1`,
-            [uid, value]
+            `UPDATE users 
+            SET email=$2, keymail=$3, validmail=FALSE
+            WHERE uid=$1`,
+            [uid, mail, keymail]
         );
     } catch (error) {
         console.log(error);
@@ -199,16 +170,13 @@ const search = async (uid, myGender, mySexuality, body) => {
 
 export default {
     insert,
-    selectByName,
     exist,
     selectByUids,
     selectMe,
     selectOffer,
+    selectBy,
+    setVal,
     setInfo,
     search,
-    selectByName,
-    setIsOK,
-    updatePassword,
-    selectBy,
-    setVal
+    updateMail,
 };
