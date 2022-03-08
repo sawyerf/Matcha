@@ -5,6 +5,7 @@ import { hashPassword } from '../utils/hash';
 
 const validMail = async (req, res) => {
     const user = await userModels.selectBy('keymail', req.params.key);
+
     if (user === false) {
         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
     } else if (user === null) {

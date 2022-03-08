@@ -1,5 +1,5 @@
 const whatType = (type) => {
-    if (['email', 'password', 'date', 'sexuality', 'gender', 'tags'].indexOf(type) >= 0) {
+    if (['email', 'password', 'date', 'sexuality', 'gender', 'tags', 'uid'].indexOf(type) >= 0) {
         return 'string';
     }
     return type;
@@ -34,6 +34,11 @@ const testTags = (tags) => {
     return regex.test(tags);
 }
 
+const testUid = (tags) => {
+    const regex = /[a-f0-9\-]*/;
+    return regex.test(tags);
+}
+
 export const checkBody = (check, body) => {
     console.log('req: ', body)
     let type;
@@ -57,6 +62,8 @@ export const checkBody = (check, body) => {
             if (testGender(body[key]) == false) return false;
         } else if (check[key] == 'tags') {
             if (testTags(body[key]) == false) return false;
+        } else if (check[key] == 'uid') {
+            if (testUid(body[key]) == false) return false;
         } else if (check[key] == 'string') {
             if (body[key] == '') return false;
         }

@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS "likes";
 DROP TABLE IF EXISTS "matchs";
 DROP TABLE IF EXISTS "blocks";
 DROP TABLE IF EXISTS "reports";
+DROP TABLE IF EXISTS "images";
 
 CREATE TABLE users (
     -- uid varchar NOT NULL,
@@ -21,7 +22,8 @@ CREATE TABLE users (
     isOK boolean DEFAULT FALSE,
     keymail varchar UNIQUE,
     keypass varchar UNIQUE,
-    validmail boolean
+    validmail boolean,
+    images text ARRAY[5]
 );
 -- CREATE UNIQUE INDEX uid ON users (uid); 
 
@@ -44,6 +46,12 @@ CREATE TABLE blocks (
 CREATE TABLE reports (
     id_reporter int,
     id_reported int
+);
+
+CREATE TABLE images (
+    id_image varchar UNIQUE,
+    id_user int,
+    image text
 );
 
 INSERT INTO users (email, username, password, birthday, gender, sexuality, tags, popularity, isOK) VALUES ('user1@lol.com', 'user1', '$2b$10$i2mzQl6vU59t53eXp3ZlxueyiVTLeQTRhrHB3zq.kabbDduUD7BH.', '1992-02-02T00:00:00.000Z', 'H', 'HF', '#bite,#barres,#lolipop' , 20, TRUE);
