@@ -73,7 +73,7 @@ const selectOffer = async (uid, myGender, mySexuality) => {
 
     try {
         res = await client.query(
-            `SELECT uid, username, date_part('year', age(birthday)) AS age, gender, sexuality, bio, tags, popularity, latitude, longitude
+            `SELECT uid, username, date_part('year', age(birthday)) AS age, gender, sexuality, bio, tags, popularity, latitude, longitude, last_visit
             FROM users
             WHERE (uid!=$1 AND isOK=TRUE AND position($2 in sexuality) > 0 AND position(gender in $3) > 0)`,
             [uid, myGender, mySexuality]
@@ -154,7 +154,7 @@ const search = async (uid, myGender, mySexuality, body) => {
 
     try {
         res = await client.query(
-            `SELECT uid, username, date_part('year', age(birthday)) AS age, gender, sexuality, bio, tags, popularity
+            `SELECT uid, username, date_part('year', age(birthday)) AS age, gender, sexuality, bio, tags, popularity, last_visit
             FROM users
             WHERE uid!=$1 AND isok=TRUE AND position($2 in sexuality) > 0 AND position(gender in $3) > 0
                 AND $4 <= date_part('year', age(birthday)) AND date_part('year', age(birthday)) <= $5

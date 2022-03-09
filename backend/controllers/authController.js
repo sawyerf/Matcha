@@ -26,7 +26,13 @@ const login = async (req, res) => {
                 if (hashPass == true) {
                     const jwtToken = jwt.createToken(user.uid, user.username, user.email);
                     res.cookie('token', jwtToken)
-                    res.status(200).json({ 'token': jwtToken });
+                    const DateNow = Date.now();
+                    const isOK = await userModels.setVal(user.uid, 'last_visit', new Date(DateNow).toISOString());
+                    if (isOK === false) {
+                        res.status(400).json({ 'error': 1, 'message': 'SQL Error' })
+                    } else {
+                        res.status(200).json({ 'token': jwtToken });
+                    }
                 } else {
                     res.status(200).json({ 'error': 1, 'message': 'Bad password' });
                 }

@@ -6,7 +6,6 @@ DROP TABLE IF EXISTS "reports";
 DROP TABLE IF EXISTS "images";
 
 CREATE TABLE users (
-    -- uid varchar NOT NULL,
     uid SERIAL PRIMARY KEY,
     email varchar UNIQUE,
     firstname varchar,
@@ -14,6 +13,7 @@ CREATE TABLE users (
     username varchar UNIQUE,
     password varchar,
     birthday timestamp,
+    last_visit timestamp,
     gender varchar(1),
     sexuality varchar(2) DEFAULT 'HF',
     bio varchar,
@@ -27,7 +27,6 @@ CREATE TABLE users (
     validmail boolean DEFAULT FALSE,
     images text ARRAY[5]
 );
--- CREATE UNIQUE INDEX uid ON users (uid); 
 
 CREATE TABLE matchs (
     id_user1 int,
