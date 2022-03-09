@@ -4,6 +4,7 @@ import userModels from '../models/user';
 import likeModels from '../models/like';
 import blockModels from '../models/block';
 import reportModels from '../models/report';
+import historyModels from '../models/history';
 import { scoreMatch } from '../utils/score';
 import { locationByIp, distance } from '../utils/location';
 
@@ -102,6 +103,41 @@ const search = async (req, res) => {
     }
 }
 
+const visit = async (req, res) => {
+    const isCheck = checkBody({
+        'username': 'string',
+    }, req.body);
+
+    if (isCheck === false) {
+        res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
+    } else {
+        const user = await userModels.selectBy('username', req.body.username);
+        if (user === false) {
+            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+        } else if (user === null) {
+            res.status(404).json({ 'error': 1, 'message': 'User not found' });
+        } else {
+            const isExist = await historyModels.isExist(req.me.uid, user.uid);
+            if (isExist === null) {
+                res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+            } else {
+                let ret;
+                const DateNow = new Date(Date.now()).toISOString();
+                if (isExist === false) {
+                    ret = await historyModels.insert(req.me.uid, user.uid, DateNow)
+                } else {
+                    ret = await historyModels.update(req.me.uid, user.uid, DateNow)
+                }
+                if (ret === false) {
+                    res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+                } else {
+                    res.status(200).json();
+                }
+            }
+        }
+    }
+}
+
 const report = async (req, res) => {
     const isCheck = checkBody({
         'username': 'string',
@@ -170,5 +206,6 @@ export default {
     offer,
     search,
     report,
-    block
+    block,
+    visit,
 }

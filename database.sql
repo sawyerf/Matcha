@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS "matchs";
 DROP TABLE IF EXISTS "blocks";
 DROP TABLE IF EXISTS "reports";
 DROP TABLE IF EXISTS "images";
+DROP TABLE IF EXISTS "history";
 
 CREATE TABLE users (
     uid SERIAL PRIMARY KEY,
@@ -53,6 +54,12 @@ CREATE TABLE images (
     id_image varchar UNIQUE,
     id_user int,
     image text
+);
+
+CREATE TABLE history (
+    id_visiter int,
+    id_visited int,
+    time timestamp
 );
 
 INSERT INTO users (email, username, password, birthday, gender, sexuality, tags, popularity, isOK) VALUES ('user1@lol.com', 'user1', '$2b$10$i2mzQl6vU59t53eXp3ZlxueyiVTLeQTRhrHB3zq.kabbDduUD7BH.', '1992-02-02T00:00:00.000Z', 'H', 'HF', '#bite,#barres,#lolipop' , 20, TRUE);
