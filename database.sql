@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS "blocks";
 DROP TABLE IF EXISTS "reports";
 DROP TABLE IF EXISTS "images";
 DROP TABLE IF EXISTS "history";
+DROP TABLE IF EXISTS "messages";
 
 CREATE TABLE users (
     uid SERIAL PRIMARY KEY,
@@ -30,6 +31,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE matchs (
+    uid SERIAL PRIMARY KEY,
     id_user1 int,
     id_user2 int
 );
@@ -60,6 +62,13 @@ CREATE TABLE history (
     id_visiter int,
     id_visited int,
     time timestamp
+);
+
+CREATE TABLE messages (
+    id_match int,
+    id_from int,
+    msg text,
+    date timestamp
 );
 
 INSERT INTO users (email, username, password, birthday, gender, sexuality, tags, popularity, isOK) VALUES ('user1@lol.com', 'user1', '$2b$10$i2mzQl6vU59t53eXp3ZlxueyiVTLeQTRhrHB3zq.kabbDduUD7BH.', '1992-02-02T00:00:00.000Z', 'H', 'HF', '#bite,#barres,#lolipop' , 20, TRUE);
