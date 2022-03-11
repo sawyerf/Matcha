@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import userModels from '../models/user';
 
 require('dotenv').config();
 
@@ -22,7 +23,39 @@ const checkToken = (token) => {
     return verified;
 }
 
+const socketToken = async (socket, token) => {
+    const user = checkToken(token);
+
+    if (user == false) {
+        socket.emit('error', { 'message': 'Bad Token' })
+        return false; // res.status(403).json({ 'error': 1, 'message': 'Bad Token' })
+    } else if ((Date.now() - user.iat) / 1000 > 3600 * 24) {
+        socket.emit('error', { 'message': 'Token expire' })
+        return false; // res.status(403).json({ 'error': 1, 'message': 'Token expire' })
+    } else {
+        const me = await userModels.selectMe(user.uid);
+
+        if (me === false) {
+            socket.emit('error', { 'message': 'SQL Error' })
+            return false; // res.status(400).json({ 'error': 1, 'message': 'SQL Error' })
+        } else if (me === null) {
+            socket.emit('error', { 'message': 'User Not Found' })
+            return false; // res.status(404).json({ 'error': 1, 'message': 'User Not Found' })
+        } else {
+            const DateNow = Date.now();
+            const isOK = await userModels.setVal(me.uid, 'last_visit', new Date(DateNow).toISOString());
+            if (isOK === false) {
+                socket.emit('error', { 'message': 'SQL Error' })
+                return false; // res.status(400).json({ 'error': 1, 'message': 'SQL Error' })
+            } else {
+                return me;
+            }
+        }
+    }
+}
+
 export default {
     createToken,
-    checkToken
+    checkToken,
+    socketToken,
 };

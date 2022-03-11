@@ -1,9 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-
+import socket from 'socket.io';
 import { apiRouter } from './routes';
-import { client } from './models/connection'
+// import { client } from './models/connection'
+import { initSocket } from './socket'
 
 require('dotenv').config()
 
@@ -15,4 +16,12 @@ app.use(cookieParser());
 
 app.use('/api', apiRouter);
 
-app.listen(process.env.PORT || 3000);
+const server = app.listen(process.env.PORT || 3000);
+
+const io = socket(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
+initSocket(io)

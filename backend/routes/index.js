@@ -14,4 +14,4 @@ apiRouter.use('/no', noRouter);
 apiRouter.use('/action', jwtMiddleware, actionRouter);
 apiRouter.use('/users', jwtMiddleware, usersRouter);
 apiRouter.use('/profil', jwtMiddleware, profilRouter);
-apiRouter.use('/message', jwtMiddleware, messageRouter);
+// apiRouter.use('/message', jwtMiddleware, messageRouter);

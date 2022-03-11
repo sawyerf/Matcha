@@ -3,26 +3,28 @@ import messageModels from '../models/message';
 import matchModels from '../models/match';
 import { checkBody } from '../utils/checkBody';
 
-const sendMessage = async (req, res) => {
+const sendMessage = async (socket, data) => {
     const isCheck = checkBody({
         'id_match': 'number',
         'message': 'string'
-    }, req.body);
+    }, data);
 
     if (isCheck === false) {
-        res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
+        // res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
     } else {
-        const isExist = await matchModels.isExistId(req.body.id_match, req.me.uid);
+        const isExist = await matchModels.isExistId(data.id_match, socket.me.uid);
         if (isExist === null) {
-            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+            // res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else if (isExist === false) {
-            res.status(403).json({ 'error': 1, 'message': 'You can\'t send a message to this person' });
+            socket.emit('Error', 'You can\'t send a message to this person');
+            // res.status(403).json({ 'error': 1, 'message': 'You can\'t send a message to this person' });
         } else {
-            const isOK = await messageModels.insert(req.body.id_match, req.me.uid, req.body.message);
+            const isOK = await messageModels.insert(data.id_match, socket.me.uid, data.message);
             if (isOK === false) {
-                res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+                // res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
             } else {
-                res.status(200).json();
+                socket.emit('message', data.message);
+                // res.status(200).json();
             }
         }
     }
