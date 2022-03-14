@@ -19,11 +19,11 @@ const useStyles = makeStyles({
   },
 });
 
-const Profile = () => {
+const Profile = ({ setDisplayProfile }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} onClick={() => setDisplayProfile(false)}>
       <div className={classes.profilCard}></div>
     </div>
   );

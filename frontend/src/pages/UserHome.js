@@ -68,12 +68,9 @@ const UserHome = () => {
       <div className={classes.root}>
         <div className={classes.matchCard}>
           <div style={{ display: "flex" }}>
-            <div
-              className={classes.matchImage}
-              onClick={() => setDisplayProfile(true)}
-            >
+            <div className={classes.matchImage}>
               <div
-                style={{ zIndex: "2", position: "absolute", top: "200px" }}
+                style={{ position: "absolute", top: "200px" }}
                 onClick={() => previousImg()}
               >
                 <RightArrow rotate="rotate(180deg)" />
@@ -87,10 +84,10 @@ const UserHome = () => {
                   objectFit: "cover",
                   objectPosition: "50% 50%",
                 }}
+                onClick={() => setDisplayProfile(true)}
               />
               <div
                 style={{
-                  zIndex: "2",
                   position: "absolute",
                   top: "200px",
                   right: "0",
@@ -198,7 +195,7 @@ const UserHome = () => {
             Bloquer Utilisateur
           </div>
         </div>
-        {displayProfile && <Profile />}
+        {displayProfile && <Profile setDisplayProfile={setDisplayProfile} />}
       </div>
     </div>
   );

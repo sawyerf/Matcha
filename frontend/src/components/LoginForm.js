@@ -2,11 +2,13 @@ import { useState } from "react";
 import axios from "axios";
 // import FormControl from '@mui/material/FormControl';
 import { Box, TextField, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [passwd, setPasswd] = useState("");
   const [msgError, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleChangeUsername = (event) => {
     setUsername(event.target.value);
@@ -25,6 +27,10 @@ const LoginForm = () => {
       console.log("Error: ", res.data.message);
       setError("Fail to connect `" + res.data.message + "`");
     } else {
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+        navigate("/myprofile");
+      }
       setError("bg le mec");
     }
   };
