@@ -74,7 +74,9 @@ const register = async (req, res) => {
                     hashPass,
                     req.body.age,
                     keymail,
-                    keypass
+                    keypass,
+                    req.body.firstname,
+                    req.body.lastname
                 );
                 if (ret === true) {
                     sendmail(req.body.email,
