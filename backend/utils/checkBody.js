@@ -30,8 +30,13 @@ const testGender = (gender) => {
 }
 
 const testTags = (tags) => {
-    const regex = /\#[a-z]*([a-z]*)*/;
-    return regex.test(tags);
+    const regex = /\#[a-z]*/;
+    for (const tag of tags.split(',')) {
+        if (regex.test(tag) === false) {
+            return false;
+        }
+    }
+    return true;
 }
 
 const testUid = (tags) => {

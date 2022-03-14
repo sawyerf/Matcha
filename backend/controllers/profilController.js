@@ -7,7 +7,6 @@ import userModels from '../models/user';
 import imgModels from '../models/image';
 import { sendmail } from '../utils/mail';
 
-
 const setInfo = async (req, res) => {
     let ret;
     const isCheck = checkBody({
@@ -18,6 +17,7 @@ const setInfo = async (req, res) => {
         'firstname': 'string',
         'lastname': 'string',
     }, req.body);
+
     if (isCheck == false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
     } else {
@@ -148,11 +148,17 @@ const delImage = async (req, res) => {
     }
 }
 
-
 const me = async (req, res) => {
     delete req.me.password;
-    delete req.me.uid;
-    res.status(200).json(req.me);
+    delete req.me.validmail;
+    const images = await imgModels.select(req.me.uid);
+    if (images === false) {
+        res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+    } else {
+        req.me.images = images;
+        delete req.me.uid;
+        res.status(200).json(req.me);
+    }
 }
 
 export default {

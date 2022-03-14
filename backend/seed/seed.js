@@ -9,16 +9,19 @@ const generateUser = () => {
     const user = {
         'email': casual.email,
         'username': casual.username,
+        'firstname': casual.first_name,
+        'lastname': casual.last_name,
         'password': '$2b$10$i2mzQl6vU59t53eXp3ZlxueyiVTLeQTRhrHB3zq.kabbDduUD7BH.',
         'birthday': casual.date('YYYY-MM-DD') + 'T00:00:00.000Z',
         'gender': gender[(Math.random() * 2) | 0],
         'sexuality': sexuality[(Math.random() * 3) | 0],
-        'bio': casual.sentences,
+        'bio': casual.sentences(),
         'popularity': (Math.random() * 100) | 0,
         'tags': ['#' + casual.word, '#' + casual.word, '#' + casual.word].join(),
         'latitude':  48.0 + Math.random(),
         'longitude': 2.0 + Math.random(),
         'isOK': true,
+        'validmail': true,
     };
     return user;
 }
@@ -27,12 +30,12 @@ const addUser = async (newUser) => {
     let res;
     try {
         res = await client.query(
-            `INSERT INTO users (email, username, password, birthday, gender, sexuality, bio, popularity, tags, latitude, longitude, isOK)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
-            [newUser.email, newUser.username, newUser.password, newUser.birthday, newUser.gender, newUser.sexuality, newUser.bio, newUser.popularity, newUser.tags, newUser.latitude, newUser.longitude, newUser.isOK]
+            `INSERT INTO users (email, username, firstname, lastname, password, birthday, gender, sexuality, bio, popularity, tags, latitude, longitude, isOK, validmail)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`,
+            [newUser.email, newUser.username, newUser.firstname, newUser.lastname, newUser.password, newUser.birthday, newUser.gender, newUser.sexuality, newUser.bio, newUser.popularity, newUser.tags, newUser.latitude, newUser.longitude, newUser.isOK, newUser.validmail]
         );
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         return false;
     }
     return true;

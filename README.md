@@ -8,9 +8,14 @@ docker-compose -f docker-compose.yml up -d
 ```
 
 ## TODO
-- Erreur register lastname/firstname
-- Empecher de faire action si pas assez info ou mail non valide
-- Check si 18 ans
+- ~~Erreur register lastname/firstname~~
+- ~~Empecher de faire action si pas assez info ou mail non valide~~
+- ~~Check si 18 ans~~
+- Bien set le profil is OK
+- Faire la validation des images
+- Faire la seed pour les images
+- Faire les socket message + notif
+- Reparer les regex
 
 ## API
 | Method | url                         | Description             |

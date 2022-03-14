@@ -2,7 +2,6 @@ import jwt from '../utils/jwt';
 import userModels from '../models/user';
 
 export const jwtMiddleware = async (req, res, next) => {
-    console.log(req.headers.authorization);
     const user = jwt.checkToken(req.headers.authorization);
 
     if (user == false) {
