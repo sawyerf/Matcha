@@ -43,7 +43,6 @@ const useStyles = makeStyles({
     backgroundColor: "white",
     marginBottom: "10px",
     position: "relative",
-    cursor: "pointer",
   },
 });
 
@@ -84,6 +83,14 @@ const MyProfile = () => {
 
   const handleChangePassword = (event) => {
     setPassword(event.target.value);
+  };
+
+  const deleteImg = () => {
+    console.log("deleteImg");
+  };
+
+  const addImg = () => {
+    console.log("addImg");
   };
 
   const handleChangeTags = (event) => {
@@ -299,7 +306,7 @@ const MyProfile = () => {
                 width: "440px",
               }}
             >
-              <div>
+              <div style={{ position: "relative" }}>
                 <img
                   src="https://static1.purepeople.com/articles/9/36/74/09/@/5297138-aymeric-bonnery-devoile-un-selfie-sur-in-950x0-2.jpg"
                   alt="ImageUser"
@@ -309,10 +316,25 @@ const MyProfile = () => {
                     objectPosition: "50% 50%",
                   }}
                 />
+                <p
+                  onClick={() => deleteImg()}
+                  style={{
+                    position: "absolute",
+                    top: "5px",
+                    right: "5px",
+                    color: "red",
+                    fontWeight: "600",
+                    fontSize: "12px",
+                    cursor: "pointer",
+                  }}
+                >
+                  X
+                </p>
               </div>
               <div>
                 <div className={classes.profilPicture}>
                   <p
+                    onClick={() => addImg()}
                     style={{
                       position: "absolute",
                       top: "35px",
@@ -320,6 +342,7 @@ const MyProfile = () => {
                       color: "#DDDDDD",
                       fontWeight: "600",
                       fontSize: "60px",
+                      cursor: "pointer",
                     }}
                   >
                     +
@@ -329,6 +352,7 @@ const MyProfile = () => {
               <div>
                 <div className={classes.profilPicture}>
                   <p
+                    onClick={() => addImg()}
                     style={{
                       position: "absolute",
                       top: "35px",
@@ -336,6 +360,7 @@ const MyProfile = () => {
                       color: "#DDDDDD",
                       fontWeight: "600",
                       fontSize: "60px",
+                      cursor: "pointer",
                     }}
                   >
                     +
@@ -354,6 +379,7 @@ const MyProfile = () => {
                 {/* IMAGE EXISTE ? img : div + */}
                 <div className={classes.profilPicture}>
                   <p
+                    onClick={() => addImg()}
                     style={{
                       position: "absolute",
                       top: "35px",
@@ -361,6 +387,7 @@ const MyProfile = () => {
                       color: "#DDDDDD",
                       fontWeight: "600",
                       fontSize: "60px",
+                      cursor: "pointer",
                     }}
                   >
                     +
@@ -370,6 +397,7 @@ const MyProfile = () => {
               <div>
                 <div className={classes.profilPicture}>
                   <p
+                    onClick={() => addImg()}
                     style={{
                       position: "absolute",
                       top: "35px",
@@ -377,6 +405,7 @@ const MyProfile = () => {
                       color: "#DDDDDD",
                       fontWeight: "600",
                       fontSize: "60px",
+                      cursor: "pointer",
                     }}
                   >
                     +
