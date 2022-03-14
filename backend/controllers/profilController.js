@@ -148,10 +148,18 @@ const delImage = async (req, res) => {
     }
 }
 
+
+const me = async (req, res) => {
+    delete req.me.password;
+    delete req.me.uid;
+    res.status(200).json(req.me);
+}
+
 export default {
     setInfo,
     changePassword,
     addImage,
     delImage,
     changeMail,
+    me,
 }

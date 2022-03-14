@@ -8,3 +8,4 @@ profilRouter.post('/changepassword', async (req, res) => profilController.change
 profilRouter.post('/changemail', async (req, res) => profilController.changeMail(req, res));
 profilRouter.post('/image', async (req, res) => profilController.addImage(req, res));
 profilRouter.delete('/image', async (req, res) => profilController.delImage(req, res));
+profilRouter.get('/me', async (req, res) => profilController.me(req, res));

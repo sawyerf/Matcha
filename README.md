@@ -7,6 +7,11 @@
 docker-compose -f docker-compose.yml up -d
 ```
 
+## TODO
+- Erreur register lastname/firstname
+- Empecher de faire action si pas assez info ou mail non valide
+- Check si 18 ans
+
 ## API
 | Method | url                         | Description             |
 |:------:|-----------------------------|-------------------------|
