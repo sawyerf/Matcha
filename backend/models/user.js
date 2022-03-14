@@ -56,7 +56,7 @@ const selectMe = async (uid) => {
 
     try {
         res = await client.query(
-            `SELECT uid, email, username, password, birthday, gender, sexuality, bio, tags, popularity, date_part('year', age(birthday)) AS age, latitude, longitude, images
+            `SELECT uid, email, username, password, birthday, gender, sexuality, bio, tags, popularity, date_part('year', age(birthday)) AS age, latitude, longitude, images, firstname, lastname
             FROM users WHERE uid=$1`,
             [uid]
         );

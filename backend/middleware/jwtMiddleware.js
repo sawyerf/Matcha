@@ -2,7 +2,8 @@ import jwt from '../utils/jwt';
 import userModels from '../models/user';
 
 export const jwtMiddleware = async (req, res, next) => {
-    const user = jwt.checkToken(req.cookies.token);
+    console.log(req.headers.authorization);
+    const user = jwt.checkToken(req.headers.authorization);
 
     if (user == false) {
         res.status(403).json({ 'error': 1, 'message': 'Bad Token' })
