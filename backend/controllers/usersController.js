@@ -2,7 +2,6 @@ import matchModels                from '../models/match';
 import userModels                 from '../models/user';
 import likeModels                 from '../models/like';
 import blockModels                from '../models/block';
-import reportModels               from '../models/report';
 import historyModels              from '../models/history';
 import { checkBody }              from '../utils/checkBody';
 import { scoreMatch }             from '../utils/score';
@@ -42,7 +41,7 @@ const offer = async (req, res) => {
     const offers = await userModels.selectOffer(req.me.uid, req.me.gender, req.me.sexuality);
     const likes = await likeModels.selectMyLike(req.me.uid);
     const blocks = await blockModels.selectBlocked(req.me.uid);
-    let retOffers;
+    let retOffer;
 
     if (offers === false || likes === false || blocks === false) {
         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
@@ -51,14 +50,21 @@ const offer = async (req, res) => {
         let index = 0;
         for (const offer of offers.sort((a, b) => { return b.score - a.score })) {
             if (likes.indexOf(offer.uid) == -1 && blocks.indexOf(offer.uid) == -1) {
+                const isLike = await likeModels.select(offer.uid, req.me.uid);
+                if (isLike === false) {
+                    return res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+                } else if (isLike === null) {
+                    offer.isLike = false;
+                } else {
+                    offer.isLike = isLike.isLike;
+                }
                 delete offer.uid
-                retOffers = offer;
-                index++
+                retOffer = offer;
+                break;
             }
-            if (index >= 1) break;
         }
         res.status(200).json({
-            'offers': retOffers
+            'offers': retOffer
         });
     }
 }
