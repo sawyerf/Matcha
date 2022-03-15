@@ -11,12 +11,12 @@ docker-compose -f docker-compose.yml up -d
 - ~~Erreur register lastname/firstname~~
 - ~~Empecher de faire action si pas assez info ou mail non valide~~
 - ~~Check si 18 ans~~
-- Bien set le profil is OK
+- ~~Bien set le profil is OK~~
+- ~~Faire la seed pour les images~~
+- ~~Reparer les regex~~
+- ~~Block les reports~~
 - Faire la validation des images
-- Faire la seed pour les images
 - Faire les socket message + notif
-- Reparer les regex
-- Block les reports
 
 ## API
 | Method | url                         | Description             |

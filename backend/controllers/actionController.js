@@ -30,7 +30,6 @@ const match = async (req, res, user, liked) => {
     }
 }
 
-
 const like = async (req, res) => {
     const isCheck = checkBody({
         'username': 'string',
@@ -87,13 +86,16 @@ const report = async (req, res) => {
             res.status(404).json({ 'error': 1, 'message': 'User not found' });
         } else {
             const isExist = await reportModels.isExist(req.me.uid, reported.uid);
-            if (isExist === null) {
+            const blockExist = await blockModels.isExist(req.me.uid, reported.uid);
+            if (isExist === null || blockExist === null) {
                 res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
             } else if (isExist == true) {
                 res.status(200).json({ 'message': 'Already reported' });
             } else {
                 const isAdd = await reportModels.insert(req.me.uid, reported.uid);
-                if (isAdd === false) {
+                let blockAdd = true;
+                if (blockExist === false) blockAdd = await blockModels.insert(req.me.uid, reported.uid);
+                if (isAdd === false || blockAdd === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else {
                     res.status(200).json();
