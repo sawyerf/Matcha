@@ -1,12 +1,11 @@
-import { checkBody } from '../utils/checkBody';
-import matchModels from '../models/match';
-import userModels from '../models/user';
-import likeModels from '../models/like';
-import blockModels from '../models/block';
-import reportModels from '../models/report';
-import imgModels from '../models/image';
-import historyModels from '../models/history';
-import { scoreMatch } from '../utils/score';
+import matchModels                from '../models/match';
+import userModels                 from '../models/user';
+import likeModels                 from '../models/like';
+import blockModels                from '../models/block';
+import reportModels               from '../models/report';
+import historyModels              from '../models/history';
+import { checkBody }              from '../utils/checkBody';
+import { scoreMatch }             from '../utils/score';
 import { locationByIp, distance } from '../utils/location';
 
 const matchs = async (req, res) => {
@@ -19,17 +18,6 @@ const matchs = async (req, res) => {
         if (matchs == null) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
-            // for (const match of matchs) {
-            //     const images = await imgModels.select(match.uid);
-            //     if (images === false) {
-            //         return res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-            //     }
-            //     if (images.length === 0) {
-            //         match.image = [];
-            //     } else {
-            //         match.image = images[0];
-            //     }
-            // }
             res.status(200).json(matchs);
         }
     }
@@ -45,17 +33,6 @@ const likes = async (req, res) => {
         if (myLiker == null) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
-            // for (const like of myLiker) {
-            //     const images = await imgModels.select(like.uid);
-            //     if (images === false) {
-            //         return res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-            //     }
-            //     if (images.length === 0) {
-            //         like.image = [];
-            //     } else {
-            //         like.image = images[0];
-            //     }
-            // }
             res.status(200).json(myLiker);
         }
     }
@@ -74,11 +51,6 @@ const offer = async (req, res) => {
         let index = 0;
         for (const offer of offers.sort((a, b) => { return b.score - a.score })) {
             if (likes.indexOf(offer.uid) == -1 && blocks.indexOf(offer.uid) == -1) {
-                // const images = await imgModels.select(offer.uid);
-                // if (images === false) {
-                //     return res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-                // }
-                // offer.images = images;
                 delete offer.uid
                 retOffers = offer;
                 index++
@@ -86,7 +58,6 @@ const offer = async (req, res) => {
             if (index >= 1) break;
         }
         res.status(200).json({
-            // 'me': req.me, // To delete
             'offers': retOffers
         });
     }
@@ -122,11 +93,6 @@ const search = async (req, res) => {
                     }
                 }
                 if (isIn == true && blocks.indexOf(ouser.uid) == -1) {
-                    // const images = await imgModels.select(ouser.uid);
-                    // if (images === false) {
-                    //     return res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-                    // }
-                    // ouser.images = images;
                     delete ouser['uid'];
                     newUsers.push(ouser);
                 }
@@ -171,74 +137,10 @@ const visit = async (req, res) => {
     }
 }
 
-const report = async (req, res) => {
-    const isCheck = checkBody({
-        'username': 'string',
-    }, req.body);
-
-    if (isCheck === false) {
-        res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
-    } else {
-        const reported = await userModels.selectBy('username', req.body.username);
-        if (reported === false) {
-            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-        } else if (reported == null) {
-            res.status(404).json({ 'error': 1, 'message': 'User not found' });
-        } else {
-            const isExist = await reportModels.isExist(req.me.uid, reported.uid);
-            if (isExist === null) {
-                res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-            } else if (isExist == true) {
-                res.status(200).json({ 'message': 'Already reported' });
-            } else {
-                const isAdd = await reportModels.insert(req.me.uid, reported.uid);
-                if (isAdd === false) {
-                    res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-                } else {
-                    res.status(200).json();
-                }
-            }
-        }
-    }
-}
-
-const block = async (req, res) => {
-    const isCheck = checkBody({
-        'username': 'string',
-    }, req.body);
-
-    if (isCheck === false) {
-        res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
-    } else {
-        const blocked = await userModels.selectBy('username', req.body.username);
-        if (blocked === false) {
-            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-        } else if (blocked == null) {
-            res.status(404).json({ 'error': 1, 'message': 'User not found' });
-        } else {
-            const isExist = await blockModels.isExist(req.me.uid, blocked.uid);
-            if (isExist === null) {
-                res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-            } else if (isExist == true) {
-                res.status(200).json({ 'message': 'Already Blocked' });
-            } else {
-                const isAdd = await blockModels.insert(req.me.uid, blocked.uid);
-                if (isAdd === false) {
-                    res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-                } else {
-                    res.status(200).json();
-                }
-            }
-        }
-    }
-}
-
 export default {
     matchs,
     likes,
     offer,
     search,
-    report,
-    block,
     visit,
 }

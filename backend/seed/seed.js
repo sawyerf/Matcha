@@ -49,7 +49,7 @@ const generateUser = () => {
         'latitude':  48.0 + Math.random(),
         'longitude': 2.0 + Math.random(),
         'isOK': true,
-        'images': [generateImage()],
+        'images': [generateImage(), generateImage()],
         'validmail': true,
     };
     return user;

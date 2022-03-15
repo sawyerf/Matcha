@@ -26,13 +26,13 @@ docker-compose -f docker-compose.yml up -d
 | POST   | [/auth/check            ]() | Check if login          |
 |        |                             |                         |
 | POST   | [/action/like           ]() | Like a user             |
+| POST   | [/action/report         ]() | Report User             |
+| POST   | [/action/block          ]() | Block User              |
 |        |                             |                         |
 | GET    | [/users/matchs          ]() | Get my match            |
 | GET    | [/users/likes           ]() | Get all like I recv     |
 | GET    | [/users/offer           ]() | Get a next user         |
 | GET    | [/users/search          ]() | Search user             |
-| POST   | [/profil/report         ]() | Report User             |
-| POST   | [/profil/block          ]() | Block User              |
 |        |                             |                         |
 | POST   | [/profil/setinfo        ]() | Set Info after register |
 | POST   | [/profil/changepassword ]() | Change Password         |
