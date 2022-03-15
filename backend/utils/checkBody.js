@@ -5,7 +5,7 @@ const whatType = (type) => {
     return type;
 }
 const testEmail = (email) => {
-    const regex = /[A-Za-z0-9]*@[A-Za-z0-9]{2,}.[A-Za-z0-9]{1,}/;
+    const regex = /^[A-Za-z0-9]*@[A-Za-z0-9]{2,}.[A-Za-z0-9]{1,}$/;
     return regex.test(email);
 }
 
@@ -15,32 +15,36 @@ const testPassword = (password) => {
 }
 
 const testDate = (date) => {
-    const regex = /[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}Z/;
+    const regex = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}Z$/;
     return regex.test(date);
 }
 
 const testSexuality = (sexuality) => {
-    const regex = /[HF]{1,2}/;
+    const regex = /^[HF]{1,2}$/;
     return regex.test(sexuality);
 }
 
 const testGender = (gender) => {
-    const regex = /[HF]/;
+    const regex = /^[HF]$/;
     return regex.test(gender);
 }
 
 const testTags = (tags) => {
-    const regex = /\#[a-z]*/;
+    const regex = /^\#[a-z]*$/;
+    const acceptTags = ['#music', '#voyage', '#cuisine', '#sport', '#fitness', '#poney', '#programmation', '#gaming', '#danse'];
+
     for (const tag of tags.split(',')) {
+        console.log(tag)
         if (regex.test(tag) === false) {
             return false;
         }
+        if (acceptTags.indexOf(tag) == -1) return false
     }
     return true;
 }
 
 const testUid = (tags) => {
-    const regex = /[a-f0-9\-]*/;
+    const regex = /^[a-f0-9\-]*$/;
     return regex.test(tags);
 }
 

@@ -122,7 +122,7 @@ const updateMail = async (uid, mail, keymail) => {
     try {
         res = await client.query(
             `UPDATE users 
-            SET email=$2, keymail=$3, validmail=FALSE
+            SET email=$2, keymail=$3, validmail=FALSE, isOK=FALSE
             WHERE uid=$1`,
             [uid, mail, keymail]
         );

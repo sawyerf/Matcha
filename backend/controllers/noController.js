@@ -2,6 +2,7 @@ import userModels from '../models/user';
 import { sendmail } from '../utils/mail';
 import { checkBody } from '../utils/checkBody';
 import { hashPassword } from '../utils/hash';
+import { checkProfilUid } from '../utils/chekProfil';
 
 const validMail = async (req, res) => {
     const user = await userModels.selectBy('keymail', req.params.key);
@@ -15,6 +16,7 @@ const validMail = async (req, res) => {
         if (ret === false) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
+            checkProfilUid(user.uid);
             res.status(200).json();
         }
     }

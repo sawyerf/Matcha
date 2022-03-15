@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import userModels from '../models/user';
 import imgModels from '../models/image';
 import { sendmail } from '../utils/mail';
+import { checkProfilUid } from '../utils/chekProfil';
 
 const setInfo = async (req, res) => {
     let ret;
@@ -25,7 +26,7 @@ const setInfo = async (req, res) => {
         if (ret == false) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
-            userModels.setVal(req.me.uid, 'isOK', true);
+            checkProfilUid(req.me.uid);
             res.status(200).json();
         }
     }
@@ -82,6 +83,7 @@ const changeMail = async (req, res) => {
                     'Welcome ' + req.me.username,
                     `Hi ${req.me.username},\nhttp://localhost:3000/profil/validmail/${keymail}\nBye !`
                 );
+                checkProfilUid(req.me.uid);
                 res.status(200).json();
             }
         }
@@ -115,6 +117,7 @@ const addImage = async (req, res) => {
                 if (isOK === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else {
+                    checkProfilUid(req.me.uid);
                     res.status(200).json();
                 }
             }
@@ -137,11 +140,12 @@ const delImage = async (req, res) => {
             res.status(404).json({ 'error': 1, 'message': 'Image not found' });
         } else {
             req.me.images.splice(index, 1);
-            const ImgIsOK = await userModels.setVal(req.me.uid, 'images', req.me.images);
+            const ImgIsOK = userModels.setVal(req.me.uid, 'images', req.me.images);
             const delIsOK = imgModels.del(req.body.id_image);
-            if (ImgIsOK === false || delIsOK === false) {
+            if (await ImgIsOK === false || await delIsOK === false) {
                 res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
             } else {
+                checkProfilUid(req.me.uid);
                 res.status(200).json();
             }
         }
