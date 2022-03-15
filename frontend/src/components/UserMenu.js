@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Disconnection from "@mui/icons-material/NoMeetingRoom";
 import Match from "@mui/icons-material/Favorite";
 import UserMenuMatch from "./UserMenuMatch";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const useStyles = makeStyles({
   root: {
@@ -54,6 +54,11 @@ const UserMenu = () => {
     navigate("/userhome");
   }
 
+  function logOut() {
+    localStorage.setItem("token", "");
+    navigate("/");
+  }
+
   return (
     <div className={classes.root}>
       <div className={classes.topMenu}>
@@ -68,6 +73,7 @@ const UserMenu = () => {
             top: "9px",
             cursor: "pointer",
           }}
+          onClick={logOut}
         />
         <Match
           style={{

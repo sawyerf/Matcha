@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import UserMenu from "../components/UserMenu";
 import Profile from "../components/Profile";
 import { makeStyles, withTheme } from "@mui/styles";
@@ -6,6 +6,7 @@ import GreenHeart from "../components/Icons/GreenHeart";
 import RedCross from "../components/Icons/RedCross";
 import RightArrow from "../components/Icons/RightArrow";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const useStyles = makeStyles({
   root: {
@@ -37,13 +38,32 @@ const UserHome = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [displayProfile, setDisplayProfile] = useState(false);
+  const [otherProfil, setOtherProfile] = useState(null);
 
-  const refuseMatch = () => {
-    console.log("Refuse Match");
-  };
-
-  const acceptMatch = () => {
-    console.log("Accept Match");
+  const youMatch = async (liked) => {
+    axios
+      .all([
+        await axios.post(
+          "http://localhost:3000/api/action/like",
+          { username: otherProfil.username, islike: liked },
+          {
+            headers: {
+              Authorization: `${localStorage.getItem("token")}`,
+            },
+          }
+        ),
+        await axios.get("http://localhost:3000/api/users/offer", {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`,
+          },
+        }),
+      ])
+      .then(
+        axios.spread((data1, data2) => {
+          console.log("data1", data1, "data2", data2);
+          data2.data && setOtherProfile(data2.data.offers);
+        })
+      );
   };
 
   const previousImg = () => {
@@ -54,13 +74,69 @@ const UserHome = () => {
     console.log("Next Img");
   };
 
-  const reportUser = () => {
-    console.log("reportUser");
+  const reportUser = async () => {
+    axios
+      .all([
+        await axios.post(
+          "http://localhost:3000/api/users/report",
+          { username: otherProfil.username },
+          {
+            headers: {
+              Authorization: `${localStorage.getItem("token")}`,
+            },
+          }
+        ),
+        await axios.get("http://localhost:3000/api/users/offer", {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`,
+          },
+        }),
+      ])
+      .then(
+        axios.spread((data1, data2) => {
+          console.log("data1", data1, "data2", data2);
+          data2.data && setOtherProfile(data2.data.offers);
+        })
+      );
   };
 
-  const blockUser = () => {
-    console.log("blockUser");
+  const blockUser = async () => {
+    axios
+      .all([
+        await axios.post(
+          "http://localhost:3000/api/users/block",
+          { username: otherProfil.username },
+          {
+            headers: {
+              Authorization: `${localStorage.getItem("token")}`,
+            },
+          }
+        ),
+        await axios.get("http://localhost:3000/api/users/offer", {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`,
+          },
+        }),
+      ])
+      .then(
+        axios.spread((data1, data2) => {
+          console.log("data1", data1, "data2", data2);
+          data2.data && setOtherProfile(data2.data.offers);
+        })
+      );
   };
+
+  useEffect(async () => {
+    const res = await axios.get("http://localhost:3000/api/users/offer", {
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
+    });
+    if ("error" in res.data) {
+      console.log("Error: ", res.data.message);
+    }
+    res.data && setOtherProfile(res.data.offers);
+  }, []);
 
   return (
     <div style={{ display: "flex" }}>
@@ -121,7 +197,7 @@ const UserHome = () => {
                       fontSize: "20px",
                     }}
                   >
-                    Johnny
+                    {otherProfil && otherProfil.username}
                   </p>
                   <p
                     style={{
@@ -131,7 +207,7 @@ const UserHome = () => {
                       marginLeft: "10px",
                     }}
                   >
-                    26
+                    {otherProfil && otherProfil.age}
                   </p>
                 </div>
                 <p
@@ -143,15 +219,15 @@ const UserHome = () => {
                     marginLeft: "10px",
                   }}
                 >
-                  Nogent Le Rotrou (23km)
+                  à {otherProfil && otherProfil.distance}km de vous
                 </p>
                 <div
                   style={{ display: "flex", justifyContent: "space-evenly" }}
                 >
-                  <div onClick={() => refuseMatch()}>
+                  <div onClick={() => youMatch(false)}>
                     <RedCross />
                   </div>
-                  <div onClick={() => acceptMatch()}>
+                  <div onClick={() => youMatch(true)}>
                     <GreenHeart />
                   </div>
                 </div>

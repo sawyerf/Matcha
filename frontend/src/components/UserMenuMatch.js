@@ -1,8 +1,8 @@
 import { makeStyles } from "@mui/styles";
 import { useNavigate } from "react-router-dom";
-import Disconnection from "@mui/icons-material/NoMeetingRoom";
-import Match from "@mui/icons-material/Favorite";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Profile from "./Profile";
 
 const useStyles = makeStyles({
   matchCard: {
@@ -17,6 +17,20 @@ const useStyles = makeStyles({
 
 const UserMenuMatch = ({ matchDisplay }) => {
   const classes = useStyles();
+  const [matchList, setMatchList] = useState(null);
+  const [displayProfile, setDisplayProfile] = useState(false);
+
+  useEffect(async () => {
+    const res = await axios.get("http://localhost:3000/api/users/matchs", {
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
+    });
+    if ("error" in res.data) {
+      console.log("Error: ", res.data.message);
+    }
+    setMatchList(res.data);
+  }, []);
 
   return (
     <div
@@ -30,213 +44,42 @@ const UserMenuMatch = ({ matchDisplay }) => {
         overflow: "scroll",
       }}
     >
-      <div className={classes.matchCard}>
-        <img
-          src="https://static1.purepeople.com/articles/9/36/74/09/@/5297138-aymeric-bonnery-devoile-un-selfie-sur-in-950x0-2.jpg"
-          alt="ImageUser"
-          className={classes.matchCard}
-          style={{
-            objectFit: "cover",
-            objectPosition: "50% 50%",
-          }}
-        />
-        <p
-          style={{
-            position: "absolute",
-            bottom: "5px",
-            left: "5px",
-            color: "white",
-            fontWeight: "600",
-            fontSize: "12px",
-          }}
-        >
-          Johnny
-        </p>
-      </div>
-      <div className={classes.matchCard}>
-        <img
-          src="https://static1.purepeople.com/articles/9/36/74/09/@/5297138-aymeric-bonnery-devoile-un-selfie-sur-in-950x0-2.jpg"
-          alt="ImageUser"
-          className={classes.matchCard}
-          style={{
-            objectFit: "cover",
-            objectPosition: "50% 50%",
-          }}
-        />
-        <p
-          style={{
-            position: "absolute",
-            bottom: "5px",
-            left: "5px",
-            color: "white",
-            fontWeight: "600",
-            fontSize: "12px",
-          }}
-        >
-          Johnny
-        </p>
-      </div>
-      <div className={classes.matchCard}>
-        <img
-          src="https://static1.purepeople.com/articles/9/36/74/09/@/5297138-aymeric-bonnery-devoile-un-selfie-sur-in-950x0-2.jpg"
-          alt="ImageUser"
-          className={classes.matchCard}
-          style={{
-            objectFit: "cover",
-            objectPosition: "50% 50%",
-          }}
-        />
-        <p
-          style={{
-            position: "absolute",
-            bottom: "5px",
-            left: "5px",
-            color: "white",
-            fontWeight: "600",
-            fontSize: "12px",
-          }}
-        >
-          Johnny
-        </p>
-      </div>
-      <div className={classes.matchCard}>
-        <img
-          src="https://static1.purepeople.com/articles/9/36/74/09/@/5297138-aymeric-bonnery-devoile-un-selfie-sur-in-950x0-2.jpg"
-          alt="ImageUser"
-          className={classes.matchCard}
-          style={{
-            objectFit: "cover",
-            objectPosition: "50% 50%",
-          }}
-        />
-        <p
-          style={{
-            position: "absolute",
-            bottom: "5px",
-            left: "5px",
-            color: "white",
-            fontWeight: "600",
-            fontSize: "12px",
-          }}
-        >
-          Johnny
-        </p>
-      </div>
-      <div className={classes.matchCard}>
-        <img
-          src="https://static1.purepeople.com/articles/9/36/74/09/@/5297138-aymeric-bonnery-devoile-un-selfie-sur-in-950x0-2.jpg"
-          alt="ImageUser"
-          className={classes.matchCard}
-          style={{
-            objectFit: "cover",
-            objectPosition: "50% 50%",
-          }}
-        />
-        <p
-          style={{
-            position: "absolute",
-            bottom: "5px",
-            left: "5px",
-            color: "white",
-            fontWeight: "600",
-            fontSize: "12px",
-          }}
-        >
-          Johnny
-        </p>
-      </div>
-      <div className={classes.matchCard}>
-        <img
-          src="https://static1.purepeople.com/articles/9/36/74/09/@/5297138-aymeric-bonnery-devoile-un-selfie-sur-in-950x0-2.jpg"
-          alt="ImageUser"
-          className={classes.matchCard}
-          style={{
-            objectFit: "cover",
-            objectPosition: "50% 50%",
-          }}
-        />
-        <p
-          style={{
-            position: "absolute",
-            bottom: "5px",
-            left: "5px",
-            color: "white",
-            fontWeight: "600",
-            fontSize: "12px",
-          }}
-        >
-          Johnny
-        </p>
-      </div>
-      <div className={classes.matchCard}>
-        <img
-          src="https://static1.purepeople.com/articles/9/36/74/09/@/5297138-aymeric-bonnery-devoile-un-selfie-sur-in-950x0-2.jpg"
-          alt="ImageUser"
-          className={classes.matchCard}
-          style={{
-            objectFit: "cover",
-            objectPosition: "50% 50%",
-          }}
-        />
-        <p
-          style={{
-            position: "absolute",
-            bottom: "5px",
-            left: "5px",
-            color: "white",
-            fontWeight: "600",
-            fontSize: "12px",
-          }}
-        >
-          Johnny
-        </p>
-      </div>
-      <div className={classes.matchCard}>
-        <img
-          src="https://static1.purepeople.com/articles/9/36/74/09/@/5297138-aymeric-bonnery-devoile-un-selfie-sur-in-950x0-2.jpg"
-          alt="ImageUser"
-          className={classes.matchCard}
-          style={{
-            objectFit: "cover",
-            objectPosition: "50% 50%",
-          }}
-        />
-        <p
-          style={{
-            position: "absolute",
-            bottom: "5px",
-            left: "5px",
-            color: "white",
-            fontWeight: "600",
-            fontSize: "12px",
-          }}
-        >
-          Johnny
-        </p>
-      </div>
-      <div className={classes.matchCard}>
-        <img
-          src="https://static1.purepeople.com/articles/9/36/74/09/@/5297138-aymeric-bonnery-devoile-un-selfie-sur-in-950x0-2.jpg"
-          alt="ImageUser"
-          className={classes.matchCard}
-          style={{
-            objectFit: "cover",
-            objectPosition: "50% 50%",
-          }}
-        />
-        <p
-          style={{
-            position: "absolute",
-            bottom: "5px",
-            left: "5px",
-            color: "white",
-            fontWeight: "600",
-            fontSize: "12px",
-          }}
-        >
-          Johnny
-        </p>
-      </div>
+      {matchList &&
+        matchList.map((data) => {
+          return (
+            <>
+              <div
+                className={classes.matchCard}
+                onClick={() => setDisplayProfile(true)}
+              >
+                <img
+                  src={data.images[0]}
+                  alt="ImageUser"
+                  className={classes.matchCard}
+                  style={{
+                    objectFit: "cover",
+                    objectPosition: "50% 50%",
+                  }}
+                />
+                <p
+                  style={{
+                    position: "absolute",
+                    bottom: "5px",
+                    left: "5px",
+                    color: "white",
+                    fontWeight: "600",
+                    fontSize: "12px",
+                  }}
+                >
+                  {data.username}
+                </p>
+              </div>
+              {displayProfile && (
+                <Profile setDisplayProfile={setDisplayProfile} />
+              )}
+            </>
+          );
+        })}
     </div>
   );
 };

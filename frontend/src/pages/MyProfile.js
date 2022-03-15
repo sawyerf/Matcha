@@ -35,8 +35,16 @@ const useStyles = makeStyles({
     width: "440px",
   },
   inputBio: {},
-  profilPicture: {
+  profilPlus: {
     border: "solid 1px #DDDDDD",
+    borderRadius: "8px",
+    width: "100px",
+    height: "150px",
+    backgroundColor: "white",
+    marginBottom: "10px",
+    position: "relative",
+  },
+  profilPicture: {
     borderRadius: "8px",
     width: "100px",
     height: "150px",
@@ -53,9 +61,16 @@ const MyProfile = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [emailCpy, setEmailCpy] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [bio, setBio] = useState("");
   const [tags, setTags] = useState("");
+  const [image1, setImage1] = useState(null);
+  const [image2, setImage2] = useState(null);
+  const [image3, setImage3] = useState(null);
+  const [image4, setImage4] = useState(null);
+  const [image5, setImage5] = useState(null);
 
   const handleChangeGender = (event) => {
     setGender(event.target.value);
@@ -81,16 +96,16 @@ const MyProfile = () => {
     setBio(event.target.value);
   };
 
-  const handleChangePassword = (event) => {
-    setPassword(event.target.value);
+  const handleChangeNewPassword = (event) => {
+    setNewPassword(event.target.value);
+  };
+
+  const handleChangeOldPassword = (event) => {
+    setOldPassword(event.target.value);
   };
 
   const deleteImg = () => {
     console.log("deleteImg");
-  };
-
-  const addImg = () => {
-    console.log("addImg");
   };
 
   const handleChangeTags = (event) => {
@@ -111,36 +126,67 @@ const MyProfile = () => {
 
   const saveProfil = () => {
     console.log(localStorage.getItem("token"));
-    const res = axios.post(
-      "http://localhost:3000/api/profil/setinfo",
-      {
-        gender: gender === "Homme" ? "H" : "F",
-        sexuality:
-          orientation === "Hétérosexuel" && gender === "Homme"
-            ? "F"
-            : orientation === "Homosexuel" && gender === "Homme"
-            ? "H"
-            : orientation === "Hétérosexuel" && gender === "Femme"
-            ? "H"
-            : orientation === "Homosexuel" && gender === "Femme"
-            ? "F"
-            : "HF",
-        tags: tags,
-        bio: bio,
-        firstname: firstName,
-        lastname: lastName,
-      },
-      {
-        headers: {
-          Authorization: `${localStorage.getItem("token")}`,
-        },
-      }
-    );
-    if ("error" in res.data) {
-      console.log("Error: ", res.data.message);
-    } else {
-      console.log(res.data);
-    }
+
+    axios
+      .all([
+        axios.post(
+          "http://localhost:3000/api/profil/setinfo",
+          {
+            gender: gender === "Homme" ? "H" : "F",
+            sexuality:
+              orientation === "Hétérosexuel" && gender === "Homme"
+                ? "F"
+                : orientation === "Homosexuel" && gender === "Homme"
+                ? "H"
+                : orientation === "Hétérosexuel" && gender === "Femme"
+                ? "H"
+                : orientation === "Homosexuel" && gender === "Femme"
+                ? "F"
+                : "HF",
+            tags: tags,
+            bio: bio,
+            firstname: firstName,
+            lastname: lastName,
+          },
+          {
+            headers: {
+              Authorization: `${localStorage.getItem("token")}`,
+            },
+          }
+        ),
+        email !== emailCpy
+          ? axios.post(
+              "http://localhost:3000/api/profil/changemail",
+              {
+                new_mail: email,
+              },
+              {
+                headers: {
+                  Authorization: `${localStorage.getItem("token")}`,
+                },
+              }
+            )
+          : null,
+        newPassword && oldPassword
+          ? axios.post(
+              "http://localhost:3000/api/profil/changepassword",
+              {
+                old_password: oldPassword,
+                new_password: newPassword,
+              },
+              {
+                headers: {
+                  Authorization: `${localStorage.getItem("token")}`,
+                },
+              }
+            )
+          : null,
+      ])
+      .then(
+        axios.spread((data1, data2) => {
+          console.log("data1", data1, "data2", data2);
+        })
+      );
   };
 
   useEffect(async () => {
@@ -154,12 +200,16 @@ const MyProfile = () => {
       //setError("Fail to connect `" + res.data.message + "`");
     }
     console.log(res.data);
-    setEmail(res.data.email);
-    setTags(res.data.tags);
-    setBio(res.data.bio);
-    setFirstName(res.data.firstname);
-    setLastName(res.data.lastname);
-    setGender(res.data.gender === "H" ? "Homme" : "Femme");
+
+    res.data.email && setEmail(res.data.email);
+    res.data.email && setEmailCpy(res.data.email);
+    res.data.tags && setTags(res.data.tags);
+    res.data.bio && setBio(res.data.bio);
+    res.data.firstname && setFirstName(res.data.firstname);
+    res.data.lastname && setLastName(res.data.lastname);
+    setGender(
+      res.data.gender === "H" ? "Homme" : res.data.gender === "F" ? "Femme" : ""
+    );
     setOrientation(
       res.data.sexuality === "F" && res.data.gender === "H"
         ? "Hétérosexuel"
@@ -172,6 +222,36 @@ const MyProfile = () => {
         : "Bisexuel"
     );
   }, []);
+
+  function getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
+  useEffect(async () => {
+    let image;
+    if (image1) image = image1;
+    else if (image2) image = image2;
+    else if (image3) image = image3;
+    else if (image4) image = image4;
+    else if (image5) image = image5;
+    if (image) {
+      const img = await getBase64(image);
+      axios.post(
+        "http://localhost:3000/api/profil/image",
+        { image: img },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`,
+          },
+        }
+      );
+    }
+  }, [image1, image2, image3, image4, image5]);
 
   return (
     <div style={{ display: "flex" }}>
@@ -213,12 +293,13 @@ const MyProfile = () => {
               display: "flex",
               justifyContent: "space-evenly",
               marginTop: "20px",
+              width: "440px",
             }}
           >
             <div>
               <p style={{ marginBottom: "5px" }}>Addresse e-mail</p>
               <TextField
-                className={classes.textField}
+                className={classes.textFieldBio}
                 placeholder="Addresse e-mail"
                 type="text"
                 onChange={handleChangeEmail}
@@ -228,13 +309,33 @@ const MyProfile = () => {
                 }}
               />
             </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              marginTop: "20px",
+            }}
+          >
             <div>
-              <p style={{ marginBottom: "5px" }}>Mot de passe</p>
+              <p style={{ marginBottom: "5px" }}>Nouveau mot de passe</p>
               <TextField
                 className={classes.textField}
-                placeholder="Mot de passe"
+                placeholder="Nouveau mot de passe"
                 type="password"
-                onChange={handleChangePassword}
+                onChange={handleChangeNewPassword}
+                InputProps={{
+                  className: classes.input,
+                }}
+              />
+            </div>
+            <div>
+              <p style={{ marginBottom: "5px" }}>Ancien mot de passe</p>
+              <TextField
+                className={classes.textField}
+                placeholder="Ancien Mot de passe"
+                type="password"
+                onChange={handleChangeOldPassword}
                 InputProps={{
                   className: classes.input,
                 }}
@@ -306,66 +407,169 @@ const MyProfile = () => {
                 width: "440px",
               }}
             >
-              <div style={{ position: "relative" }}>
-                <img
-                  src="https://static1.purepeople.com/articles/9/36/74/09/@/5297138-aymeric-bonnery-devoile-un-selfie-sur-in-950x0-2.jpg"
-                  alt="ImageUser"
-                  className={classes.profilPicture}
-                  style={{
-                    objectFit: "cover",
-                    objectPosition: "50% 50%",
-                  }}
-                />
-                <p
-                  onClick={() => deleteImg()}
-                  style={{
-                    position: "absolute",
-                    top: "5px",
-                    right: "5px",
-                    color: "red",
-                    fontWeight: "600",
-                    fontSize: "12px",
-                    cursor: "pointer",
-                  }}
-                >
-                  X
-                </p>
+              <div className={classes.profilPlus}>
+                {image1 ? (
+                  <>
+                    {" "}
+                    <img
+                      src={URL.createObjectURL(image1)}
+                      alt="image1"
+                      className={classes.profilPicture}
+                      style={{
+                        objectFit: "cover",
+                        objectPosition: "50% 50%",
+                      }}
+                    />
+                    <p
+                      onClick={() => deleteImg()}
+                      style={{
+                        position: "absolute",
+                        top: "5px",
+                        right: "5px",
+                        color: "red",
+                        fontWeight: "600",
+                        fontSize: "12px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      X
+                    </p>{" "}
+                  </>
+                ) : (
+                  <label>
+                    <input
+                      type="file"
+                      name="image1"
+                      style={{ display: "none" }}
+                      onChange={(event) => {
+                        console.log(event.target.files[0]);
+                        setImage1(event.target.files[0]);
+                      }}
+                    />
+                    <p
+                      style={{
+                        position: "absolute",
+                        top: "35px",
+                        left: "33px",
+                        color: "#DDDDDD",
+                        fontWeight: "600",
+                        fontSize: "60px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      +
+                    </p>
+                  </label>
+                )}
               </div>
-              <div>
-                <div className={classes.profilPicture}>
-                  <p
-                    onClick={() => addImg()}
-                    style={{
-                      position: "absolute",
-                      top: "35px",
-                      left: "33px",
-                      color: "#DDDDDD",
-                      fontWeight: "600",
-                      fontSize: "60px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    +
-                  </p>
-                </div>
+              <div className={classes.profilPlus}>
+                {image2 ? (
+                  <>
+                    {" "}
+                    <img
+                      src={URL.createObjectURL(image2)}
+                      alt="image2"
+                      className={classes.profilPicture}
+                      style={{
+                        objectFit: "cover",
+                        objectPosition: "50% 50%",
+                      }}
+                    />
+                    <p
+                      onClick={() => deleteImg()}
+                      style={{
+                        position: "absolute",
+                        top: "5px",
+                        right: "5px",
+                        color: "red",
+                        fontWeight: "600",
+                        fontSize: "12px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      X
+                    </p>{" "}
+                  </>
+                ) : (
+                  <label>
+                    <input
+                      type="file"
+                      name="image2"
+                      style={{ display: "none" }}
+                      onChange={(event) => {
+                        console.log(event.target.files[0]);
+                        setImage2(event.target.files[0]);
+                      }}
+                    />
+                    <p
+                      style={{
+                        position: "absolute",
+                        top: "35px",
+                        left: "33px",
+                        color: "#DDDDDD",
+                        fontWeight: "600",
+                        fontSize: "60px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      +
+                    </p>
+                  </label>
+                )}
               </div>
-              <div>
-                <div className={classes.profilPicture}>
-                  <p
-                    onClick={() => addImg()}
-                    style={{
-                      position: "absolute",
-                      top: "35px",
-                      left: "33px",
-                      color: "#DDDDDD",
-                      fontWeight: "600",
-                      fontSize: "60px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    +
-                  </p>
-                </div>
+              <div className={classes.profilPlus}>
+                {image3 ? (
+                  <>
+                    <img
+                      src={URL.createObjectURL(image3)}
+                      alt="image3"
+                      className={classes.profilPicture}
+                      style={{
+                        objectFit: "cover",
+                        objectPosition: "50% 50%",
+                      }}
+                    />
+                    <p
+                      onClick={() => deleteImg()}
+                      style={{
+                        position: "absolute",
+                        top: "5px",
+                        right: "5px",
+                        color: "red",
+                        fontWeight: "600",
+                        fontSize: "12px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      X
+                    </p>
+                  </>
+                ) : (
+                  <label>
+                    <input
+                      type="file"
+                      name="image2"
+                      style={{ display: "none" }}
+                      onChange={(event) => {
+                        console.log(event.target.files[0]);
+                        setImage3(event.target.files[0]);
+                      }}
+                    />
+                    <p
+                      style={{
+                        position: "absolute",
+                        top: "35px",
+                        left: "33px",
+                        color: "#DDDDDD",
+                        fontWeight: "600",
+                        fontSize: "60px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      +
+                    </p>
+                  </label>
+                )}
               </div>
             </div>
             <div
@@ -375,42 +579,113 @@ const MyProfile = () => {
                 width: "440px",
               }}
             >
-              <div>
-                {/* IMAGE EXISTE ? img : div + */}
-                <div className={classes.profilPicture}>
-                  <p
-                    onClick={() => addImg()}
-                    style={{
-                      position: "absolute",
-                      top: "35px",
-                      left: "33px",
-                      color: "#DDDDDD",
-                      fontWeight: "600",
-                      fontSize: "60px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    +
-                  </p>
-                </div>
+              <div className={classes.profilPlus}>
+                {image4 ? (
+                  <>
+                    <img
+                      src={URL.createObjectURL(image4)}
+                      alt="image4"
+                      className={classes.profilPicture}
+                      style={{
+                        objectFit: "cover",
+                        objectPosition: "50% 50%",
+                      }}
+                    />
+                    <p
+                      onClick={() => deleteImg()}
+                      style={{
+                        position: "absolute",
+                        top: "5px",
+                        right: "5px",
+                        color: "red",
+                        fontWeight: "600",
+                        fontSize: "12px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      X
+                    </p>
+                  </>
+                ) : (
+                  <label>
+                    <input
+                      type="file"
+                      name="image"
+                      style={{ display: "none" }}
+                      onChange={(event) => {
+                        console.log(event.target.files[0]);
+                        setImage4(event.target.files[0]);
+                      }}
+                    />
+                    <p
+                      style={{
+                        position: "absolute",
+                        top: "35px",
+                        left: "33px",
+                        color: "#DDDDDD",
+                        fontWeight: "600",
+                        fontSize: "60px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      +
+                    </p>
+                  </label>
+                )}
               </div>
-              <div>
-                <div className={classes.profilPicture}>
-                  <p
-                    onClick={() => addImg()}
-                    style={{
-                      position: "absolute",
-                      top: "35px",
-                      left: "33px",
-                      color: "#DDDDDD",
-                      fontWeight: "600",
-                      fontSize: "60px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    +
-                  </p>
-                </div>
+              <div className={classes.profilPlus}>
+                {image5 ? (
+                  <>
+                    <img
+                      src={URL.createObjectURL(image5)}
+                      alt="image5"
+                      className={classes.profilPicture}
+                      style={{
+                        objectFit: "cover",
+                        objectPosition: "50% 50%",
+                      }}
+                    />
+                    <p
+                      onClick={() => deleteImg()}
+                      style={{
+                        position: "absolute",
+                        top: "5px",
+                        right: "5px",
+                        color: "red",
+                        fontWeight: "600",
+                        fontSize: "12px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      X
+                    </p>
+                  </>
+                ) : (
+                  <label>
+                    <input
+                      type="file"
+                      name="image5"
+                      style={{ display: "none" }}
+                      onChange={(event) => {
+                        console.log(event.target.files[0]);
+                        setImage5(event.target.files[0]);
+                      }}
+                    />
+                    <p
+                      style={{
+                        position: "absolute",
+                        top: "35px",
+                        left: "33px",
+                        color: "#DDDDDD",
+                        fontWeight: "600",
+                        fontSize: "60px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      +
+                    </p>
+                  </label>
+                )}
               </div>
             </div>
           </div>
