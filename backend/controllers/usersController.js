@@ -19,17 +19,17 @@ const matchs = async (req, res) => {
         if (matchs == null) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
-            for (const match of matchs) {
-                const images = await imgModels.select(match.uid);
-                if (images === false) {
-                    return res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-                }
-                if (images.length === 0) {
-                    match.image = [];
-                } else {
-                    match.image = images[0];
-                }
-            }
+            // for (const match of matchs) {
+            //     const images = await imgModels.select(match.uid);
+            //     if (images === false) {
+            //         return res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+            //     }
+            //     if (images.length === 0) {
+            //         match.image = [];
+            //     } else {
+            //         match.image = images[0];
+            //     }
+            // }
             res.status(200).json(matchs);
         }
     }
@@ -45,17 +45,17 @@ const likes = async (req, res) => {
         if (myLiker == null) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
-            for (const like of myLiker) {
-                const images = await imgModels.select(like.uid);
-                if (images === false) {
-                    return res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-                }
-                if (images.length === 0) {
-                    like.image = [];
-                } else {
-                    like.image = images[0];
-                }
-            }
+            // for (const like of myLiker) {
+            //     const images = await imgModels.select(like.uid);
+            //     if (images === false) {
+            //         return res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+            //     }
+            //     if (images.length === 0) {
+            //         like.image = [];
+            //     } else {
+            //         like.image = images[0];
+            //     }
+            // }
             res.status(200).json(myLiker);
         }
     }
@@ -74,11 +74,11 @@ const offer = async (req, res) => {
         let index = 0;
         for (const offer of offers.sort((a, b) => { return b.score - a.score })) {
             if (likes.indexOf(offer.uid) == -1 && blocks.indexOf(offer.uid) == -1) {
-                const images = await imgModels.select(offer.uid);
-                if (images === false) {
-                    return res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-                }
-                offer.images = images;
+                // const images = await imgModels.select(offer.uid);
+                // if (images === false) {
+                //     return res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+                // }
+                // offer.images = images;
                 delete offer.uid
                 retOffers = offer;
                 index++
@@ -122,11 +122,11 @@ const search = async (req, res) => {
                     }
                 }
                 if (isIn == true && blocks.indexOf(ouser.uid) == -1) {
-                    const images = await imgModels.select(ouser.uid);
-                    if (images === false) {
-                        return res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-                    }
-                    ouser.images = images;
+                    // const images = await imgModels.select(ouser.uid);
+                    // if (images === false) {
+                    //     return res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+                    // }
+                    // ouser.images = images;
                     delete ouser['uid'];
                     newUsers.push(ouser);
                 }

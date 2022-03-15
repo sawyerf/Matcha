@@ -16,6 +16,7 @@ docker-compose -f docker-compose.yml up -d
 - Faire la seed pour les images
 - Faire les socket message + notif
 - Reparer les regex
+- Block les reports
 
 ## API
 | Method | url                         | Description             |

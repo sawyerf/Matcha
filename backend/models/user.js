@@ -35,7 +35,7 @@ const setInfo = async (uid, gender, sexuality, tags, bio, firstname, lastname) =
 
 const selectByUids = async (uids) => {
     let res;
-    const sql = `SELECT uid, username, date_part('year', age(birthday)) AS age
+    const sql = `SELECT uid, username, date_part('year', age(birthday)) AS age, gender, sexuality, bio, tags, popularity, latitude, longitude, last_visit, images
         FROM users WHERE uid IN (${uids.map((val, index) => `$${index + 1}`).join(',')})`;
 
     if (uids.length == 0) return ([]);
@@ -73,7 +73,7 @@ const selectOffer = async (uid, myGender, mySexuality) => {
 
     try {
         res = await client.query(
-            `SELECT uid, username, date_part('year', age(birthday)) AS age, gender, sexuality, bio, tags, popularity, latitude, longitude, last_visit
+            `SELECT uid, username, date_part('year', age(birthday)) AS age, gender, sexuality, bio, tags, popularity, latitude, longitude, last_visit, images
             FROM users
             WHERE (uid!=$1 AND isOK=TRUE AND position($2 in sexuality) > 0 AND position(gender in $3) > 0)`,
             [uid, myGender, mySexuality]
@@ -154,7 +154,7 @@ const search = async (uid, myGender, mySexuality, body) => {
 
     try {
         res = await client.query(
-            `SELECT uid, username, date_part('year', age(birthday)) AS age, gender, sexuality, bio, tags, popularity, last_visit
+            `SELECT uid, username, date_part('year', age(birthday)) AS age, gender, sexuality, bio, tags, popularity, last_visit, images
             FROM users
             WHERE uid!=$1 AND isok=TRUE AND position($2 in sexuality) > 0 AND position(gender in $3) > 0
                 AND $4 <= date_part('year', age(birthday)) AND date_part('year', age(birthday)) <= $5

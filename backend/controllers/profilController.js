@@ -155,14 +155,14 @@ const delImage = async (req, res) => {
 const me = async (req, res) => {
     delete req.me.password;
     delete req.me.validmail;
-    const images = await imgModels.select(req.me.uid);
-    if (images === false) {
-        res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-    } else {
+    // const images = await imgModels.select(req.me.uid);
+    // if (images === false) {
+    //     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+    // } else { 
         req.me.images = images;
         delete req.me.uid;
         res.status(200).json(req.me);
-    }
+    // }
 }
 
 export default {
