@@ -65,7 +65,7 @@ const offer = async (req, res) => {
     const offers = await userModels.selectOffer(req.me.uid, req.me.gender, req.me.sexuality);
     const likes = await likeModels.selectMyLike(req.me.uid);
     const blocks = await blockModels.selectBlocked(req.me.uid);
-    let retOffers = [];
+    let retOffers;
 
     if (offers === false || likes === false || blocks === false) {
         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
@@ -80,10 +80,10 @@ const offer = async (req, res) => {
                 }
                 offer.images = images;
                 delete offer.uid
-                retOffers.push(offer);
+                retOffers = offer;
                 index++
             }
-            if (index >= 10) break;
+            if (index >= 1) break;
         }
         res.status(200).json({
             // 'me': req.me, // To delete
