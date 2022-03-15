@@ -1,5 +1,4 @@
 const casual = require('casual').fr_FR;
-const { faker } = require('@faker-js/faker');
 import { client } from '../models/connection'
 
 const generateTags = (tags) => {
