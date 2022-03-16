@@ -136,6 +136,7 @@ const visit = async (req, res) => {
                 if (ret === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else {
+                    global.io.sockets.to(user.uid).emit('notif', {act: 'visit', username: req.me.uid, msg: `${req.me.uid} visit you`});
                     res.status(200).json();
                 }
             }

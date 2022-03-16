@@ -12,6 +12,7 @@ const match = async (req, res, user, liked) => {
     if (isMatch == null) {
         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
     } else if (isMatch === false) {
+        global.io.sockets.to(liked.uid).emit('notif', {act: 'like', username: user.username, msg:`${user.username} like you`});
         res.status(200).json({ 'match': false });
     } else if (isMatch === true) {
         const isMatchExist = await matchModels.isExist(user.uid, liked.uid);
@@ -22,6 +23,7 @@ const match = async (req, res, user, liked) => {
             if (ret === false) {
                 res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
             } else if (ret === true) {
+                global.io.sockets.to(liked.uid).emit('notif', {act: 'match', username: user.username, msg:`You match with ${user.username}`});
                 res.status(200).json({ 'match': true });
             }
         } else if (isMatchExist === true) {
@@ -30,8 +32,21 @@ const match = async (req, res, user, liked) => {
     }
 }
 
-const caculatePopularity = () => {
+const caculatePopularity = async (user) => {
+    const likesOther = await likeModels.selectMyJudge(user.uid);
 
+    if (likesOther !== false) {
+        let likes = {dislike: 0, like: 0};
+        for (const like of likesOther) {
+            if (like.islike === true) {
+                likes.like++;
+            } else {
+                likes.dislike++;
+            }
+        }
+        const popularity = (likes.like * 100) / (likes.like + likes.dislike);
+        userModels.setVal(user.uid, 'popularity', popularity);
+    }
 }
 
 const like = async (req, res) => {
@@ -39,7 +54,6 @@ const like = async (req, res) => {
         'username': 'string',
         'islike': 'boolean'
     }, req.body);
-
     if (isCheck === false || req.me.username == req.body.username) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' })
     } else {
@@ -64,6 +78,7 @@ const like = async (req, res) => {
                 if (ret === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else {
+                    caculatePopularity(liked);
                     if (req.body.islike == true) {
                         await match(req, res, req.me, liked);
                     } else {

@@ -34,7 +34,6 @@ const testTags = (tags) => {
     const acceptTags = ['#music', '#voyage', '#cuisine', '#sport', '#fitness', '#poney', '#programmation', '#gaming', '#danse'];
 
     for (const tag of tags.split(',')) {
-        console.log(tag)
         if (regex.test(tag) === false) {
             return false;
         }

@@ -18,6 +18,5 @@ export const distance = (loca1, loca2) => {
               Math.sin(Δλ/2) * Math.sin(Δλ/2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     const d = ((R * c) / 1000) | 0; // in metres
-    // console.log('distance: ', d, 'km')
     return (d);
 }

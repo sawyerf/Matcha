@@ -16,10 +16,11 @@ docker-compose -f docker-compose.yml up -d
 - ~~Reparer les regex~~
 - ~~Block les reports~~
 - ~~Ajouter si offer a like~~
+- ~~Faire le truc de popularite~~
+- ~~Faire les socket message + notif~~
 - Faire la validation des images
-- Faire les socket message + notif
-- Faire le truc de popularite
 - Faire du bonux pour le lik2
+- Rendre possible de delike un match
 
 ## API
 | Method | url                         | Description             |
