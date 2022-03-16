@@ -129,57 +129,33 @@ const MyProfile = () => {
 
     axios
       .all([
-        axios.post(
-          "http://localhost:3000/api/profil/setinfo",
-          {
-            gender: gender === "Homme" ? "H" : "F",
-            sexuality:
-              orientation === "Hétérosexuel" && gender === "Homme"
-                ? "F"
-                : orientation === "Homosexuel" && gender === "Homme"
-                ? "H"
-                : orientation === "Hétérosexuel" && gender === "Femme"
-                ? "H"
-                : orientation === "Homosexuel" && gender === "Femme"
-                ? "F"
-                : "HF",
-            tags: tags,
-            bio: bio,
-            firstname: firstName,
-            lastname: lastName,
-          },
-          {
-            headers: {
-              Authorization: `${localStorage.getItem("token")}`,
-            },
-          }
-        ),
+        axios.post("/profil/setinfo", {
+          gender: gender === "Homme" ? "H" : "F",
+          sexuality:
+            orientation === "Hétérosexuel" && gender === "Homme"
+              ? "F"
+              : orientation === "Homosexuel" && gender === "Homme"
+              ? "H"
+              : orientation === "Hétérosexuel" && gender === "Femme"
+              ? "H"
+              : orientation === "Homosexuel" && gender === "Femme"
+              ? "F"
+              : "HF",
+          tags: tags,
+          bio: bio,
+          firstname: firstName,
+          lastname: lastName,
+        }),
         email !== emailCpy
-          ? axios.post(
-              "http://localhost:3000/api/profil/changemail",
-              {
-                new_mail: email,
-              },
-              {
-                headers: {
-                  Authorization: `${localStorage.getItem("token")}`,
-                },
-              }
-            )
+          ? axios.post("/profil/changemail", {
+              new_mail: email,
+            })
           : null,
         newPassword && oldPassword
-          ? axios.post(
-              "http://localhost:3000/api/profil/changepassword",
-              {
-                old_password: oldPassword,
-                new_password: newPassword,
-              },
-              {
-                headers: {
-                  Authorization: `${localStorage.getItem("token")}`,
-                },
-              }
-            )
+          ? axios.post("/profil/changepassword", {
+              old_password: oldPassword,
+              new_password: newPassword,
+            })
           : null,
       ])
       .then(
@@ -190,11 +166,7 @@ const MyProfile = () => {
   };
 
   useEffect(async () => {
-    const res = await axios.get("http://localhost:3000/api/profil/me", {
-      headers: {
-        Authorization: `${localStorage.getItem("token")}`,
-      },
-    });
+    const res = await axios.get("/profil/me");
     if ("error" in res.data) {
       console.log("Error: ", res.data.message);
       //setError("Fail to connect `" + res.data.message + "`");
@@ -241,15 +213,7 @@ const MyProfile = () => {
     else if (image5) image = image5;
     if (image) {
       const img = await getBase64(image);
-      axios.post(
-        "http://localhost:3000/api/profil/image",
-        { image: img },
-        {
-          headers: {
-            Authorization: `${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      axios.post("/profil/image", { image: img });
     }
   }, [image1, image2, image3, image4, image5]);
 

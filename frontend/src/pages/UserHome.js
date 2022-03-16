@@ -29,7 +29,6 @@ const useStyles = makeStyles({
     overflow: "hidden",
     height: "500px",
     borderRadius: "8px",
-    boxShadow: "1px 1px 1px 1px #9E9E9E",
     marginTop: "70px",
   },
 });
@@ -39,63 +38,49 @@ const UserHome = () => {
   const navigate = useNavigate();
   const [displayProfile, setDisplayProfile] = useState(false);
   const [otherProfil, setOtherProfile] = useState(null);
+  const [displayedImage, setDisplayedImage] = useState(null);
+  const [displayedImageNb, setDisplayedImageNb] = useState(0);
+  const [matched, setMatched] = useState(false);
 
   const youMatch = async (liked) => {
     axios
       .all([
-        await axios.post(
-          "http://localhost:3000/api/action/like",
-          { username: otherProfil.username, islike: liked },
-          {
-            headers: {
-              Authorization: `${localStorage.getItem("token")}`,
-            },
-          }
-        ),
-        await axios.get("http://localhost:3000/api/users/offer", {
-          headers: {
-            Authorization: `${localStorage.getItem("token")}`,
-          },
+        await axios.post("/action/like", {
+          username: otherProfil.username,
+          islike: liked,
         }),
+        await axios.get("/users/offer"),
       ])
       .then(
         axios.spread((data1, data2) => {
           console.log("data1", data1, "data2", data2);
           data2.data && setOtherProfile(data2.data.offers);
+          setDisplayedImage(data2.data.offers.images[0]);
         })
       );
   };
 
   const previousImg = () => {
-    console.log("Previous Img");
+    if (displayedImageNb === 0) return;
+    else setDisplayedImageNb(displayedImageNb - 1);
   };
 
   const nextImg = () => {
-    console.log("Next Img");
+    if (displayedImageNb === otherProfil.images.length - 1) return;
+    else setDisplayedImageNb(displayedImageNb + 1);
   };
 
   const reportUser = async () => {
     axios
       .all([
-        await axios.post(
-          "http://localhost:3000/api/users/report",
-          { username: otherProfil.username },
-          {
-            headers: {
-              Authorization: `${localStorage.getItem("token")}`,
-            },
-          }
-        ),
-        await axios.get("http://localhost:3000/api/users/offer", {
-          headers: {
-            Authorization: `${localStorage.getItem("token")}`,
-          },
-        }),
+        await axios.post("/action/report", { username: otherProfil.username }),
+        await axios.get("/users/offer"),
       ])
       .then(
         axios.spread((data1, data2) => {
           console.log("data1", data1, "data2", data2);
           data2.data && setOtherProfile(data2.data.offers);
+          setDisplayedImage(data2.data.offers.images[0]);
         })
       );
   };
@@ -103,46 +88,45 @@ const UserHome = () => {
   const blockUser = async () => {
     axios
       .all([
-        await axios.post(
-          "http://localhost:3000/api/users/block",
-          { username: otherProfil.username },
-          {
-            headers: {
-              Authorization: `${localStorage.getItem("token")}`,
-            },
-          }
-        ),
-        await axios.get("http://localhost:3000/api/users/offer", {
-          headers: {
-            Authorization: `${localStorage.getItem("token")}`,
-          },
-        }),
+        await axios.post("/action/block", { username: otherProfil.username }),
+        await axios.get("/users/offer"),
       ])
       .then(
         axios.spread((data1, data2) => {
           console.log("data1", data1, "data2", data2);
           data2.data && setOtherProfile(data2.data.offers);
+          setDisplayedImage(data2.data.offers.images[0]);
         })
       );
   };
 
   useEffect(async () => {
-    const res = await axios.get("http://localhost:3000/api/users/offer", {
-      headers: {
-        Authorization: `${localStorage.getItem("token")}`,
-      },
-    });
+    const res = await axios.get("/users/offer");
     if ("error" in res.data) {
       console.log("Error: ", res.data.message);
     }
     res.data && setOtherProfile(res.data.offers);
+    setDisplayedImage(res.data.offers.images[0]);
   }, []);
+
+  useEffect(async () => {
+    setDisplayedImage(otherProfil.images[displayedImageNb]);
+    console.log(displayedImage);
+  }, [displayedImageNb]);
 
   return (
     <div style={{ display: "flex" }}>
       <UserMenu />
       <div className={classes.root}>
-        <div className={classes.matchCard}>
+        <div
+          className={classes.matchCard}
+          style={{
+            boxShadow:
+              otherProfil && otherProfil.isLike
+                ? "50px 50px 50px pink, -50px -50px 50px pink"
+                : "1px 1px 1px 1px #9E9E9E",
+          }}
+        >
           <div style={{ display: "flex" }}>
             <div className={classes.matchImage}>
               <div
@@ -152,7 +136,7 @@ const UserHome = () => {
                 <RightArrow rotate="rotate(180deg)" />
               </div>
               <img
-                src="https://static1.purepeople.com/articles/9/36/74/09/@/5297138-aymeric-bonnery-devoile-un-selfie-sur-in-950x0-2.jpg"
+                src={displayedImage}
                 alt="ImageUser"
                 style={{
                   height: "500px",

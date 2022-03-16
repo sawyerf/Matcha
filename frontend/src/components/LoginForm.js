@@ -19,7 +19,7 @@ const LoginForm = () => {
   };
 
   const loginApi = async (username, passwd) => {
-    const res = await axios.post("http://localhost:3000/api/auth/login", {
+    const res = await axios.post("/auth/login", {
       username: username,
       password: passwd,
     });
@@ -29,6 +29,8 @@ const LoginForm = () => {
     } else {
       if (res.data.token) {
         localStorage.setItem("token", res.data.token);
+        axios.defaults.headers.common["Authorization"] =
+          localStorage.getItem("token");
         navigate("/myprofile");
       }
       setError("bg le mec");

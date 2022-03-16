@@ -21,11 +21,7 @@ const UserMenuMatch = ({ matchDisplay }) => {
   const [displayProfile, setDisplayProfile] = useState(false);
 
   useEffect(async () => {
-    const res = await axios.get("http://localhost:3000/api/users/matchs", {
-      headers: {
-        Authorization: `${localStorage.getItem("token")}`,
-      },
-    });
+    const res = await axios.get("/users/matchs");
     if ("error" in res.data) {
       console.log("Error: ", res.data.message);
     }
@@ -41,7 +37,7 @@ const UserMenuMatch = ({ matchDisplay }) => {
         justifyContent: "space-between",
         flexFlow: "wrap",
         height: `calc(100% - 60px)`,
-        overflow: "scroll",
+        overflowX: "hidden",
       }}
     >
       {matchList &&
@@ -53,7 +49,11 @@ const UserMenuMatch = ({ matchDisplay }) => {
                 onClick={() => setDisplayProfile(true)}
               >
                 <img
-                  src={data.images[0]}
+                  src={
+                    data.images && data.images[0]
+                      ? data.images[0]
+                      : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzFhQ-2EAoeS6qbmv4PeqGPsw7oa1uPmaVow&usqp=CAU"
+                  }
                   alt="ImageUser"
                   className={classes.matchCard}
                   style={{
