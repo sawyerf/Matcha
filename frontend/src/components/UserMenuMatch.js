@@ -15,10 +15,14 @@ const useStyles = makeStyles({
   },
 });
 
-const UserMenuMatch = ({ matchDisplay }) => {
+const UserMenuMatch = ({
+  matchDisplay,
+  otherProfileData,
+  setOtherProfileData,
+}) => {
   const classes = useStyles();
+  const navigate = useNavigate();
   const [matchList, setMatchList] = useState(null);
-  const [displayProfile, setDisplayProfile] = useState(false);
 
   useEffect(async () => {
     const res = await axios.get("/users/matchs");
@@ -27,6 +31,11 @@ const UserMenuMatch = ({ matchDisplay }) => {
     }
     setMatchList(res.data);
   }, []);
+
+  const seeProfile = (data) => {
+    setOtherProfileData(data);
+    if (otherProfileData) navigate("/otherprofile");
+  };
 
   return (
     <div
@@ -46,7 +55,7 @@ const UserMenuMatch = ({ matchDisplay }) => {
             <>
               <div
                 className={classes.matchCard}
-                onClick={() => setDisplayProfile(true)}
+                onClick={() => seeProfile(data)}
               >
                 <img
                   src={
@@ -74,9 +83,6 @@ const UserMenuMatch = ({ matchDisplay }) => {
                   {data.username}
                 </p>
               </div>
-              {displayProfile && (
-                <Profile setDisplayProfile={setDisplayProfile} />
-              )}
             </>
           );
         })}

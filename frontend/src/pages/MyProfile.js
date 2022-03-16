@@ -54,7 +54,12 @@ const useStyles = makeStyles({
   },
 });
 
-const MyProfile = () => {
+const MyProfile = ({
+  myProfileData,
+  setMyProfileData,
+  otherProfileData,
+  setOtherProfileData,
+}) => {
   const classes = useStyles();
   const [gender, setGender] = useState("");
   const [orientation, setOrientation] = useState("");
@@ -114,19 +119,15 @@ const MyProfile = () => {
       if (tagsCpy !== "") tagsCpy += "," + event.target.id;
       else tagsCpy = event.target.id;
     } else {
-      console.log("delte");
       if (tagsCpy.includes("," + event.target.id))
         tagsCpy = tagsCpy.replace("," + event.target.id, "");
       else if (tagsCpy.includes(event.target.id))
         tagsCpy = tagsCpy.replace(event.target.id, "");
     }
     setTags(tagsCpy);
-    console.log(tags);
   };
 
   const saveProfil = () => {
-    console.log(localStorage.getItem("token"));
-
     axios
       .all([
         axios.post("/profil/setinfo", {
@@ -173,6 +174,7 @@ const MyProfile = () => {
     }
     console.log(res.data);
 
+    res.data && setMyProfileData(res.data);
     res.data.email && setEmail(res.data.email);
     res.data.email && setEmailCpy(res.data.email);
     res.data.tags && setTags(res.data.tags);
@@ -212,14 +214,19 @@ const MyProfile = () => {
     else if (image4) image = image4;
     else if (image5) image = image5;
     if (image) {
-      const img = await getBase64(image);
-      axios.post("/profil/image", { image: img });
+      const form = new FormData();
+      form.append("file", image);
+      axios.post("/profil/image", form);
     }
   }, [image1, image2, image3, image4, image5]);
 
   return (
     <div style={{ display: "flex" }}>
-      <UserMenu />
+      <UserMenu
+        myProfileData={myProfileData}
+        otherProfileData={otherProfileData}
+        setOtherProfileData={setOtherProfileData}
+      />
       <div className={classes.root}>
         <div className={classes.card}>
           <h3 style={{ marginBottom: "20px" }}>Modification du Profil</h3>

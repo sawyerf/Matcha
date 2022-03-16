@@ -41,7 +41,7 @@ const useStyles = makeStyles({
   },
 });
 
-const UserMenu = () => {
+const UserMenu = ({ myProfileData, otherProfileData, setOtherProfileData }) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [matchDisplay, setMatchDisplay] = useState(true);
@@ -100,7 +100,7 @@ const UserMenu = () => {
         >
           <img
             style={{ height: "30px", width: "30px", borderRadius: "16px" }}
-            src="https://media.istockphoto.com/photos/designer-is-picking-up-a-tie-for-light-jacket-picture-id1163491245"
+            src={myProfileData && myProfileData.images[0]}
             alt="ImageUser"
           />
           <p
@@ -112,7 +112,7 @@ const UserMenu = () => {
               fontWeight: "600",
             }}
           >
-            Johnny
+            {myProfileData && myProfileData.username}
           </p>
         </div>
       </div>
@@ -156,7 +156,11 @@ const UserMenu = () => {
             Message
           </p>
         </div>
-        <UserMenuMatch matchDisplay={matchDisplay} />
+        <UserMenuMatch
+          matchDisplay={matchDisplay}
+          otherProfileData={otherProfileData}
+          setOtherProfileData={setOtherProfileData}
+        />
       </div>
     </div>
   );

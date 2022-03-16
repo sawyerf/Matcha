@@ -33,10 +33,14 @@ const useStyles = makeStyles({
   },
 });
 
-const UserHome = () => {
+const UserHome = ({
+  myProfileData,
+  otherProfileData,
+  setOtherProfileData,
+  setMyProfileData,
+}) => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const [displayProfile, setDisplayProfile] = useState(false);
   const [otherProfil, setOtherProfile] = useState(null);
   const [displayedImage, setDisplayedImage] = useState(null);
   const [displayedImageNb, setDisplayedImageNb] = useState(0);
@@ -111,12 +115,20 @@ const UserHome = () => {
 
   useEffect(async () => {
     setDisplayedImage(otherProfil.images[displayedImageNb]);
-    console.log(displayedImage);
   }, [displayedImageNb]);
+
+  const seeProfile = (data) => {
+    setOtherProfileData(data);
+    navigate("/otherprofile");
+  };
 
   return (
     <div style={{ display: "flex" }}>
-      <UserMenu />
+      <UserMenu
+        myProfileData={myProfileData}
+        otherProfileData={otherProfileData}
+        setOtherProfileData={setOtherProfileData}
+      />
       <div className={classes.root}>
         <div
           className={classes.matchCard}
@@ -144,7 +156,7 @@ const UserHome = () => {
                   objectFit: "cover",
                   objectPosition: "50% 50%",
                 }}
-                onClick={() => setDisplayProfile(true)}
+                onClick={() => seeProfile(otherProfil)}
               />
               <div
                 style={{
@@ -255,7 +267,6 @@ const UserHome = () => {
             Bloquer Utilisateur
           </div>
         </div>
-        {displayProfile && <Profile setDisplayProfile={setDisplayProfile} />}
       </div>
     </div>
   );
