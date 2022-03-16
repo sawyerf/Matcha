@@ -12,6 +12,7 @@ const match = async (req, res, user, liked) => {
     if (isMatch == null) {
         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
     } else if (isMatch === false) {
+        global.io.sockets.to(liked.uid).emit('notif', {act: 'like', username: user.username, msg:`${user.username} like you`});
         res.status(200).json({ 'match': false });
     } else if (isMatch === true) {
         const isMatchExist = await matchModels.isExist(user.uid, liked.uid);
@@ -22,6 +23,7 @@ const match = async (req, res, user, liked) => {
             if (ret === false) {
                 res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
             } else if (ret === true) {
+                global.io.sockets.to(liked.uid).emit('notif', {act: 'match', username: user.username, msg:`You match with ${user.username}`});
                 res.status(200).json({ 'match': true });
             }
         } else if (isMatchExist === true) {
@@ -52,7 +54,6 @@ const like = async (req, res) => {
         'username': 'string',
         'islike': 'boolean'
     }, req.body);
-
     if (isCheck === false || req.me.username == req.body.username) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' })
     } else {

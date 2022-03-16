@@ -92,7 +92,7 @@ const changeMail = async (req, res) => {
 }
 
 const addImage = async (req, res) => {
-    console.log('file', req.file)
+    // console.log('file', req.file)
     if (req.me.images != null && req.me.images.length >= 5) {
         res.status(400).json({ 'error': 1, 'message': 'Too many Images' });
     } else {

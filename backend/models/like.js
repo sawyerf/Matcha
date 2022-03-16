@@ -96,7 +96,6 @@ const isMatch = async (id_liker, id_liked) => {
         console.log('error: ', error);
         return null;
     }
-    console.log('isMatch: ', res.rowCount)
     if (res.rowCount == 2) {
         return true;
     } else {

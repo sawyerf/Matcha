@@ -6,7 +6,6 @@ import { checkBody } from '../utils/checkBody';
 const sendMessage = async (socket, data) => {
     const isCheck = checkBody({
         'id_match': 'number',
-        'username': 'string',
         'message': 'string'
     }, data);
 
@@ -24,9 +23,7 @@ const sendMessage = async (socket, data) => {
             if (isOK === false) {
                 // res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
             } else {
-                socket.to(isExist.id_user1).emit('message', data.message);
-                socket.to(isExist.id_user2).emit('message', data.message);
-                // res.status(200).json();
+                global.io.sockets.to(isExist.id_user1).to(isExist.id_user2).emit('message', {id_match: data.id_match, msg: data.message});
             }
         }
     }

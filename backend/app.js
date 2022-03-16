@@ -24,4 +24,5 @@ const io = socket(server, {
         methods: ["GET", "POST"]
     }
 });
+global.io = io;
 initSocket(io)
