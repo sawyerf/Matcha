@@ -30,6 +30,10 @@ const match = async (req, res, user, liked) => {
     }
 }
 
+const caculatePopularity = () => {
+
+}
+
 const like = async (req, res) => {
     const isCheck = checkBody({
         'username': 'string',

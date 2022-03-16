@@ -83,3 +83,17 @@ INSERT INTO matchs (id_user1, id_user2) VALUES(1, 13);
 INSERT INTO matchs (id_user1, id_user2) VALUES(1, 30);
 INSERT INTO matchs (id_user1, id_user2) VALUES(1, 35);
 INSERT INTO matchs (id_user1, id_user2) VALUES(1, 36);
+
+
+INSERT INTO matchs (id_liker, id_liked, islike) VALUES(2, 1, TRUE);
+INSERT INTO matchs (id_liker, id_liked, islike) VALUES(3, 1, TRUE);
+INSERT INTO matchs (id_liker, id_liked, islike) VALUES(4, 1, TRUE);
+INSERT INTO matchs (id_liker, id_liked, islike) VALUES(5, 1, TRUE);
+INSERT INTO matchs (id_liker, id_liked, islike) VALUES(6, 1, TRUE);
+INSERT INTO matchs (id_liker, id_liked, islike) VALUES(7, 1, TRUE);
+INSERT INTO matchs (id_liker, id_liked, islike) VALUES(8, 1, TRUE);
+INSERT INTO matchs (id_liker, id_liked, islike) VALUES(9, 1, TRUE);
+INSERT INTO matchs (id_liker, id_liked, islike) VALUES(10, 1, TRUE);
+INSERT INTO matchs (id_liker, id_liked, islike) VALUES(11, 1, TRUE);
+INSERT INTO matchs (id_liker, id_liked, islike) VALUES(12, 1, TRUE);
+INSERT INTO matchs (id_liker, id_liked, islike) VALUES(13, 1, TRUE);

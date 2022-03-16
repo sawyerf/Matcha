@@ -56,7 +56,7 @@ const offer = async (req, res) => {
                 } else if (isLike === null) {
                     offer.isLike = false;
                 } else {
-                    offer.isLike = isLike.isLike;
+                    offer.isLike = isLike.islike;
                 }
                 delete offer.uid
                 retOffer = offer;

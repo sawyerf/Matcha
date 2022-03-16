@@ -18,6 +18,8 @@ docker-compose -f docker-compose.yml up -d
 - ~~Ajouter si offer a like~~
 - Faire la validation des images
 - Faire les socket message + notif
+- Faire le truc de popularite
+- Faire du bonux pour le lik2
 
 ## API
 | Method | url                         | Description             |

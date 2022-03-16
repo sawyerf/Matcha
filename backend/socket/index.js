@@ -14,10 +14,12 @@ export const initSocket = (io) => {
             if (user === false) {
                 socket.disconnect();
             } else {
-                socket.join(user.username);
+                socket.join(user.uid);
             }
         })
 
         socket.on('message', (data) => messageController.sendMessage(socket, data));
     });
+
+    
 }

@@ -30,7 +30,7 @@ const isExist = async (uid1, uid2) => {
     if (res.rowCount == 0) {
         return false;
     }
-    return true;
+    return res.rows[0];
 }
 
 const isExistId = async (id_match, id_user) => {
