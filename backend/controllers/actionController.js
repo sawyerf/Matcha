@@ -30,8 +30,21 @@ const match = async (req, res, user, liked) => {
     }
 }
 
-const caculatePopularity = () => {
+const caculatePopularity = async (user) => {
+    const likesOther = await likeModels.selectMyJudge(user.uid);
 
+    if (likesOther !== false) {
+        let likes = {dislike: 0, like: 0};
+        for (const like of likesOther) {
+            if (like.islike === true) {
+                likes.like++;
+            } else {
+                likes.dislike++;
+            }
+        }
+        const popularity = (likes.like * 100) / (likes.like + likes.dislike);
+        userModels.setVal(user.uid, 'popularity', popularity);
+    }
 }
 
 const like = async (req, res) => {
@@ -64,6 +77,7 @@ const like = async (req, res) => {
                 if (ret === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else {
+                    caculatePopularity(liked);
                     if (req.body.islike == true) {
                         await match(req, res, req.me, liked);
                     } else {
