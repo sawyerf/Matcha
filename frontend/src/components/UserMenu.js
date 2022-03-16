@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Disconnection from "@mui/icons-material/NoMeetingRoom";
 import Match from "@mui/icons-material/Favorite";
 import UserMenuMatch from "./UserMenuMatch";
+import UserMenuMessage from "./UserMenuMessage";
 import { useState, useEffect } from "react";
 
 const useStyles = makeStyles({
@@ -165,6 +166,7 @@ const UserMenu = ({ myProfileData, otherProfileData, setOtherProfileData }) => {
           otherProfileData={otherProfileData}
           setOtherProfileData={setOtherProfileData}
         />
+        <UserMenuMessage matchDisplay={matchDisplay} />
       </div>
     </div>
   );

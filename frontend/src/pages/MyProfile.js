@@ -685,7 +685,7 @@ const MyProfile = ({
                 value="music"
                 onChange={handleChangeTags}
               />
-              <label for="music" style={{ marginLeft: "5px" }}>
+              <label htmlFor="music" style={{ marginLeft: "5px" }}>
                 Musique
               </label>
             </div>
@@ -698,7 +698,7 @@ const MyProfile = ({
                 value="voyage"
                 onChange={handleChangeTags}
               />
-              <label for="voyage" style={{ marginLeft: "5px" }}>
+              <label htmlFor="voyage" style={{ marginLeft: "5px" }}>
                 Voyage
               </label>
             </div>
@@ -711,7 +711,7 @@ const MyProfile = ({
                 value="cuisine"
                 onChange={handleChangeTags}
               />
-              <label for="cuisine" style={{ marginLeft: "5px" }}>
+              <label htmlFor="cuisine" style={{ marginLeft: "5px" }}>
                 Cuisine
               </label>
             </div>
@@ -724,7 +724,7 @@ const MyProfile = ({
                 value="programmation"
                 onChange={handleChangeTags}
               />
-              <label for="programmation" style={{ marginLeft: "5px" }}>
+              <label htmlFor="programmation" style={{ marginLeft: "5px" }}>
                 Programmation
               </label>
             </div>
@@ -745,7 +745,7 @@ const MyProfile = ({
                 value="gaming"
                 onChange={handleChangeTags}
               />
-              <label for="gaming" style={{ marginLeft: "5px" }}>
+              <label htmlFor="gaming" style={{ marginLeft: "5px" }}>
                 Gaming
               </label>
             </div>
@@ -758,7 +758,7 @@ const MyProfile = ({
                 value="poney"
                 onChange={handleChangeTags}
               />
-              <label for="poney" style={{ marginLeft: "5px" }}>
+              <label htmlFor="poney" style={{ marginLeft: "5px" }}>
                 Poney
               </label>
             </div>
@@ -771,7 +771,7 @@ const MyProfile = ({
                 value="sport"
                 onChange={handleChangeTags}
               />
-              <label for="sport" style={{ marginLeft: "5px" }}>
+              <label htmlFor="sport" style={{ marginLeft: "5px" }}>
                 Sport
               </label>
             </div>
@@ -784,7 +784,7 @@ const MyProfile = ({
                 value="fitness"
                 onChange={handleChangeTags}
               />
-              <label for="fitness" style={{ marginLeft: "5px" }}>
+              <label htmlFor="fitness" style={{ marginLeft: "5px" }}>
                 Fitness
               </label>
             </div>
@@ -797,7 +797,7 @@ const MyProfile = ({
                 value="danse"
                 onChange={handleChangeTags}
               />
-              <label for="danse" style={{ marginLeft: "5px" }}>
+              <label htmlFor="danse" style={{ marginLeft: "5px" }}>
                 Danse
               </label>
             </div>

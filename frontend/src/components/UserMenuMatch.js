@@ -45,14 +45,13 @@ const UserMenuMatch = ({
         display: matchDisplay ? "flex" : "none",
         justifyContent: "space-between",
         flexFlow: "wrap",
-        height: `calc(100% - 60px)`,
         overflowX: "hidden",
       }}
     >
       {matchList &&
-        matchList.map((data) => {
+        matchList.map((data, key) => {
           return (
-            <>
+            <div key={key}>
               <div
                 className={classes.matchCard}
                 onClick={() => seeProfile(data)}
@@ -83,7 +82,7 @@ const UserMenuMatch = ({
                   {data.username}
                 </p>
               </div>
-            </>
+            </div>
           );
         })}
     </div>

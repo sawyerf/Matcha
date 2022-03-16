@@ -11,16 +11,16 @@ function RedCross(props) {
       <path
         d="M14.8286 9.17139L9.17176 14.8282"
         stroke="#FF0000"
-        stroke-width="3"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M9.17139 9.17139L14.8282 14.8282"
         stroke="#FF0000"
-        stroke-width="3"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

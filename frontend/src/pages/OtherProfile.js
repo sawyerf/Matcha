@@ -34,7 +34,7 @@ const OtherProfile = ({
 }) => {
   const classes = useStyles();
   const [displayedImage, setDisplayedImage] = useState(
-    otherProfileData.images[0]
+    otherProfileData && otherProfileData.images && otherProfileData.images[0]
   );
   const [displayedImageNb, setDisplayedImageNb] = useState(0);
   console.log(otherProfileData);
@@ -53,6 +53,16 @@ const OtherProfile = ({
     setDisplayedImage(otherProfileData.images[displayedImageNb]);
   }, [displayedImageNb]);
 
+  useEffect(async () => {
+    otherProfileData &&
+      otherProfileData.images &&
+      otherProfileData.images[0] &&
+      setDisplayedImage(otherProfileData.images[0]);
+    axios.post("/users/visit", {
+      username: otherProfileData.username,
+    });
+  }, [otherProfileData]);
+
   return (
     <div style={{ display: "flex" }}>
       <UserMenu
@@ -63,7 +73,7 @@ const OtherProfile = ({
       <div className={classes.root}>
         <div className={classes.card}>
           <h3 style={{ marginBottom: "20px" }}>
-            Profil de {otherProfileData.username}
+            Profil de {otherProfileData && otherProfileData.username}
           </h3>
           <div style={{ display: "flex" }}>
             <div style={{ position: "relative" }}>
@@ -75,7 +85,9 @@ const OtherProfile = ({
               </div>
               <img
                 src={
-                  otherProfileData.images && otherProfileData.images[0]
+                  otherProfileData &&
+                  otherProfileData.images &&
+                  otherProfileData.images[0]
                     ? displayedImage
                     : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzFhQ-2EAoeS6qbmv4PeqGPsw7oa1uPmaVow&usqp=CAU"
                 }
@@ -105,30 +117,33 @@ const OtherProfile = ({
               }}
             >
               <p style={{ marginBottom: "10px" }}>
-                Age : {otherProfileData.age}
+                Age : {otherProfileData && otherProfileData.age}
               </p>
               <p style={{ marginBottom: "10px" }}>
-                Genre : {otherProfileData.gender === "H" ? "Homme" : "Femme"}
+                Genre :{" "}
+                {otherProfileData && otherProfileData.gender === "H"
+                  ? "Homme"
+                  : "Femme"}
               </p>
               <p style={{ marginBottom: "10px" }}>
                 Recherche :{" "}
-                {otherProfileData.sexuality === "H"
+                {otherProfileData && otherProfileData.sexuality === "H"
                   ? "Homme"
-                  : otherProfileData.sexuality === "F"
+                  : otherProfileData && otherProfileData.sexuality === "F"
                   ? "Femme"
                   : "Homme et Femme"}
               </p>
               <p style={{ marginBottom: "10px" }}>
-                Distance : {otherProfileData.distance}
+                Distance : {otherProfileData && otherProfileData.distance}
               </p>
               <p style={{ marginBottom: "10px" }}>
-                Popularité : {otherProfileData.popularity}
+                Popularité : {otherProfileData && otherProfileData.popularity}
               </p>
               <p style={{ marginBottom: "10px" }}>
-                Bio : {otherProfileData.bio}
+                Bio : {otherProfileData && otherProfileData.bio}
               </p>
               <p style={{ marginBottom: "10px" }}>
-                {otherProfileData.tags.replaceAll(",", " ")}
+                {otherProfileData && otherProfileData.tags.replaceAll(",", " ")}
               </p>
             </div>
           </div>

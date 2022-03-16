@@ -114,7 +114,9 @@ const UserHome = ({
   }, []);
 
   useEffect(async () => {
-    setDisplayedImage(otherProfil.images[displayedImageNb]);
+    setDisplayedImage(
+      otherProfil && otherProfil.images && otherProfil.images[displayedImageNb]
+    );
   }, [displayedImageNb]);
 
   const seeProfile = (data) => {
