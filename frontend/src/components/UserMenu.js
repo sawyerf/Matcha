@@ -100,7 +100,11 @@ const UserMenu = ({ myProfileData, otherProfileData, setOtherProfileData }) => {
         >
           <img
             style={{ height: "30px", width: "30px", borderRadius: "16px" }}
-            src={myProfileData && myProfileData.images[0]}
+            src={
+              myProfileData && myProfileData.images
+                ? myProfileData.images[0]
+                : ""
+            }
             alt="ImageUser"
           />
           <p
