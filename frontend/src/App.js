@@ -11,6 +11,7 @@ import Message from "./pages/Message";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import UserMenu from "./components/UserMenu";
+import socketIOClient from "socket.io-client";
 
 function App() {
   const [myProfileData, setMyProfileData] = useState(null);
@@ -36,11 +37,13 @@ function App() {
   return (
     <div style={{ display: "flex" }}>
       <BrowserRouter>
-        <UserMenu
-          myProfileData={myProfileData}
-          otherProfileData={otherProfileData}
-          setOtherProfileData={setOtherProfileData}
-        />
+        {localStorage.getItem("token") && (
+          <UserMenu
+            myProfileData={myProfileData}
+            otherProfileData={otherProfileData}
+            setOtherProfileData={setOtherProfileData}
+          />
+        )}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
