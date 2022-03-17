@@ -11,6 +11,7 @@ import Message from "./pages/Message";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import UserMenu from "./components/UserMenu";
+import socketIOClient from "socket.io-client";
 
 function App() {
   const [myProfileData, setMyProfileData] = useState(null);
