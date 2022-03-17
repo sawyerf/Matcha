@@ -33,12 +33,7 @@ const useStyles = makeStyles({
   },
 });
 
-const UserHome = ({
-  myProfileData,
-  otherProfileData,
-  setOtherProfileData,
-  setMyProfileData,
-}) => {
+const UserHome = ({ setOtherProfileData }) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [otherProfil, setOtherProfile] = useState(null);
@@ -60,6 +55,7 @@ const UserHome = ({
           console.log("data1", data1, "data2", data2);
           data2.data && setOtherProfile(data2.data.offers);
           setDisplayedImage(data2.data.offers.images[0]);
+          setDisplayedImageNb(0);
         })
       );
   };
@@ -85,6 +81,7 @@ const UserHome = ({
           console.log("data1", data1, "data2", data2);
           data2.data && setOtherProfile(data2.data.offers);
           setDisplayedImage(data2.data.offers.images[0]);
+          setDisplayedImageNb(0);
         })
       );
   };
@@ -100,6 +97,7 @@ const UserHome = ({
           console.log("data1", data1, "data2", data2);
           data2.data && setOtherProfile(data2.data.offers);
           setDisplayedImage(data2.data.offers.images[0]);
+          setDisplayedImageNb(0);
         })
       );
   };
@@ -126,11 +124,6 @@ const UserHome = ({
 
   return (
     <div style={{ display: "flex" }}>
-      <UserMenu
-        myProfileData={myProfileData}
-        otherProfileData={otherProfileData}
-        setOtherProfileData={setOtherProfileData}
-      />
       <div className={classes.root}>
         <div
           className={classes.matchCard}

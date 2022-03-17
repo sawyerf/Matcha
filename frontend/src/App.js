@@ -7,52 +7,114 @@ import NotFound from "./pages/NotFound";
 import UserHome from "./pages/UserHome";
 import MyProfile from "./pages/MyProfile";
 import OtherProfile from "./pages/OtherProfile";
-import { useState } from "react";
+import Message from "./pages/Message";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import UserMenu from "./components/UserMenu";
 
 function App() {
   const [myProfileData, setMyProfileData] = useState(null);
   const [otherProfileData, setOtherProfileData] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  useEffect(async () => {
+    const res = await axios.get("/profil/me");
+    if ("error" in res.data) {
+      console.log("Error: ", res.data.message);
+    }
+    res.data && setMyProfileData(res.data);
+  }, []);
+
+  useEffect(async () => {
+    if (errorMsg !== null) {
+      setTimeout(() => {
+        setErrorMsg(null);
+      }, 5000);
+    }
+  }, [errorMsg]);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/otherprofile"
-          element={
-            <OtherProfile
-              myProfileData={myProfileData}
-              otherProfileData={otherProfileData}
-              setOtherProfileData={setOtherProfileData}
-            />
-          }
+    <div style={{ display: "flex" }}>
+      <BrowserRouter>
+        <UserMenu
+          myProfileData={myProfileData}
+          otherProfileData={otherProfileData}
+          setOtherProfileData={setOtherProfileData}
         />
-        <Route
-          path="/userhome"
-          element={
-            <UserHome
-              myProfileData={myProfileData}
-              otherProfileData={otherProfileData}
-              setOtherProfileData={setOtherProfileData}
-            />
-          }
-        />
-        <Route
-          path="/myprofile"
-          element={
-            <MyProfile
-              myProfileData={myProfileData}
-              setMyProfileData={setMyProfileData}
-              otherProfileData={otherProfileData}
-              setOtherProfileData={setOtherProfileData}
-            />
-          }
-        />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/otherprofile"
+            element={
+              <OtherProfile
+                otherProfileData={otherProfileData}
+                setErrorMsg={setErrorMsg}
+              />
+            }
+          />
+          <Route
+            path="/userhome"
+            element={
+              <UserHome
+                setOtherProfileData={setOtherProfileData}
+                setErrorMsg={setErrorMsg}
+              />
+            }
+          />
+          <Route
+            path="/myprofile"
+            element={
+              <MyProfile
+                myProfileData={myProfileData}
+                setMyProfileData={setMyProfileData}
+                otherProfileData={otherProfileData}
+                setOtherProfileData={setOtherProfileData}
+                setErrorMsg={setErrorMsg}
+              />
+            }
+          />
+          <Route
+            path="/message"
+            element={
+              <Message
+                otherProfileData={otherProfileData}
+                setErrorMsg={setErrorMsg}
+              />
+            }
+          />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        {errorMsg ? (
+          <div
+            style={{
+              position: "absolute",
+              top: "20px",
+              right: "40px",
+              width: "200px",
+              height: "50px",
+              borderRadius: "8px",
+              backgroundColor: "red",
+              boxShadow: "5px 5px 5px darkred",
+            }}
+          >
+            <p
+              style={{
+                color: "white",
+                fontWeight: "600",
+                margin: "5px",
+                fontSize: "14px",
+              }}
+            >
+              {errorMsg}
+            </p>
+          </div>
+        ) : (
+          ""
+        )}
+      </BrowserRouter>
+    </div>
   );
 }
 

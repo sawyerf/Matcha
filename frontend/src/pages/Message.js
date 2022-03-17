@@ -27,7 +27,7 @@ const useStyles = makeStyles({
   },
 });
 
-const OtherProfile = ({ otherProfileData }) => {
+const Message = ({ otherProfileData }) => {
   const classes = useStyles();
   const [displayedImage, setDisplayedImage] = useState(
     otherProfileData && otherProfileData.images && otherProfileData.images[0]
@@ -144,4 +144,4 @@ const OtherProfile = ({ otherProfileData }) => {
   );
 };
 
-export default OtherProfile;
+export default Message;

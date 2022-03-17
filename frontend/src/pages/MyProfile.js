@@ -59,6 +59,7 @@ const MyProfile = ({
   setMyProfileData,
   otherProfileData,
   setOtherProfileData,
+  setErrorMsg,
 }) => {
   const classes = useStyles();
   const [gender, setGender] = useState("");
@@ -127,8 +128,8 @@ const MyProfile = ({
     setTags(tagsCpy);
   };
 
-  const saveProfil = () => {
-    axios
+  const saveProfil = async () => {
+    const res = await axios
       .all([
         axios.post("/profil/setinfo", {
           gender: gender === "Homme" ? "H" : "F",
@@ -161,20 +162,22 @@ const MyProfile = ({
       ])
       .then(
         axios.spread((data1, data2) => {
-          console.log("data1", data1, "data2", data2);
+          setErrorMsg(null);
         })
-      );
+      )
+      .catch((err) => {
+        setErrorMsg("Remplissez tout les champs texte");
+      });
   };
 
   useEffect(async () => {
     const res = await axios.get("/profil/me");
     if ("error" in res.data) {
       console.log("Error: ", res.data.message);
-      //setError("Fail to connect `" + res.data.message + "`");
+      setErrorMsg(res.data.message);
     }
     console.log(res.data);
 
-    res.data && setMyProfileData(res.data);
     res.data.email && setEmail(res.data.email);
     res.data.email && setEmailCpy(res.data.email);
     res.data.tags && setTags(res.data.tags);
@@ -216,17 +219,16 @@ const MyProfile = ({
     if (image) {
       const form = new FormData();
       form.append("file", image);
-      axios.post("/profil/image", form);
+      const res = axios.post("/profil/image", form);
+      if ("error" in res.data) {
+        console.log("Error: ", res.data.message);
+        setErrorMsg(res.data.message);
+      }
     }
   }, [image1, image2, image3, image4, image5]);
 
   return (
     <div style={{ display: "flex" }}>
-      <UserMenu
-        myProfileData={myProfileData}
-        otherProfileData={otherProfileData}
-        setOtherProfileData={setOtherProfileData}
-      />
       <div className={classes.root}>
         <div className={classes.card}>
           <h3 style={{ marginBottom: "20px" }}>Modification du Profil</h3>
