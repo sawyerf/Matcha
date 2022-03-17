@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import UserMenu from "../components/UserMenu";
 import { makeStyles } from "@mui/styles";
 import axios from "axios";
-import RightArrow from "../components/Icons/RightArrow";
+import SendMessageIcon from "../components/Icons/SendMessageIcon";
 
 const useStyles = makeStyles({
   root: {
@@ -12,12 +12,11 @@ const useStyles = makeStyles({
   },
   card: {
     backgroundColor: "white",
-    width: "550px",
+    width: "510px",
     height: "70vh",
     borderRadius: "16px",
     marginTop: "70px",
-    paddingTop: "20px",
-    paddingBottom: "20px",
+    padding: "20px",
     position: "relative",
   },
   matchCard: {
@@ -25,118 +24,90 @@ const useStyles = makeStyles({
     height: "400px",
     marginLeft: "20px",
   },
+  myMessage: {
+    width: "fit-content",
+    marginLeft: "auto",
+    margin: "5px",
+    padding: "3px",
+    position: "relative",
+    borderRadius: "8px",
+    background: "orange",
+    maxWidth: "50%",
+  },
+  theirMessage: {
+    width: "fit-content",
+    marginRight: "auto",
+    margin: "5px",
+    padding: "3px",
+    position: "relative",
+    borderRadius: "8px",
+    background: "lightgrey",
+    maxWidth: "50%",
+  },
+  messages: {
+    textAlign: "left",
+    margin: "5px",
+  },
 });
 
 const Message = ({ otherProfileData }) => {
   const classes = useStyles();
-  const [displayedImage, setDisplayedImage] = useState(
-    otherProfileData && otherProfileData.images && otherProfileData.images[0]
-  );
-  const [displayedImageNb, setDisplayedImageNb] = useState(0);
-  console.log(otherProfileData);
+  const messagesEndRef = useRef(null);
+  const [messageToSend, setMessageToSend] = useState("");
+  const [discussion, setDiscussion] = useState([
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5, 6, 7, 8, 9,
+  ]);
 
-  const previousImg = () => {
-    if (displayedImageNb === 0) return;
-    else setDisplayedImageNb(displayedImageNb - 1);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const nextImg = () => {
-    if (displayedImageNb === otherProfileData.images.length - 1) return;
-    else setDisplayedImageNb(displayedImageNb + 1);
+  const sendMessage = () => {
+    console.log(messageToSend);
+    setMessageToSend("");
   };
 
-  useEffect(async () => {
-    setDisplayedImage(otherProfileData.images[displayedImageNb]);
-  }, [displayedImageNb]);
-
-  useEffect(async () => {
-    otherProfileData &&
-      otherProfileData.images &&
-      otherProfileData.images[0] &&
-      setDisplayedImage(otherProfileData.images[0]);
-    axios.post("/users/visit", {
-      username: otherProfileData.username,
-    });
-  }, [otherProfileData]);
+  useEffect(() => {
+    scrollToBottom();
+  }, [discussion]);
 
   return (
     <div style={{ display: "flex" }}>
       <div className={classes.root}>
         <div className={classes.card}>
-          <h3 style={{ marginBottom: "20px" }}>
-            Profil de {otherProfileData && otherProfileData.username}
-          </h3>
-          <div style={{ display: "flex" }}>
-            <div style={{ position: "relative" }}>
-              <div
-                style={{ position: "absolute", top: "170px", left: "20px" }}
-                onClick={() => previousImg()}
-              >
-                <RightArrow rotate="rotate(180deg)" />
-              </div>
-              <img
-                src={
-                  otherProfileData &&
-                  otherProfileData.images &&
-                  otherProfileData.images[0]
-                    ? displayedImage
-                    : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzFhQ-2EAoeS6qbmv4PeqGPsw7oa1uPmaVow&usqp=CAU"
-                }
-                alt="ImageUser"
-                className={classes.matchCard}
-                style={{
-                  objectFit: "cover",
-                  objectPosition: "50% 50%",
-                }}
-              />
-              <div
-                style={{
-                  position: "absolute",
-                  top: "170px",
-                  right: "0",
-                }}
-                onClick={() => nextImg()}
-              >
-                <RightArrow />
-              </div>
-            </div>
-            <div
+          <h3 style={{ marginBottom: "10px" }}>Message avec User</h3>
+          <div style={{ overflow: "scroll", height: "85%" }}>
+            {discussion &&
+              discussion.map((data, key) => {
+                return (
+                  <div key={key}>
+                    <div className={classes.myMessage}>
+                      <p className={classes.messages}>
+                        my qsdfqsd qsdf qsdf qsdf qsdf e is here
+                      </p>
+                    </div>
+                    <div className={classes.theirMessage}>
+                      <p className={classes.messages}>Their message is here</p>
+                    </div>
+                  </div>
+                );
+              })}
+            <div ref={messagesEndRef} />
+          </div>
+          <div style={{ marginTop: "10px", width: "90%", display: "flex" }}>
+            <textarea
               style={{
-                marginLeft: "30px",
-                marginRight: "20px",
-                textAlign: "left",
+                resize: "none",
+                width: "100%",
+                height: "27px",
+                fontSize: "16px",
+                padding: "3px",
+                borderRadius: "8px",
               }}
-            >
-              <p style={{ marginBottom: "10px" }}>
-                Age : {otherProfileData && otherProfileData.age}
-              </p>
-              <p style={{ marginBottom: "10px" }}>
-                Genre :{" "}
-                {otherProfileData && otherProfileData.gender === "H"
-                  ? "Homme"
-                  : "Femme"}
-              </p>
-              <p style={{ marginBottom: "10px" }}>
-                Recherche :{" "}
-                {otherProfileData && otherProfileData.sexuality === "H"
-                  ? "Homme"
-                  : otherProfileData && otherProfileData.sexuality === "F"
-                  ? "Femme"
-                  : "Homme et Femme"}
-              </p>
-              <p style={{ marginBottom: "10px" }}>
-                Distance : {otherProfileData && otherProfileData.distance}
-              </p>
-              <p style={{ marginBottom: "10px" }}>
-                Popularité : {otherProfileData && otherProfileData.popularity}
-              </p>
-              <p style={{ marginBottom: "10px" }}>
-                Bio : {otherProfileData && otherProfileData.bio}
-              </p>
-              <p style={{ marginBottom: "10px" }}>
-                {otherProfileData && otherProfileData.tags.replaceAll(",", " ")}
-              </p>
-            </div>
+              value={messageToSend}
+              onChange={(e) => setMessageToSend(e.target.value)}
+            />
+            <SendMessageIcon onClick={sendMessage} />
           </div>
         </div>
       </div>

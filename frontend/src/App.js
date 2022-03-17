@@ -36,11 +36,13 @@ function App() {
   return (
     <div style={{ display: "flex" }}>
       <BrowserRouter>
-        <UserMenu
-          myProfileData={myProfileData}
-          otherProfileData={otherProfileData}
-          setOtherProfileData={setOtherProfileData}
-        />
+        {localStorage.getItem("token") && (
+          <UserMenu
+            myProfileData={myProfileData}
+            otherProfileData={otherProfileData}
+            setOtherProfileData={setOtherProfileData}
+          />
+        )}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />

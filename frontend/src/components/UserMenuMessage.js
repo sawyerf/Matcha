@@ -21,16 +21,17 @@ const UserMenuMessage = ({ matchDisplay }) => {
   const [messageList, setMessageList] = useState([1, 2, 3]);
 
   useEffect(async () => {
-    /*const res = await axios.get("/users/matchs");
+    const res = await axios.get("/users/matchs");
     if ("error" in res.data) {
       console.log("Error: ", res.data.message);
     }
-    setMessageList(res.data);*/
+    setMessageList(res.data);
   }, []);
 
   const readMessage = (data) => {
     //setOtherProfileData(data);
-    //if (otherProfileData) navigate("/message");
+    //if (otherProfileData)
+    navigate("/message");
   };
 
   return (
@@ -59,7 +60,9 @@ const UserMenuMessage = ({ matchDisplay }) => {
                     borderRadius: "16px",
                   }}
                   src={
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzFhQ-2EAoeS6qbmv4PeqGPsw7oa1uPmaVow&usqp=CAU"
+                    data && data.images && data.images[0]
+                      ? data.images[0]
+                      : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzFhQ-2EAoeS6qbmv4PeqGPsw7oa1uPmaVow&usqp=CAU"
                   }
                   alt="ImageUser"
                 />
@@ -70,7 +73,7 @@ const UserMenuMessage = ({ matchDisplay }) => {
                       fontSize: "14px",
                     }}
                   >
-                    Johnny
+                    {data.userName}
                   </p>
                   <p
                     style={{
