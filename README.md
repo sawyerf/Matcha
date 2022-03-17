@@ -18,9 +18,9 @@ docker-compose -f docker-compose.yml up -d
 - ~~Ajouter si offer a like~~
 - ~~Faire le truc de popularite~~
 - ~~Faire les socket message + notif~~
+- ~~Rendre possible de delike un match~~
 - Faire la validation des images
 - Faire du bonux pour le lik2
-- Rendre possible de delike un match
 
 ## API
 | Method | url                         | Description             |

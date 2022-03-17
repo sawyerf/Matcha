@@ -15,6 +15,21 @@ const insert = async (uid1, uid2) => {
     return true;
 }
 
+const del = async (uid1, uid2) => {
+    let res;
+    try {
+        res = await client.query(
+            `DELETE FROM matchs
+                WHERE (id_user1=$1 AND id_user2=$2) OR (id_user1=$2 AND id_user2=$1)`,
+            [uid1, uid2]
+        );
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+    return true;
+}
+
 const isExist = async (uid1, uid2) => {
     let res;
     try {
@@ -81,4 +96,5 @@ export default {
     isExist,
     selectByUser,
     isExistId,
+    del,
 }

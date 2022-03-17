@@ -32,6 +32,22 @@ const match = async (req, res, user, liked) => {
     }
 }
 
+const unmatch = async (req, res, user, liked) => {
+    const isMatchExist = await matchModels.isExist(user.uid, liked.uid);
+    if (isMatchExist == null) {
+        res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+    } else if (isMatchExist === false) {
+        res.status(200).json();
+    } else {
+        const isOK = await matchModels.del(user.uid, liked.uid);
+        if (isOK === false) {
+            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+        } else {
+            res.status(200).json();
+        }
+    }
+}
+
 const caculatePopularity = async (user) => {
     const likesOther = await likeModels.selectMyJudge(user.uid);
 
@@ -82,7 +98,7 @@ const like = async (req, res) => {
                     if (req.body.islike == true) {
                         await match(req, res, req.me, liked);
                     } else {
-                        res.status(200).json();
+                        await unmatch(req, res, req.me, liked);
                     }
                 }
             }
