@@ -1,11 +1,12 @@
-import matchModels                from '../models/match';
-import userModels                 from '../models/user';
-import likeModels                 from '../models/like';
-import blockModels                from '../models/block';
-import historyModels              from '../models/history';
-import { checkBody }              from '../utils/checkBody';
-import { scoreMatch }             from '../utils/score';
+import matchModels from '../models/match';
+import userModels from '../models/user';
+import likeModels from '../models/like';
+import blockModels from '../models/block';
+import historyModels from '../models/history';
+import { checkBody } from '../utils/checkBody';
+import { scoreMatch } from '../utils/score';
 import { locationByIp, distance } from '../utils/location';
+import messageModels from '../models/message';
 
 const matchs = async (req, res) => {
     const uidMatchs = await matchModels.selectByUser(req.me.uid);
@@ -17,6 +18,21 @@ const matchs = async (req, res) => {
         if (matchs == null) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
+            for (const match of matchs) {
+                console.log(match);
+                match.message = await messageModels.selectLast(req.me.uid, match.uid);
+                if (match.message != false && match.message != null) {
+                    if (match.message.id_from === req.me.uid) {
+                        match.message.from = req.me.username;
+                    } else {
+                        match.message.from = match.username;
+                    }
+                    delete match.message.id_from;
+                    delete match.message.id_to;
+                    delete match.message.id_match;
+                }
+                delete match.uid;
+            }
             res.status(200).json(matchs);
         }
     }
@@ -136,7 +152,7 @@ const visit = async (req, res) => {
                 if (ret === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else {
-                    global.io.sockets.to(user.uid).emit('notif', {act: 'visit', username: req.me.uid, msg: `${req.me.uid} visit you`});
+                    global.io.sockets.to(user.uid).emit('notif', { act: 'visit', username: req.me.uid, msg: `${req.me.uid} visit you` });
                     res.status(200).json();
                 }
             }

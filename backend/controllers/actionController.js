@@ -73,7 +73,7 @@ const like = async (req, res) => {
                 } else if (preLike.islike != req.body.islike) {
                     ret = await likeModels.update(req.me.uid, liked.uid, req.body.islike);
                 } else {
-                    ret = true;
+                    return res.status(200).json();
                 }
                 if (ret === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
