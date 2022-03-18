@@ -31,6 +31,22 @@ const select = async (id_user) => {
     return res.rows;
 }
 
+const selectByUid = async (uid) => {
+    let res;
+
+    try {
+        res = await client.query(
+            `SELECT id_image, image FROM images WHERE id_image=$1`,
+            [uid]
+        );
+    } catch (error) {
+        console.log('error: ', error);
+        return false;
+    }
+    if (res.rowCount === 0) return null;
+    return res.rows[0];
+}
+
 const del = async (id_image) => {
     let res;
 
@@ -50,4 +66,5 @@ export default {
     insert,
     select,
     del,
+    selectByUid,
 };

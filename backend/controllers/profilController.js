@@ -7,7 +7,6 @@ import userModels from '../models/user';
 import imgModels from '../models/image';
 import { sendmail } from '../utils/mail';
 import { checkProfilUid } from '../utils/chekProfil';
-import fs from 'fs';
 
 const setInfo = async (req, res) => {
     let ret;
@@ -92,31 +91,32 @@ const changeMail = async (req, res) => {
 }
 
 const addImage = async (req, res) => {
-    // console.log('file', req.file)
-    if (req.me.images != null && req.me.images.length >= 5) {
+    if (!req.files || Object.keys(req.files).length === 0) {
+        res.status(400).json({ 'error': 1, 'message': 'No files were uploaded' });
+    } else if (req.me.images != null && req.me.images.length >= 5) {
         res.status(400).json({ 'error': 1, 'message': 'Too many Images' });
     } else {
-        const img = fs.readFileSync(req.file.path);
-        const encode_img = img.toString('base64');
+        const { file } = req.files;
         const id_img = uuidv4();
-        let isOK = await imgModels.insert(id_img, req.me.uid, new Buffer(encode_img, 'base64'));
-        if (isOK === false) {
-            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-        } else {
-            let images = req.me.images;
-            if (images === null) {
-                images = [id_img];
-            } else {
-                images.push(id_img)
-            }
-            isOK = await userModels.setVal(req.me.uid, 'images', images);
-            if (isOK === false) {
-                res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-            } else {
-                checkProfilUid(req.me.uid);
-                res.status(200).json();
-            }
-        }
+        file.mv(__dirname +  '/pictures/')
+        // let isOK = await imgModels.insert(id_img, req.me.uid, file.data);
+        // if (isOK === false) {
+        //     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+        // } else {
+        //     let images = req.me.images;
+        //     if (images === null) {
+        //         images = [id_img];
+        //     } else {
+        //         images.push(id_img)
+        //     }
+        //     isOK = await userModels.setVal(req.me.uid, 'images', images);
+        //     if (isOK === false) {
+        //         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+        //     } else {
+        //         checkProfilUid(req.me.uid);
+        //         res.status(200).json();
+        //     }
+        // }
     }
 }
 

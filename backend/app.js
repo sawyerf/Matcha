@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import socket from 'socket.io';
+import fileUpload from 'express-fileupload';
 import { apiRouter } from './routes';
 import { initSocket } from './socket';
 
@@ -9,6 +10,7 @@ require('dotenv').config()
 
 const app = express();
 
+app.use(fileUpload())
 app.use(cors());
 app.use(express.json({limit: '5mb'}));
 app.use(cookieParser());

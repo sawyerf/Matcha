@@ -137,12 +137,12 @@ const MyProfile = ({
             orientation === "Hétérosexuel" && gender === "Homme"
               ? "F"
               : orientation === "Homosexuel" && gender === "Homme"
-              ? "H"
-              : orientation === "Hétérosexuel" && gender === "Femme"
-              ? "H"
-              : orientation === "Homosexuel" && gender === "Femme"
-              ? "F"
-              : "HF",
+                ? "H"
+                : orientation === "Hétérosexuel" && gender === "Femme"
+                  ? "H"
+                  : orientation === "Homosexuel" && gender === "Femme"
+                    ? "F"
+                    : "HF",
           tags: tags,
           bio: bio,
           firstname: firstName,
@@ -150,14 +150,14 @@ const MyProfile = ({
         }),
         email !== emailCpy
           ? axios.post("/profil/changemail", {
-              new_mail: email,
-            })
+            new_mail: email,
+          })
           : null,
         newPassword && oldPassword
           ? axios.post("/profil/changepassword", {
-              old_password: oldPassword,
-              new_password: newPassword,
-            })
+            old_password: oldPassword,
+            new_password: newPassword,
+          })
           : null,
       ])
       .then(
@@ -191,12 +191,12 @@ const MyProfile = ({
       res.data.sexuality === "F" && res.data.gender === "H"
         ? "Hétérosexuel"
         : res.data.sexuality === "F" && res.data.gender === "F"
-        ? "Homosexuel"
-        : res.data.sexuality === "H" && res.data.gender === "F"
-        ? "Hétérosexuel"
-        : res.data.sexuality === "H" && res.data.gender === "H"
-        ? "Homosexuel"
-        : "Bisexuel"
+          ? "Homosexuel"
+          : res.data.sexuality === "H" && res.data.gender === "F"
+            ? "Hétérosexuel"
+            : res.data.sexuality === "H" && res.data.gender === "H"
+              ? "Homosexuel"
+              : "Bisexuel"
     );
   }, []);
 
@@ -217,8 +217,9 @@ const MyProfile = ({
     else if (image4) image = image4;
     else if (image5) image = image5;
     if (image) {
-      const img = await getBase64(image);
-      const res = axios.post("/profil/image", { image: img });
+      const form = new FormData();
+      form.append("file", image);
+      const res = axios.post("/profil/image", form);
       if ("error" in res.data) {
         console.log("Error: ", res.data.message);
         setErrorMsg(res.data.message);

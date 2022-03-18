@@ -55,7 +55,7 @@ CREATE TABLE reports (
 CREATE TABLE images (
     id_image varchar UNIQUE,
     id_user int,
-    image text
+    image bytea
 );
 
 CREATE TABLE history (
