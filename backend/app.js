@@ -3,8 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import socket from 'socket.io';
 import { apiRouter } from './routes';
-// import { client } from './models/connection'
-import { initSocket } from './socket'
+import { initSocket } from './socket';
 
 require('dotenv').config()
 

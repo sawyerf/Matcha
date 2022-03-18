@@ -39,7 +39,7 @@ const sendMessage = async (req, res) => {
 const roomMessage = async (req, res) => {
     const isCheck = checkBody({
         'username': 'string',
-    }, req.body);
+    }, req.query);
 
     if (isCheck === false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
