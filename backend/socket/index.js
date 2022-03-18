@@ -7,10 +7,10 @@ export const initSocket = (io) => {
     io.sockets.on('connection', (socket) => {
         socket.on('token', async (token) => {
             const user = await jwt.socketToken(socket, token);
-            socket.me = user;
             if (user === false) {
                 socket.disconnect();
             } else {
+                socket.me = user;
                 console.log('Connect', user.username)
                 socket.join(user.uid);
             }

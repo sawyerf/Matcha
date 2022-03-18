@@ -19,7 +19,6 @@ const matchs = async (req, res) => {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
             for (const match of matchs) {
-                console.log(match);
                 match.message = await messageModels.selectLast(req.me.uid, match.uid);
                 if (match.message != false && match.message != null) {
                     if (match.message.id_from === req.me.uid) {

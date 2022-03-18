@@ -87,7 +87,6 @@ const selectByUser = async (uid) => {
             ret.push(match.id_user2);
         }
     }
-    console.log(ret)
     return ret;
 }
 

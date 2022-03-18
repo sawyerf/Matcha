@@ -3,33 +3,33 @@ import messageModels from '../models/message';
 import matchModels from '../models/match';
 import { checkBody } from '../utils/checkBody';
 
-const sendMessage = async (socket, data) => {
+const sendMessage = async (req, res) => {
     const isCheck = checkBody({
         'username': 'string',
         'message': 'string'
-    }, data);
+    }, req.body);
 
     if (isCheck === false) {
-        // res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
+        res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
     } else {
-        const user = await userModels.selectBy('username', data.username);
+        const user = await userModels.selectBy('username', req.body.username);
         if (user === false) {
-            // res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else if (user === null) {
-            // res.status(403).json({ 'error': 1, 'message': 'User not found' });
+            res.status(403).json({ 'error': 1, 'message': 'User not found' });
         } else {
-            const isExist = await matchModels.isExist(socket.me.uid, user.uid);
+            const isExist = await matchModels.isExist(req.me.uid, user.uid);
             if (isExist === null) {
-                // res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+                res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
             } else if (isExist === false) {
-                socket.emit('error', 'You can\'t send a message to this person');
-                // res.status(403).json({ 'error': 1, 'message': 'You can\'t send a message to this person' });
+                res.status(403).json({ 'error': 1, 'message': 'You can\'t send a message to this person' });
             } else {
-                const isOK = await messageModels.insert(socket.me.uid, user.uid, data.message);
+                const isOK = await messageModels.insert(req.me.uid, user.uid, req.body.message);
                 if (isOK === false) {
-                    // res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+                    res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else {
-                    global.io.sockets.to(socket.me.uid).to(user.uid).emit('message', { id_match: data.id_match, username: socket.me.username, msg: data.message });
+                    global.io.sockets.to(req.me.uid).to(user.uid).emit('message', { id_match: req.body.id_match, username: req.me.username, msg: req.body.message });
+                    res.status(200).json()
                 }
             }
         }
