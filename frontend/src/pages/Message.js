@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import UserMenu from "../components/UserMenu";
 import { makeStyles } from "@mui/styles";
 import axios from "axios";
 import SendMessageIcon from "../components/Icons/SendMessageIcon";
+import { SocketContext } from "../context/socket";
 
 const useStyles = makeStyles({
   root: {
@@ -50,19 +51,23 @@ const useStyles = makeStyles({
   },
 });
 
-const Message = ({ otherProfileData, socket }) => {
+const Message = ({ otherProfileData }) => {
   const classes = useStyles();
   const messagesEndRef = useRef(null);
   const [messageToSend, setMessageToSend] = useState("");
   const [discussion, setDiscussion] = useState();
+  const socket = useContext(SocketContext);
+
+  socket.on("message", (msg) => {
+    console.log("message", msg);
+  });
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const sendMessage = () => {
-    console.log(messageToSend);
-    console.log(otherProfileData);
+    console.log(socket);
     const res = axios.post("/message/send", {
       username: otherProfileData.username,
       message: messageToSend,
