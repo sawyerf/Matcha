@@ -44,7 +44,7 @@ const roomMessage = async (req, res) => {
     if (isCheck === false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
     } else {
-        const user = await userModels.selectBy('username', req.body.username);
+        const user = await userModels.selectBy('username', req.query.username);
         if (user === false) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else if (user === null) {
