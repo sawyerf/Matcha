@@ -179,3 +179,4 @@ sketch
 # End of https://www.toptal.com/developers/gitignore/api/node,visualstudiocode,react
 package-lock.json
 package.json
+uploads

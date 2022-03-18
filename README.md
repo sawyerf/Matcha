@@ -8,6 +8,7 @@ docker-compose -f docker-compose.yml up -d
 ```
 
 ## TODO
+### Backend
 - ~~Erreur register lastname/firstname~~
 - ~~Empecher de faire action si pas assez info ou mail non valide~~
 - ~~Check si 18 ans~~
@@ -20,7 +21,23 @@ docker-compose -f docker-compose.yml up -d
 - ~~Faire les socket message + notif~~
 - ~~Rendre possible de delike un match~~
 - Faire la validation des images
-- Faire du bonux pour le lik2
+
+### Frontend
+- Suppression des images
+- Affichage des images dans le /myprofil
+- Faire les notification + notif de message
+- Regler le probleme de raffraichissement des pages
+- Mettre le dernier message dans l'onglet message
+- Pouvoir delik2 un match
+- Gerer la gestion d'erreur
+- Quand token rediriger vers le reste
+- Quand on se login rediriger direct vers les offers si les info sont bien remplis
+- Rediriger vers login apres s'etre register
+- Pouvoir envoy2 le message avec entree dans les messages
+- Faire quelque chose si il n'y a pas d'image de profil en haut a gauche
+- Faire quelque chose si il n'y a plus de offer
+- Faire les recherche
+- Ne pas afficher tout les message recu par socket
 
 ## API
 | Method | url                         | Description             |

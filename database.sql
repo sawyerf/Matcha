@@ -3,7 +3,6 @@ DROP TABLE IF EXISTS "likes";
 DROP TABLE IF EXISTS "matchs";
 DROP TABLE IF EXISTS "blocks";
 DROP TABLE IF EXISTS "reports";
-DROP TABLE IF EXISTS "images";
 DROP TABLE IF EXISTS "history";
 DROP TABLE IF EXISTS "messages";
 
@@ -50,12 +49,6 @@ CREATE TABLE blocks (
 CREATE TABLE reports (
     id_reporter int,
     id_reported int
-);
-
-CREATE TABLE images (
-    id_image varchar UNIQUE,
-    id_user int,
-    image bytea
 );
 
 CREATE TABLE history (

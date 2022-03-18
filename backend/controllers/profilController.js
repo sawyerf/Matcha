@@ -8,6 +8,8 @@ import imgModels from '../models/image';
 import { sendmail } from '../utils/mail';
 import { checkProfilUid } from '../utils/chekProfil';
 
+require('dotenv').config()
+
 const setInfo = async (req, res) => {
     let ret;
     const isCheck = checkBody({
@@ -97,25 +99,25 @@ const addImage = async (req, res) => {
         res.status(400).json({ 'error': 1, 'message': 'Too many Images' });
     } else {
         const { file } = req.files;
+        console.log(file);
         const id_img = uuidv4();
-        file.mv(__dirname +  '/pictures/')
-        // let isOK = await imgModels.insert(id_img, req.me.uid, file.data);
-        // if (isOK === false) {
-        //     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-        // } else {
-        //     let images = req.me.images;
-        //     if (images === null) {
-        //         images = [id_img];
-        //     } else {
-        //         images.push(id_img)
-        //     }
-        //     isOK = await userModels.setVal(req.me.uid, 'images', images);
-        //     if (isOK === false) {
-        //         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-        //     } else {
-        //         checkProfilUid(req.me.uid);
-        //         res.status(200).json();
-        //     }
+        const type = {
+            '': ''
+        }
+        file.mv(__dirname + '/../uploads/' + id_img)
+        let images = req.me.images;
+        if (images === null) {
+            images = [`${process.env.HOST}/images/` + id_img];
+        } else {
+            images.push(`${process.env.HOST}/images/` + id_img)
+        }
+        const isOK = await userModels.setVal(req.me.uid, 'images', images);
+        if (isOK === false) {
+            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+        } else {
+            checkProfilUid(req.me.uid);
+            res.status(200).json();
+        }
         // }
     }
 }
