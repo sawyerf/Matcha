@@ -17,14 +17,23 @@ function App() {
   const [myProfileData, setMyProfileData] = useState(null);
   const [otherProfileData, setOtherProfileData] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [displayMenu, setDisplayMenu] = useState(false);
+  const socket = socketIOClient("http://localhost:3000");
 
   useEffect(async () => {
-    const res = await axios.get("/profil/me");
-    if ("error" in res.data) {
-      console.log("Error: ", res.data.message);
+    if (localStorage.getItem("token")) {
+      const res = await axios.get("/profil/me");
+      if ("error" in res.data) {
+        console.log("Error: ", res.data.message);
+      }
+      res.data && setMyProfileData(res.data);
+      socket.on("connect", () => {
+        console.log("connect");
+        socket.emit("token", localStorage.getItem("token"));
+      });
+      setDisplayMenu(true);
     }
-    res.data && setMyProfileData(res.data);
-  }, []);
+  }, [localStorage.getItem("token")]);
 
   useEffect(async () => {
     if (errorMsg !== null) {
@@ -37,13 +46,14 @@ function App() {
   return (
     <div style={{ display: "flex" }}>
       <BrowserRouter>
-        {localStorage.getItem("token") && (
-          <UserMenu
-            myProfileData={myProfileData}
-            otherProfileData={otherProfileData}
-            setOtherProfileData={setOtherProfileData}
-          />
-        )}
+        <UserMenu
+          myProfileData={myProfileData}
+          otherProfileData={otherProfileData}
+          setOtherProfileData={setOtherProfileData}
+          socket={socket}
+          displayMenu={displayMenu}
+          setDisplayMenu={setDisplayMenu}
+        />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -84,6 +94,7 @@ function App() {
               <Message
                 otherProfileData={otherProfileData}
                 setErrorMsg={setErrorMsg}
+                socket={socket}
               />
             }
           />

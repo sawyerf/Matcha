@@ -15,10 +15,14 @@ const useStyles = makeStyles({
   },
 });
 
-const UserMenuMessage = ({ matchDisplay }) => {
+const UserMenuMessage = ({
+  matchDisplay,
+  otherProfileData,
+  setOtherProfileData,
+}) => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const [messageList, setMessageList] = useState([1, 2, 3]);
+  const [messageList, setMessageList] = useState();
 
   useEffect(async () => {
     const res = await axios.get("/users/matchs");
@@ -26,11 +30,18 @@ const UserMenuMessage = ({ matchDisplay }) => {
       console.log("Error: ", res.data.message);
     }
     setMessageList(res.data);
-  }, []);
+  }, [localStorage.getItem("token")]);
+
+  useEffect(async () => {
+    const res = await axios.get("/users/matchs");
+    if ("error" in res.data) {
+      console.log("Error: ", res.data.message);
+    }
+    setMessageList(res.data);
+  }, [localStorage.getItem("token")]);
 
   const readMessage = (data) => {
-    //setOtherProfileData(data);
-    //if (otherProfileData)
+    setOtherProfileData(data);
     navigate("/message");
   };
 

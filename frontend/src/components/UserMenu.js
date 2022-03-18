@@ -42,7 +42,14 @@ const useStyles = makeStyles({
   },
 });
 
-const UserMenu = ({ myProfileData, otherProfileData, setOtherProfileData }) => {
+const UserMenu = ({
+  myProfileData,
+  otherProfileData,
+  setOtherProfileData,
+  socket,
+  displayMenu,
+  setDisplayMenu,
+}) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [matchDisplay, setMatchDisplay] = useState(true);
@@ -56,12 +63,23 @@ const UserMenu = ({ myProfileData, otherProfileData, setOtherProfileData }) => {
   }
 
   function logOut() {
+    socket.disconnect();
     localStorage.setItem("token", "");
     navigate("/");
+    setDisplayMenu(false);
   }
 
+  useEffect(async () => {
+    if (localStorage.getItem("token")) {
+      setDisplayMenu(true);
+    }
+  }, [localStorage.getItem("token")]);
+
   return (
-    <div className={classes.root}>
+    <div
+      className={classes.root}
+      style={{ display: displayMenu ? "" : "none" }}
+    >
       <div className={classes.topMenu}>
         <Disconnection
           style={{
@@ -166,7 +184,11 @@ const UserMenu = ({ myProfileData, otherProfileData, setOtherProfileData }) => {
           otherProfileData={otherProfileData}
           setOtherProfileData={setOtherProfileData}
         />
-        <UserMenuMessage matchDisplay={matchDisplay} />
+        <UserMenuMessage
+          matchDisplay={matchDisplay}
+          otherProfileData={otherProfileData}
+          setOtherProfileData={setOtherProfileData}
+        />
       </div>
     </div>
   );

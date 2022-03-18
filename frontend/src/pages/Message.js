@@ -50,13 +50,11 @@ const useStyles = makeStyles({
   },
 });
 
-const Message = ({ otherProfileData }) => {
+const Message = ({ otherProfileData, socket }) => {
   const classes = useStyles();
   const messagesEndRef = useRef(null);
   const [messageToSend, setMessageToSend] = useState("");
-  const [discussion, setDiscussion] = useState([
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5, 6, 7, 8, 9,
-  ]);
+  const [discussion, setDiscussion] = useState();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -64,8 +62,27 @@ const Message = ({ otherProfileData }) => {
 
   const sendMessage = () => {
     console.log(messageToSend);
+    console.log(otherProfileData);
+    const res = axios.post("/message/send", {
+      username: otherProfileData.username,
+      message: messageToSend,
+    });
+    if ("error" in res.data) {
+      console.log("Error: ", res.data.message);
+      //setErrorMsg(res.data.message);
+    }
     setMessageToSend("");
   };
+
+  useEffect(async () => {
+    const res = await axios.get("/message/room", {
+      params: { username: otherProfileData.username },
+    });
+    if ("error" in res.data) {
+      console.log("Error: ", res.data.message);
+    }
+    setDiscussion(res.data);
+  }, [otherProfileData]);
 
   useEffect(() => {
     scrollToBottom();
@@ -75,19 +92,22 @@ const Message = ({ otherProfileData }) => {
     <div style={{ display: "flex" }}>
       <div className={classes.root}>
         <div className={classes.card}>
-          <h3 style={{ marginBottom: "10px" }}>Message avec User</h3>
+          <h3 style={{ marginBottom: "10px" }}>
+            Message avec {otherProfileData && otherProfileData.username}
+          </h3>
           <div style={{ overflow: "scroll", height: "85%" }}>
             {discussion &&
               discussion.map((data, key) => {
                 return (
                   <div key={key}>
-                    <div className={classes.myMessage}>
-                      <p className={classes.messages}>
-                        my qsdfqsd qsdf qsdf qsdf qsdf e is here
-                      </p>
-                    </div>
-                    <div className={classes.theirMessage}>
-                      <p className={classes.messages}>Their message is here</p>
+                    <div
+                      className={
+                        data.from === otherProfileData.username
+                          ? classes.theirMessage
+                          : classes.myMessage
+                      }
+                    >
+                      <p className={classes.messages}>{data.msg} </p>
                     </div>
                   </div>
                 );

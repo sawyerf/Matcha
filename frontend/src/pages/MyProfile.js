@@ -217,9 +217,8 @@ const MyProfile = ({
     else if (image4) image = image4;
     else if (image5) image = image5;
     if (image) {
-      const form = new FormData();
-      form.append("file", image);
-      const res = axios.post("/profil/image", form);
+      const img = await getBase64(image);
+      const res = axios.post("/profil/image", { image: img });
       if ("error" in res.data) {
         console.log("Error: ", res.data.message);
         setErrorMsg(res.data.message);
@@ -242,7 +241,7 @@ const MyProfile = ({
                 type="text"
                 onChange={handleChangeLastName}
                 value={lastName} // mettre le nom actuelle
-                InputProps={{
+                inputprops={{
                   className: classes.input,
                 }}
               />
@@ -255,7 +254,7 @@ const MyProfile = ({
                 type="text"
                 onChange={handleChangeFirstName}
                 value={firstName} // mettre le nom actuelle
-                InputProps={{
+                inputprops={{
                   className: classes.input,
                 }}
               />
@@ -277,7 +276,7 @@ const MyProfile = ({
                 type="text"
                 onChange={handleChangeEmail}
                 value={email} // mettre le nom actuelle
-                InputProps={{
+                inputprops={{
                   className: classes.input,
                 }}
               />
@@ -297,7 +296,7 @@ const MyProfile = ({
                 placeholder="Nouveau mot de passe"
                 type="password"
                 onChange={handleChangeNewPassword}
-                InputProps={{
+                inputprops={{
                   className: classes.input,
                 }}
               />
@@ -309,7 +308,7 @@ const MyProfile = ({
                 placeholder="Ancien Mot de passe"
                 type="password"
                 onChange={handleChangeOldPassword}
-                InputProps={{
+                inputprops={{
                   className: classes.input,
                 }}
               />
@@ -330,7 +329,7 @@ const MyProfile = ({
                 label="Genre"
                 onChange={handleChangeGender}
                 className={classes.textField}
-                InputProps={{
+                inputprops={{
                   className: classes.input,
                 }}
               >
@@ -367,7 +366,7 @@ const MyProfile = ({
               type="text"
               onChange={handleChangeBio}
               defaultValue={bio} // mettre le nom actuelle
-              InputProps={{
+              inputprops={{
                 className: classes.inputBio,
               }}
             />

@@ -30,11 +30,11 @@ const UserMenuMatch = ({
       console.log("Error: ", res.data.message);
     }
     setMatchList(res.data);
-  }, []);
+  }, [localStorage.getItem("token")]);
 
   const seeProfile = (data) => {
     setOtherProfileData(data);
-    if (otherProfileData) navigate("/otherprofile");
+    navigate("/otherprofile");
   };
 
   return (
