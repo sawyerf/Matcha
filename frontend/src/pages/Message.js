@@ -4,6 +4,7 @@ import { makeStyles } from "@mui/styles";
 import axios from "axios";
 import SendMessageIcon from "../components/Icons/SendMessageIcon";
 import { SocketContext } from "../context/socket";
+import { LocalShippingOutlined } from "@mui/icons-material";
 
 const useStyles = makeStyles({
   root: {
@@ -56,18 +57,14 @@ const Message = ({ otherProfileData }) => {
   const messagesEndRef = useRef(null);
   const [messageToSend, setMessageToSend] = useState("");
   const [discussion, setDiscussion] = useState();
+  const [messageToPush, setMessageToPush] = useState(null);
   const socket = useContext(SocketContext);
-
-  socket.on("message", (msg) => {
-    console.log("message", msg);
-  });
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const sendMessage = () => {
-    console.log(socket);
     const res = axios.post("/message/send", {
       username: otherProfileData.username,
       message: messageToSend,
@@ -79,6 +76,11 @@ const Message = ({ otherProfileData }) => {
     setMessageToSend("");
   };
 
+  const writeMessage = (msg) => {
+    console.log(msg);
+    setMessageToPush(msg);
+  };
+
   useEffect(async () => {
     const res = await axios.get("/message/room", {
       params: { username: otherProfileData.username },
@@ -88,6 +90,20 @@ const Message = ({ otherProfileData }) => {
     }
     setDiscussion(res.data);
   }, [otherProfileData]);
+
+  useEffect(async () => {
+    console.log(discussion);
+    if (messageToPush) {
+      let discussionCpy = discussion;
+      discussionCpy.push(messageToPush);
+      setDiscussion([...discussionCpy]);
+      setMessageToPush(null);
+    }
+  }, [messageToPush]);
+
+  useEffect(() => {
+    socket.on("message", (msg) => writeMessage(msg));
+  }, [socket]);
 
   useEffect(() => {
     scrollToBottom();
