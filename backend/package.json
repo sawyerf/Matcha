@@ -29,6 +29,7 @@
     "geoip-lite": "^1.4.3",
     "jsonwebtoken": "^8.5.1",
     "Math": "^0.0.1-security",
+    "mmmagic": "^0.5.3",
     "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15",
     "pg": "^8.7.1",

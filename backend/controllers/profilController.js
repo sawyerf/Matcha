@@ -4,7 +4,6 @@ import { checkBody } from '../utils/checkBody';
 import { hashPassword } from '../utils/hash';
 import { v4 as uuidv4 } from 'uuid';
 import userModels from '../models/user';
-import imgModels from '../models/image';
 import { sendmail } from '../utils/mail';
 import { checkProfilUid } from '../utils/chekProfil';
 
@@ -99,32 +98,31 @@ const addImage = async (req, res) => {
         res.status(400).json({ 'error': 1, 'message': 'Too many Images' });
     } else {
         const { file } = req.files;
-        console.log(file);
-        const id_img = uuidv4();
-        const type = {
-            '': ''
-        }
-        file.mv(__dirname + '/../uploads/' + id_img)
-        let images = req.me.images;
-        if (images === null) {
-            images = [`${process.env.HOST}/images/` + id_img];
+        const type_accept = ['image/jpeg', 'image/png'];
+        const type = { 'image/jpeg': '.jpg', 'image/png': '.png' }
+        if (type_accept.indexOf(file.mimetype) == -1) {
+            res.status(400).json({ 'error': 1, 'message': 'Type of the file not accept' });
         } else {
-            images.push(`${process.env.HOST}/images/` + id_img)
+            const name_file = file.md5 + type[file.mimetype];
+
+            file.mv(__dirname + '/../uploads/' + name_file)
+            let images = req.me.images;
+            if (images === null) images = [];
+            images.push(`${process.env.HOST}/images/${name_file}`);
+            const isOK = await userModels.setVal(req.me.uid, 'images', images);
+            if (isOK === false) {
+                res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+            } else {
+                checkProfilUid(req.me.uid);
+                res.status(200).json({image: `${process.env.HOST}/images/${name_file}`});
+            }
         }
-        const isOK = await userModels.setVal(req.me.uid, 'images', images);
-        if (isOK === false) {
-            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-        } else {
-            checkProfilUid(req.me.uid);
-            res.status(200).json();
-        }
-        // }
     }
 }
 
 const delImage = async (req, res) => {
     const isCheck = checkBody({
-        'id_image': 'uid'
+        'image': 'string'
     }, req.body);
 
     if (isCheck === false) {
@@ -132,14 +130,13 @@ const delImage = async (req, res) => {
     } else if (req.me.images === null) {
         res.status(404).json({ 'error': 1, 'message': 'No Image' });
     } else {
-        const index = req.me.images.indexOf(req.body.id_image);
+        const index = req.me.images.indexOf(req.body.image);
         if (index == -1) {
             res.status(404).json({ 'error': 1, 'message': 'Image not found' });
         } else {
             req.me.images.splice(index, 1);
             const ImgIsOK = userModels.setVal(req.me.uid, 'images', req.me.images);
-            const delIsOK = imgModels.del(req.body.id_image);
-            if (await ImgIsOK === false || await delIsOK === false) {
+            if (await ImgIsOK === false) {
                 res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
             } else {
                 checkProfilUid(req.me.uid);

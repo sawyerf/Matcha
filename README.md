@@ -20,6 +20,7 @@ docker-compose -f docker-compose.yml up -d
 - ~~Faire le truc de popularite~~
 - ~~Faire les socket message + notif~~
 - ~~Rendre possible de delike un match~~
+- ~~Ameliorer la verif du token~~
 - Faire la validation des images
 
 ### Frontend
