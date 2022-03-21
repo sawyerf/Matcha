@@ -21,7 +21,8 @@ docker-compose -f docker-compose.yml up -d
 - ~~Faire les socket message + notif~~
 - ~~Rendre possible de delike un match~~
 - ~~Ameliorer la verif du token~~
-- Faire la validation des images
+- ~~Faire la validation des images~~ ??
+- Faire la geolocalisation
 
 ### Frontend
 - Suppression des images
