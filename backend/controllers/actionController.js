@@ -5,25 +5,25 @@ import userModels from '../models/user.js';
 import blockModels from '../models/block';
 import reportModels from '../models/report';
 
-const match = async (req, res, user, liked) => {
+const match = async (req, res, liked) => {
     let ret;
 
-    const isMatch = await likeModels.isMatch(user.uid, liked.uid);
+    const isMatch = await likeModels.isMatch(req.me.uid, liked.uid);
     if (isMatch == null) {
         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
     } else if (isMatch === false) {
-        global.io.sockets.to(liked.uid).emit('notif', {act: 'like', username: user.username, msg:`${user.username} like you`});
+        global.io.sockets.to(liked.uid).emit('notif', {act: 'like', username: req.me.username, msg:`${req.me.username} like you`});
         res.status(200).json({ 'match': false });
     } else if (isMatch === true) {
-        const isMatchExist = await matchModels.isExist(user.uid, liked.uid);
+        const isMatchExist = await matchModels.isExist(req.me.uid, liked.uid);
         if (isMatchExist == null) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else if (isMatchExist === false) {
-            ret = await matchModels.insert(user.uid, liked.uid);
+            ret = await matchModels.insert(req.me.uid, liked.uid);
             if (ret === false) {
                 res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
             } else if (ret === true) {
-                global.io.sockets.to(liked.uid).emit('notif', {act: 'match', username: user.username, msg:`You match with ${user.username}`});
+                global.io.sockets.to(liked.uid).emit('notif', {act: 'match', username: req.me.username, msg:`You match with ${req.me.username}`});
                 res.status(200).json({ 'match': true });
             }
         } else if (isMatchExist === true) {
@@ -32,18 +32,19 @@ const match = async (req, res, user, liked) => {
     }
 }
 
-const unmatch = async (req, res, user, liked) => {
-    const isMatchExist = await matchModels.isExist(user.uid, liked.uid);
+const unmatch = async (req, res, liked) => {
+    const isMatchExist = await matchModels.isExist(req.me.uid, liked.uid);
     if (isMatchExist == null) {
         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
     } else if (isMatchExist === false) {
         res.status(200).json();
     } else {
-        const isOK = await matchModels.del(user.uid, liked.uid);
+        const isOK = await matchModels.del(req.me.uid, liked.uid);
         if (isOK === false) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
-            res.status(200).json();
+            global.io.sockets.to(liked.uid).emit('notif', {act: 'unmatch', username: req.me.username, msg:`You unmatch with ${req.me.username}`});
+            res.status(200).json({ 'match': false });
         }
     }
 }
@@ -96,9 +97,9 @@ const like = async (req, res) => {
                 } else {
                     caculatePopularity(liked);
                     if (req.body.islike == true) {
-                        await match(req, res, req.me, liked);
+                        await match(req, res, liked);
                     } else {
-                        await unmatch(req, res, req.me, liked);
+                        await unmatch(req, res, liked);
                     }
                 }
             }

@@ -50,8 +50,29 @@ const update = async (id_visiter, id_visited, time) => {
     return true;
 }
 
+const select = async (id_visited) => {
+    let res;
+
+    try {
+        res = await client.query(
+            `SELECT id_visiter, time FROM history
+            WHERE id_visited=$1`,
+            [id_visited]
+        );
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+    const visits = {};
+    for (const visit of res.rows) {
+        visits[visit.id_visiter] = visit.time;
+    }
+    return visits;
+}
+
 export default {
     insert,
     isExist,
     update,
+    select,
 }

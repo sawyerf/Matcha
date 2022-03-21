@@ -1,6 +1,6 @@
 import userModels from '../models/user';
 import jwt from '../utils/jwt'
-import messageController from '../controllers/messageController';
+// import messageController from '../controllers/messageController';
 
 export const initSocket = (io) => {
     console.log('Start Socket');
@@ -13,9 +13,18 @@ export const initSocket = (io) => {
                 socket.me = user;
                 console.log('Connect', user.username)
                 socket.join(user.uid);
+                const DateNow = Date.now();
+                userModels.setVal(socket.me.uid, 'last_visit', new Date(DateNow).toISOString());
             }
         })
-
-        socket.on('message', (data) => messageController.sendMessage(socket, data));
+        // socket.on('message', (data) => messageController.sendMessage(socket, data));
+        
+        socket.on('disconnect', () => {
+            console.log('disconnect')
+            if (socket.me !== undefined) {
+                const DateNow = Date.now();
+                userModels.setVal(socket.me.uid, 'last_visit', new Date(DateNow).toISOString());
+            }
+        });
     });
 }

@@ -28,7 +28,7 @@ const sendMessage = async (req, res) => {
                 if (isOK === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else {
-                    global.io.sockets.to(req.me.uid).to(user.uid).emit('message', { from: req.me.username, msg: req.body.message });
+                    global.io.sockets.to(req.me.uid).to(user.uid).emit('message', { from: req.me.username, to: user.username, msg: req.body.message });
                     res.status(200).json()
                 }
             }

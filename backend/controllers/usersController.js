@@ -6,7 +6,9 @@ import historyModels from '../models/history';
 import { checkBody } from '../utils/checkBody';
 import { scoreMatch } from '../utils/score';
 import { locationByIp, distance } from '../utils/location';
+import { isOnline } from '../utils/online';
 import messageModels from '../models/message';
+import user from '../models/user';
 
 const matchs = async (req, res) => {
     const uidMatchs = await matchModels.selectByUser(req.me.uid);
@@ -30,6 +32,7 @@ const matchs = async (req, res) => {
                     delete match.message.id_to;
                     delete match.message.id_match;
                 }
+                match.isOnline = isOnline(match.uid);
                 delete match.uid;
             }
             res.status(200).json(matchs);
@@ -73,6 +76,7 @@ const offer = async (req, res) => {
                 } else {
                     offer.isLike = isLike.islike;
                 }
+                offer.isOnline = isOnline(offer.uid);
                 delete offer.uid
                 retOffer = offer;
                 break;
@@ -114,7 +118,8 @@ const search = async (req, res) => {
                     }
                 }
                 if (isIn == true && blocks.indexOf(ouser.uid) == -1) {
-                    delete ouser['uid'];
+                    ouser.isOnline = isOnline(ouser.uid);
+                    delete ouser.uid;
                     newUsers.push(ouser);
                 }
             }
@@ -159,10 +164,37 @@ const visit = async (req, res) => {
     }
 }
 
+const myVisits = async (req, res) => {
+    const visits = await historyModels.select(req.me.uid);
+
+    if (visits === false) {
+        res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+    } else {
+        const users = await userModels.selectByUids(Object.keys(visits));
+        if (users === null) {
+            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+        } else {
+            const ret_visits = [];
+            for (const visit of Object.keys(visits)) {
+                const user = users.find((post, index) => {
+                    console.log(visit, post.uid);
+                    if (post.uid == visit) return true;
+                })
+                ret_visits.push({
+                    username: user.username,
+                    last_visit: visits[visit],
+                })
+            }
+            res.status(200).json(ret_visits);
+        }
+    }
+}
+
 export default {
     matchs,
     likes,
     offer,
     search,
     visit,
+    myVisits,
 }

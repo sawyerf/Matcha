@@ -22,10 +22,10 @@ docker-compose -f docker-compose.yml up -d
 - ~~Rendre possible de delike un match~~
 - ~~Ameliorer la verif du token~~
 - ~~Faire la validation des images~~ ??
+- ~~Consultation des visite~~
+- ~~Notif quand delike match~~
+- ~~Voir si utilisateur est en ligne~~
 - Faire la geolocalisation
-- Notif quand delike match
-- Voir si utilisateur est en ligne
-- Consultation des visite
 
 ### Frontend
 - Suppression des images
