@@ -23,6 +23,9 @@ docker-compose -f docker-compose.yml up -d
 - ~~Ameliorer la verif du token~~
 - ~~Faire la validation des images~~ ??
 - Faire la geolocalisation
+- Notif quand delike match
+- Voir si utilisateur est en ligne
+- Consultation des visite
 
 ### Frontend
 - Suppression des images
