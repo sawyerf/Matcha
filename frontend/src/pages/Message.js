@@ -64,16 +64,18 @@ const Message = ({ otherProfileData }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const sendMessage = () => {
-    const res = axios.post("/message/send", {
-      username: otherProfileData.username,
-      message: messageToSend,
-    });
-    if ("error" in res.data) {
-      console.log("Error: ", res.data.message);
-      //setErrorMsg(res.data.message);
+  const sendMessage = async () => {
+    if (messageToSend !== "" && messageToSend !== null) {
+      const res = await axios.post("/message/send", {
+        username: otherProfileData.username,
+        message: messageToSend,
+      });
+      if ("error" in res.data) {
+        console.log("Error: ", res.data.message);
+        //setErrorMsg(res.data.message);
+      }
     }
-    setMessageToSend("");
+    await setMessageToSend("");
   };
 
   const writeMessage = (msg) => {
@@ -146,7 +148,12 @@ const Message = ({ otherProfileData }) => {
                 borderRadius: "8px",
               }}
               value={messageToSend}
-              onChange={(e) => setMessageToSend(e.target.value)}
+              onChange={(e) =>
+                e.nativeEvent.inputType === "insertLineBreak"
+                  ? setMessageToSend("")
+                  : setMessageToSend(e.target.value)
+              }
+              onKeyPress={(e) => (e.key === "Enter" ? sendMessage() : null)}
             />
             <SendMessageIcon onClick={sendMessage} />
           </div>

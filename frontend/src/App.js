@@ -18,6 +18,7 @@ function App() {
   const [otherProfileData, setOtherProfileData] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [displayMenu, setDisplayMenu] = useState(false);
+  const [notifMessage, setNotifMessage] = useState("");
 
   useEffect(async () => {
     console.log(localStorage.getItem("token"));
@@ -54,11 +55,15 @@ function App() {
             socket={socket}
             displayMenu={displayMenu}
             setDisplayMenu={setDisplayMenu}
+            setNotifMessage={setNotifMessage}
           />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route
+              path="/register"
+              element={<Register setErrorMsg={setErrorMsg} />}
+            />
             <Route
               path="/otherprofile"
               element={
@@ -123,6 +128,30 @@ function App() {
                 }}
               >
                 {errorMsg}
+              </p>
+            </div>
+          ) : notifMessage ? (
+            <div
+              style={{
+                position: "absolute",
+                top: "20px",
+                right: "40px",
+                width: "200px",
+                height: "50px",
+                borderRadius: "8px",
+                backgroundColor: "green",
+                boxShadow: "5px 5px 5px darkgreen",
+              }}
+            >
+              <p
+                style={{
+                  color: "white",
+                  fontWeight: "600",
+                  margin: "5px",
+                  fontSize: "14px",
+                }}
+              >
+                {notifMessage}
               </p>
             </div>
           ) : (

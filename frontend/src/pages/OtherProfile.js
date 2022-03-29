@@ -45,6 +45,10 @@ const OtherProfile = ({ otherProfileData }) => {
     else setDisplayedImageNb(displayedImageNb + 1);
   };
 
+  const unlikeMatch = () => {
+    console.log("UnlikeMatch");
+  };
+
   useEffect(async () => {
     setDisplayedImage(otherProfileData.images[displayedImageNb]);
   }, [displayedImageNb]);
@@ -136,6 +140,33 @@ const OtherProfile = ({ otherProfileData }) => {
               <p style={{ marginBottom: "10px" }}>
                 {otherProfileData && otherProfileData.tags.replaceAll(",", " ")}
               </p>
+              {otherProfileData.isLike === false ? (
+                ""
+              ) : (
+                <div
+                  style={{
+                    width: "70px",
+                    height: "30px",
+                    borderRadius: "8px",
+                    backgroundColor: "red",
+                    boxShadow: "5px 5px 5px darkred",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => unlikeMatch()}
+                >
+                  <p
+                    style={{
+                      color: "white",
+                      fontWeight: "600",
+                      marginLeft: "7px",
+                      paddingTop: "5px",
+                      fontSize: "18px",
+                    }}
+                  >
+                    Unlike
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

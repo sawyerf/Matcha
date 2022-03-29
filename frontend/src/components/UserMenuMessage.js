@@ -93,10 +93,9 @@ const UserMenuMessage = ({
                       marginTop: "5px",
                     }}
                   >
-                    {"message message message message message message".substr(
-                      0,
-                      15
-                    )}
+                    {data && data.message && data.message.msg
+                      ? data.message.msg.substr(0, 15)
+                      : "--"}
                   </p>
                 </div>
               </div>

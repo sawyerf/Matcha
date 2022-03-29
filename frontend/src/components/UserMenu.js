@@ -4,7 +4,7 @@ import Disconnection from "@mui/icons-material/NoMeetingRoom";
 import Match from "@mui/icons-material/Favorite";
 import UserMenuMatch from "./UserMenuMatch";
 import UserMenuMessage from "./UserMenuMessage";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 const useStyles = makeStyles({
   root: {
@@ -49,6 +49,7 @@ const UserMenu = ({
   socket,
   displayMenu,
   setDisplayMenu,
+  setNotifMessage,
 }) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -74,6 +75,15 @@ const UserMenu = ({
       setDisplayMenu(true);
     }
   }, [localStorage.getItem("token")]);
+
+  const displayNotif = (notif) => {
+    console.log(notif);
+    setNotifMessage(notif);
+  };
+
+  useEffect(() => {
+    socket.on("notification", (notif) => displayNotif(notif));
+  }, [socket]);
 
   return (
     <div
@@ -124,7 +134,6 @@ const UserMenu = ({
                 ? myProfileData.images[0]
                 : ""
             }
-            alt="ImageUser"
           />
           <p
             style={{

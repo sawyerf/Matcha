@@ -29,7 +29,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Register = () => {
+const Register = ({ setErrorMsg }) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
@@ -38,7 +38,6 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [msgError, setError] = useState("");
 
   const handleChangeUsername = (event) => {
     setUsername(event.target.value);
@@ -65,6 +64,7 @@ const Register = () => {
   };
 
   const registerApi = async (username, passwd) => {
+    setErrorMsg("Fail to register");
     const res = await axios.post("/auth/register", {
       username: username,
       password: passwd,
@@ -73,12 +73,10 @@ const Register = () => {
       firstname: firstName,
       lastname: lastName,
     });
-    if (res.status == 201) {
-      setError("bg mon gars");
-    }
-    if ("error" in res.data) {
-      console.log("Error: ", res.data.message);
-      setError("Fail to connect `" + res.data.message + "`");
+    if (res.status === 201) {
+      setErrorMsg("");
+      navigate("/login");
+    } else {
     }
   };
 
@@ -107,7 +105,6 @@ const Register = () => {
         }}
       >
         <div className={classes.registerForm}>
-          <p> {msgError} </p>
           <div
             style={{
               marginLeft: "20px",
