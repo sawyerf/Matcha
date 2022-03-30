@@ -32,14 +32,6 @@ const UserMenuMessage = ({
     setMessageList(res.data);
   }, [localStorage.getItem("token")]);
 
-  useEffect(async () => {
-    const res = await axios.get("/users/matchs");
-    if ("error" in res.data) {
-      console.log("Error: ", res.data.message);
-    }
-    setMessageList(res.data);
-  }, [localStorage.getItem("token")]);
-
   const readMessage = (data) => {
     setOtherProfileData(data);
     navigate("/message");

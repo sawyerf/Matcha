@@ -78,6 +78,12 @@ const MyProfile = ({
   const [image4, setImage4] = useState(null);
   const [image5, setImage5] = useState(null);
 
+  const [imageToUpload1, setImageToUpload1] = useState(null);
+  const [imageToUpload2, setImageToUpload2] = useState(null);
+  const [imageToUpload3, setImageToUpload3] = useState(null);
+  const [imageToUpload4, setImageToUpload4] = useState(null);
+  const [imageToUpload5, setImageToUpload5] = useState(null);
+
   const handleChangeGender = (event) => {
     setGender(event.target.value);
   };
@@ -110,7 +116,13 @@ const MyProfile = ({
     setOldPassword(event.target.value);
   };
 
-  const deleteImg = () => {
+  const deleteImg = async (image, setImage) => {
+    const res = await axios.delete("/profil/image", {
+      data: {
+        image: image,
+      },
+    });
+    setImage(null);
     console.log("deleteImg");
   };
 
@@ -137,12 +149,12 @@ const MyProfile = ({
             orientation === "Hétérosexuel" && gender === "Homme"
               ? "F"
               : orientation === "Homosexuel" && gender === "Homme"
-                ? "H"
-                : orientation === "Hétérosexuel" && gender === "Femme"
-                  ? "H"
-                  : orientation === "Homosexuel" && gender === "Femme"
-                    ? "F"
-                    : "HF",
+              ? "H"
+              : orientation === "Hétérosexuel" && gender === "Femme"
+              ? "H"
+              : orientation === "Homosexuel" && gender === "Femme"
+              ? "F"
+              : "HF",
           tags: tags,
           bio: bio,
           firstname: firstName,
@@ -150,14 +162,14 @@ const MyProfile = ({
         }),
         email !== emailCpy
           ? axios.post("/profil/changemail", {
-            new_mail: email,
-          })
+              new_mail: email,
+            })
           : null,
         newPassword && oldPassword
           ? axios.post("/profil/changepassword", {
-            old_password: oldPassword,
-            new_password: newPassword,
-          })
+              old_password: oldPassword,
+              new_password: newPassword,
+            })
           : null,
       ])
       .then(
@@ -191,41 +203,95 @@ const MyProfile = ({
       res.data.sexuality === "F" && res.data.gender === "H"
         ? "Hétérosexuel"
         : res.data.sexuality === "F" && res.data.gender === "F"
-          ? "Homosexuel"
-          : res.data.sexuality === "H" && res.data.gender === "F"
-            ? "Hétérosexuel"
-            : res.data.sexuality === "H" && res.data.gender === "H"
-              ? "Homosexuel"
-              : "Bisexuel"
+        ? "Homosexuel"
+        : res.data.sexuality === "H" && res.data.gender === "F"
+        ? "Hétérosexuel"
+        : res.data.sexuality === "H" && res.data.gender === "H"
+        ? "Homosexuel"
+        : "Bisexuel"
     );
   }, []);
 
-  function getBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  }
+  useEffect(async () => {
+    if (myProfileData !== null && myProfileData.images[0]) {
+      console.log(myProfileData);
+      myProfileData.images[0] && setImage1(myProfileData.images[0]);
+      myProfileData.images[1] && setImage2(myProfileData.images[1]);
+      myProfileData.images[2] && setImage3(myProfileData.images[2]);
+      myProfileData.images[3] && setImage4(myProfileData.images[3]);
+      myProfileData.images[4] && setImage5(myProfileData.images[4]);
+    }
+  }, [myProfileData]);
 
   useEffect(async () => {
-    let image;
-    if (image1) image = image1;
-    else if (image2) image = image2;
-    else if (image3) image = image3;
-    else if (image4) image = image4;
-    else if (image5) image = image5;
-    if (image) {
+    if (imageToUpload1) {
       const form = new FormData();
-      form.append("file", image);
-      const res = axios.post("/profil/image", form);
+      form.append("file", imageToUpload1);
+      const res = await axios.post("/profil/image", form);
       if ("error" in res.data) {
         console.log("Error: ", res.data.message);
         setErrorMsg(res.data.message);
       }
+      const res2 = await axios.get("/profil/me").catch(function (error) {});
+      res2.data && setMyProfileData(res2.data);
     }
-  }, [image1, image2, image3, image4, image5]);
+  }, [imageToUpload1]);
+
+  useEffect(async () => {
+    if (imageToUpload2) {
+      const form = new FormData();
+      form.append("file", imageToUpload2);
+      const res = await axios.post("/profil/image", form);
+      if ("error" in res.data) {
+        console.log("Error: ", res.data.message);
+        setErrorMsg(res.data.message);
+      }
+      const res2 = await axios.get("/profil/me").catch(function (error) {});
+      res2.data && setMyProfileData(res2.data);
+    }
+  }, [imageToUpload2]);
+
+  useEffect(async () => {
+    if (imageToUpload3) {
+      const form = new FormData();
+      form.append("file", imageToUpload3);
+      const res = await axios.post("/profil/image", form);
+      if ("error" in res.data) {
+        console.log("Error: ", res.data.message);
+        setErrorMsg(res.data.message);
+      }
+      const res2 = await axios.get("/profil/me").catch(function (error) {});
+      res2.data && setMyProfileData(res2.data);
+    }
+  }, [imageToUpload3]);
+
+  useEffect(async () => {
+    if (imageToUpload4) {
+      const form = new FormData();
+      form.append("file", imageToUpload4);
+      const res = await axios.post("/profil/image", form);
+      if ("error" in res.data) {
+        console.log("Error: ", res.data.message);
+        setErrorMsg(res.data.message);
+      }
+      const res2 = await axios.get("/profil/me").catch(function (error) {});
+      res2.data && setMyProfileData(res2.data);
+    }
+  }, [imageToUpload4]);
+
+  useEffect(async () => {
+    if (imageToUpload5) {
+      const form = new FormData();
+      form.append("file", imageToUpload5);
+      const res = await axios.post("/profil/image", form);
+      if ("error" in res.data) {
+        console.log("Error: ", res.data.message);
+        setErrorMsg(res.data.message);
+      }
+      const res2 = await axios.get("/profil/me").catch(function (error) {});
+      res2.data && setMyProfileData(res2.data);
+    }
+  }, [imageToUpload5]);
 
   return (
     <div style={{ display: "flex" }}>
@@ -383,9 +449,8 @@ const MyProfile = ({
               <div className={classes.profilPlus}>
                 {image1 ? (
                   <>
-                    {" "}
                     <img
-                      src={URL.createObjectURL(image1)}
+                      src={image1}
                       alt="image1"
                       className={classes.profilPicture}
                       style={{
@@ -394,7 +459,7 @@ const MyProfile = ({
                       }}
                     />
                     <p
-                      onClick={() => deleteImg()}
+                      onClick={() => deleteImg(image1, setImage1)}
                       style={{
                         position: "absolute",
                         top: "5px",
@@ -416,7 +481,7 @@ const MyProfile = ({
                       style={{ display: "none" }}
                       onChange={(event) => {
                         console.log(event.target.files[0]);
-                        setImage1(event.target.files[0]);
+                        setImageToUpload1(event.target.files[0]);
                       }}
                     />
                     <p
@@ -440,7 +505,7 @@ const MyProfile = ({
                   <>
                     {" "}
                     <img
-                      src={URL.createObjectURL(image2)}
+                      src={image2}
                       alt="image2"
                       className={classes.profilPicture}
                       style={{
@@ -449,7 +514,7 @@ const MyProfile = ({
                       }}
                     />
                     <p
-                      onClick={() => deleteImg()}
+                      onClick={() => deleteImg(image2, setImage2)}
                       style={{
                         position: "absolute",
                         top: "5px",
@@ -471,7 +536,7 @@ const MyProfile = ({
                       style={{ display: "none" }}
                       onChange={(event) => {
                         console.log(event.target.files[0]);
-                        setImage2(event.target.files[0]);
+                        setImageToUpload2(event.target.files[0]);
                       }}
                     />
                     <p
@@ -494,7 +559,7 @@ const MyProfile = ({
                 {image3 ? (
                   <>
                     <img
-                      src={URL.createObjectURL(image3)}
+                      src={image3}
                       alt="image3"
                       className={classes.profilPicture}
                       style={{
@@ -503,7 +568,7 @@ const MyProfile = ({
                       }}
                     />
                     <p
-                      onClick={() => deleteImg()}
+                      onClick={() => deleteImg(image3, setImage3)}
                       style={{
                         position: "absolute",
                         top: "5px",
@@ -525,7 +590,7 @@ const MyProfile = ({
                       style={{ display: "none" }}
                       onChange={(event) => {
                         console.log(event.target.files[0]);
-                        setImage3(event.target.files[0]);
+                        setImageToUpload3(event.target.files[0]);
                       }}
                     />
                     <p
@@ -556,7 +621,7 @@ const MyProfile = ({
                 {image4 ? (
                   <>
                     <img
-                      src={URL.createObjectURL(image4)}
+                      src={image4}
                       alt="image4"
                       className={classes.profilPicture}
                       style={{
@@ -565,7 +630,7 @@ const MyProfile = ({
                       }}
                     />
                     <p
-                      onClick={() => deleteImg()}
+                      onClick={() => deleteImg(image4, setImage4)}
                       style={{
                         position: "absolute",
                         top: "5px",
@@ -587,7 +652,7 @@ const MyProfile = ({
                       style={{ display: "none" }}
                       onChange={(event) => {
                         console.log(event.target.files[0]);
-                        setImage4(event.target.files[0]);
+                        setImageToUpload4(event.target.files[0]);
                       }}
                     />
                     <p
@@ -610,7 +675,7 @@ const MyProfile = ({
                 {image5 ? (
                   <>
                     <img
-                      src={URL.createObjectURL(image5)}
+                      src={image5}
                       alt="image5"
                       className={classes.profilPicture}
                       style={{
@@ -619,7 +684,7 @@ const MyProfile = ({
                       }}
                     />
                     <p
-                      onClick={() => deleteImg()}
+                      onClick={() => deleteImg(image5, setImage5)}
                       style={{
                         position: "absolute",
                         top: "5px",
@@ -641,7 +706,7 @@ const MyProfile = ({
                       style={{ display: "none" }}
                       onChange={(event) => {
                         console.log(event.target.files[0]);
-                        setImage5(event.target.files[0]);
+                        setImageToUpload5(event.target.files[0]);
                       }}
                     />
                     <p

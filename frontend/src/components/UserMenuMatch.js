@@ -19,6 +19,7 @@ const UserMenuMatch = ({
   matchDisplay,
   otherProfileData,
   setOtherProfileData,
+  refreshMatchList,
 }) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const UserMenuMatch = ({
       console.log("Error: ", res.data.message);
     }
     setMatchList(res.data);
-  }, [localStorage.getItem("token")]);
+  }, [refreshMatchList]);
 
   const seeProfile = (data) => {
     setOtherProfileData(data);

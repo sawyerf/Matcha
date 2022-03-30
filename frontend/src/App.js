@@ -18,21 +18,22 @@ function App() {
   const [otherProfileData, setOtherProfileData] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [displayMenu, setDisplayMenu] = useState(false);
+  const [refreshMatchList, setRefreshMatchList] = useState(false);
   const [notifMessage, setNotifMessage] = useState("");
 
   useEffect(async () => {
     console.log(localStorage.getItem("token"));
 
     if (localStorage.getItem("token")) {
+      setDisplayMenu(true);
       console.log(localStorage.getItem("token"));
-      const res = await axios.get("/profil/me");
-      if ("error" in res.data) {
-        console.log("Error: ", res.data.message);
-      }
+      const res = await axios.get("/profil/me").catch(function (error) {
+        console.log(error);
+        setDisplayMenu(false);
+      });
       res.data && setMyProfileData(res.data);
       console.log("connect");
       socket.emit("token", localStorage.getItem("token"));
-      setDisplayMenu(true);
     }
   }, [localStorage.getItem("token")]);
 
@@ -56,6 +57,7 @@ function App() {
             displayMenu={displayMenu}
             setDisplayMenu={setDisplayMenu}
             setNotifMessage={setNotifMessage}
+            refreshMatchList={refreshMatchList}
           />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -70,6 +72,8 @@ function App() {
                 <OtherProfile
                   otherProfileData={otherProfileData}
                   setErrorMsg={setErrorMsg}
+                  setRefreshMatchList={setRefreshMatchList}
+                  refreshMatchList={refreshMatchList}
                 />
               }
             />
@@ -99,6 +103,7 @@ function App() {
               element={
                 <Message
                   otherProfileData={otherProfileData}
+                  myProfileData={myProfileData}
                   setErrorMsg={setErrorMsg}
                   socket={socket}
                 />

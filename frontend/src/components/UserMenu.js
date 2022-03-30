@@ -50,6 +50,7 @@ const UserMenu = ({
   displayMenu,
   setDisplayMenu,
   setNotifMessage,
+  refreshMatchList,
 }) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -73,6 +74,7 @@ const UserMenu = ({
   useEffect(async () => {
     if (localStorage.getItem("token")) {
       setDisplayMenu(true);
+      navigate("/myprofile");
     }
   }, [localStorage.getItem("token")]);
 
@@ -192,6 +194,7 @@ const UserMenu = ({
           matchDisplay={matchDisplay}
           otherProfileData={otherProfileData}
           setOtherProfileData={setOtherProfileData}
+          refreshMatchList={refreshMatchList}
         />
         <UserMenuMessage
           matchDisplay={matchDisplay}

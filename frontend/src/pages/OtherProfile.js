@@ -3,6 +3,7 @@ import UserMenu from "../components/UserMenu";
 import { makeStyles } from "@mui/styles";
 import axios from "axios";
 import RightArrow from "../components/Icons/RightArrow";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
@@ -27,8 +28,13 @@ const useStyles = makeStyles({
   },
 });
 
-const OtherProfile = ({ otherProfileData }) => {
+const OtherProfile = ({
+  otherProfileData,
+  setRefreshMatchList,
+  refreshMatchList,
+}) => {
   const classes = useStyles();
+  const navigate = useNavigate();
   const [displayedImage, setDisplayedImage] = useState(
     otherProfileData && otherProfileData.images && otherProfileData.images[0]
   );
@@ -45,8 +51,13 @@ const OtherProfile = ({ otherProfileData }) => {
     else setDisplayedImageNb(displayedImageNb + 1);
   };
 
-  const unlikeMatch = () => {
-    console.log("UnlikeMatch");
+  const unlikeMatch = async () => {
+    await axios.post("/action/like", {
+      username: otherProfileData.username,
+      islike: false,
+    });
+    await setRefreshMatchList(!refreshMatchList);
+    await navigate("/userhome");
   };
 
   useEffect(async () => {

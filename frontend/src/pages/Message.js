@@ -52,7 +52,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Message = ({ otherProfileData }) => {
+const Message = ({ otherProfileData, myProfileData }) => {
   const classes = useStyles();
   const messagesEndRef = useRef(null);
   const [messageToSend, setMessageToSend] = useState("");
@@ -95,7 +95,13 @@ const Message = ({ otherProfileData }) => {
 
   useEffect(async () => {
     console.log(discussion);
-    if (messageToPush) {
+    if (
+      (messageToPush && messageToPush.from === otherProfileData.username) ||
+      messageToPush.from === myProfileData.username
+    ) {
+      console.log(messageToPush);
+      console.log(otherProfileData.username);
+      console.log(myProfileData.username);
       let discussionCpy = discussion;
       discussionCpy.push(messageToPush);
       setDiscussion([...discussionCpy]);

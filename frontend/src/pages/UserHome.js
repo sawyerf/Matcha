@@ -7,6 +7,7 @@ import RedCross from "../components/Icons/RedCross";
 import RightArrow from "../components/Icons/RightArrow";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Slider from "@mui/material/Slider";
 
 const useStyles = makeStyles({
   root: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles({
     overflow: "hidden",
     height: "500px",
     borderRadius: "8px",
-    marginTop: "70px",
+    marginTop: "45px",
   },
 });
 
@@ -40,6 +41,10 @@ const UserHome = ({ setOtherProfileData }) => {
   const [displayedImage, setDisplayedImage] = useState(null);
   const [displayedImageNb, setDisplayedImageNb] = useState(0);
   const [matched, setMatched] = useState(false);
+  const [age, setAge] = useState([18, 30]);
+  const [popularity, setPopularity] = useState([0, 100]);
+  const [distance, setDistance] = useState(30);
+  const [tags, setTags] = useState("");
 
   const youMatch = async (liked) => {
     axios
@@ -120,6 +125,32 @@ const UserHome = ({ setOtherProfileData }) => {
   const seeProfile = (data) => {
     setOtherProfileData(data);
     navigate("/otherprofile");
+  };
+
+  const handleChangeAge = (event, newValue) => {
+    setAge(newValue);
+  };
+
+  const handleChangePopularity = (event, newValue) => {
+    setPopularity(newValue);
+  };
+
+  const handleChangeDistance = (event, newValue) => {
+    setDistance(newValue);
+  };
+
+  const handleChangeTags = (event) => {
+    let tagsCpy = tags;
+    if (event.target.checked === true) {
+      if (tagsCpy !== "") tagsCpy += "," + event.target.id;
+      else tagsCpy = event.target.id;
+    } else {
+      if (tagsCpy.includes("," + event.target.id))
+        tagsCpy = tagsCpy.replace("," + event.target.id, "");
+      else if (tagsCpy.includes(event.target.id))
+        tagsCpy = tagsCpy.replace(event.target.id, "");
+    }
+    setTags(tagsCpy);
   };
 
   return (
@@ -260,6 +291,192 @@ const UserHome = ({ setOtherProfileData }) => {
             onClick={() => blockUser()}
           >
             Bloquer Utilisateur
+          </div>
+        </div>
+        <div style={{ display: "flex" }}>
+          <div style={{ float: "left", marginLeft: "20px" }}>
+            <div style={{ display: "flex", width: "230px" }}>
+              <p style={{ marginRight: "63px", marginTop: "4px" }}>Age</p>
+              <Slider
+                getAriaLabel={() => "Age"}
+                value={age}
+                min={18}
+                max={100}
+                size="small"
+                onChange={handleChangeAge}
+                valueLabelDisplay="auto"
+              />
+            </div>
+            <div style={{ display: "flex", width: "230px" }}>
+              <p style={{ marginRight: "20px", marginTop: "4px" }}>
+                Popularité
+              </p>
+              <Slider
+                getAriaLabel={() => "Popularity"}
+                value={popularity}
+                min={0}
+                max={100}
+                size="small"
+                onChange={handleChangePopularity}
+                valueLabelDisplay="auto"
+              />
+            </div>
+            <div style={{ display: "flex", width: "230px" }}>
+              <p style={{ marginRight: "30px", marginTop: "4px" }}>Distance</p>
+              <Slider
+                size="small"
+                value={distance}
+                aria-label="Distance"
+                valueLabelDisplay="auto"
+                onChange={handleChangeDistance}
+                min={2}
+              />
+            </div>
+          </div>
+          <div style={{ marginTop: "12px", marginLeft: "15px" }}>
+            <div
+              style={{
+                justifyContent: "space-between",
+                display: "flex",
+                width: "330px",
+                marginBottom: "5px",
+              }}
+            >
+              <div>
+                <input
+                  checked={tags.includes("#music") ? true : false}
+                  type="checkbox"
+                  id="#music"
+                  name="music"
+                  value="music"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="music" style={{ marginLeft: "5px" }}>
+                  Musique
+                </label>
+              </div>
+              <div>
+                <input
+                  checked={tags.includes("#voyage") ? true : false}
+                  type="checkbox"
+                  id="#voyage"
+                  name="voyage"
+                  value="voyage"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="voyage" style={{ marginLeft: "5px" }}>
+                  Voyage
+                </label>
+              </div>
+              <div>
+                <input
+                  checked={tags.includes("#cuisine") ? true : false}
+                  type="checkbox"
+                  id="#cuisine"
+                  name="cuisine"
+                  value="cuisine"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="cuisine" style={{ marginLeft: "5px" }}>
+                  Cuisine
+                </label>
+              </div>
+            </div>
+            <div
+              style={{
+                justifyContent: "space-between",
+                display: "flex",
+                width: "330px",
+                marginBottom: "5px",
+              }}
+            >
+              <div>
+                <input
+                  checked={tags.includes("#programmation") ? true : false}
+                  type="checkbox"
+                  id="#programmation"
+                  name="programmation"
+                  value="programmation"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="programmation" style={{ marginLeft: "5px" }}>
+                  Programmation
+                </label>
+              </div>
+              <div style={{ marginLeft: "-57px" }}>
+                <input
+                  checked={tags.includes("#fitness") ? true : false}
+                  type="checkbox"
+                  id="#fitness"
+                  name="fitness"
+                  value="fitness"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="fitness" style={{ marginLeft: "5px" }}>
+                  Fitness
+                </label>
+              </div>
+              <div>
+                <input
+                  checked={tags.includes("#danse") ? true : false}
+                  type="checkbox"
+                  id="#danse"
+                  name="danse"
+                  value="danse"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="danse" style={{ marginLeft: "5px" }}>
+                  Danse
+                </label>
+              </div>
+            </div>
+            <div
+              style={{
+                justifyContent: "space-between",
+                display: "flex",
+                width: "330px",
+              }}
+            >
+              <div>
+                <input
+                  checked={tags.includes("#gaming") ? true : false}
+                  type="checkbox"
+                  id="#gaming"
+                  name="gaming"
+                  value="gaming"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="gaming" style={{ marginLeft: "5px" }}>
+                  Gaming
+                </label>
+              </div>
+              <div style={{ marginLeft: "-17px" }}>
+                <input
+                  checked={tags.includes("#poney") ? true : false}
+                  type="checkbox"
+                  id="#poney"
+                  name="poney"
+                  value="poney"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="poney" style={{ marginLeft: "5px" }}>
+                  Poney
+                </label>
+              </div>
+              <div>
+                <input
+                  checked={tags.includes("#sport") ? true : false}
+                  type="checkbox"
+                  id="#sport"
+                  name="sport"
+                  value="sport"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="sport" style={{ marginLeft: "5px" }}>
+                  Sport
+                </label>
+              </div>
+            </div>
           </div>
         </div>
       </div>
