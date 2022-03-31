@@ -45,24 +45,44 @@ const UserHome = ({ setOtherProfileData }) => {
   const [popularity, setPopularity] = useState([0, 100]);
   const [distance, setDistance] = useState(30);
   const [tags, setTags] = useState("");
+  const [preferenceList, setPreferenceList] = useState([]);
+  const [indexPreferenceList, setIndexPreferenceList] = useState(0);
 
   const youMatch = async (liked) => {
-    axios
-      .all([
-        await axios.post("/action/like", {
-          username: otherProfil.username,
-          islike: liked,
-        }),
-        await axios.get("/users/offer"),
-      ])
-      .then(
-        axios.spread((data1, data2) => {
-          console.log("data1", data1, "data2", data2);
-          data2.data && setOtherProfile(data2.data.offers);
-          setDisplayedImage(data2.data.offers.images[0]);
-          setDisplayedImageNb(0);
-        })
+    if (preferenceList && preferenceList.length - 1 > indexPreferenceList) {
+      console.log("LIKE DANS LA PREFERENCE LIST");
+      console.log(preferenceList.length);
+      console.log(indexPreferenceList);
+      console.log(preferenceList);
+      await axios.post("/action/like", {
+        username: otherProfil.username,
+        islike: liked,
+      });
+      await setOtherProfile(preferenceList[indexPreferenceList + 1]);
+      await setDisplayedImage(
+        preferenceList[indexPreferenceList + 1].images[0]
       );
+      await setIndexPreferenceList(indexPreferenceList + 1);
+      await setDisplayedImageNb(0);
+    } else {
+      console.log("LIKE DANS LES OFFERS RANDOM");
+      axios
+        .all([
+          await axios.post("/action/like", {
+            username: otherProfil.username,
+            islike: liked,
+          }),
+          await axios.get("/users/offer"),
+        ])
+        .then(
+          axios.spread((data1, data2) => {
+            console.log("data1", data1, "data2", data2);
+            data2.data && setOtherProfile(data2.data.offers);
+            setDisplayedImage(data2.data.offers.images[0]);
+            setDisplayedImageNb(0);
+          })
+        );
+    }
   };
 
   const previousImg = () => {
@@ -89,6 +109,28 @@ const UserHome = ({ setOtherProfileData }) => {
           setDisplayedImageNb(0);
         })
       );
+  };
+
+  const searchPrefUser = async () => {
+    const res = await axios.post("/users/search", {
+      minAge: age[0],
+      maxAge: age[1],
+      minPopularity: popularity[0],
+      maxPopularity: popularity[1],
+      maxDistance: distance,
+      tags: ["#gaming"],
+    });
+    console.log(res.data[0]);
+    console.log(otherProfil);
+    if (res.data[0] && preferenceList !== res.data) {
+      console.log("NOUVELLE LISTE DE PREFERENCE");
+      await setPreferenceList(res.data);
+      await setIndexPreferenceList(0);
+      await setOtherProfile(res.data[0]);
+      await setDisplayedImage(res.data[0].images[0]);
+      await setDisplayedImageNb(0);
+    } else {
+    }
   };
 
   const blockUser = async () => {
@@ -267,33 +309,39 @@ const UserHome = ({ setOtherProfileData }) => {
           <div
             style={{
               marginTop: "5px",
-              backgroundColor: "white",
+              background: "linear-gradient(135deg, #EB58A2, orange)",
               borderRadius: "8px",
-              border: "solid 1px black",
+              border: "solid 1px white",
               padding: "5px 17px",
               width: "fit-content",
               cursor: "pointer",
             }}
             onClick={() => reportUser()}
           >
-            Report Utilisateur
+            <p style={{ color: "white" }}>Report Utilisateur</p>
           </div>
           <div
             style={{
               marginTop: "5px",
-              backgroundColor: "white",
+              background: "linear-gradient(135deg, #EB58A2, orange)",
               borderRadius: "8px",
-              border: "solid 1px black",
+              border: "solid 1px white",
               padding: "5px 17px",
               width: "fit-content",
               cursor: "pointer",
             }}
             onClick={() => blockUser()}
           >
-            Bloquer Utilisateur
+            <p style={{ color: "white" }}>Bloquer Utilisateur</p>
           </div>
         </div>
-        <div style={{ display: "flex" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px",
+          }}
+        >
           <div style={{ float: "left", marginLeft: "20px" }}>
             <div style={{ display: "flex", width: "230px" }}>
               <p style={{ marginRight: "63px", marginTop: "4px" }}>Age</p>
@@ -477,6 +525,22 @@ const UserHome = ({ setOtherProfileData }) => {
                 </label>
               </div>
             </div>
+          </div>
+          <div
+            style={{
+              marginTop: "30px",
+              marginLeft: "10px",
+              background: "linear-gradient(135deg, #EB58A2, orange)",
+              borderRadius: "8px",
+              border: "solid 1px white",
+              padding: "5px 17px",
+              width: "fit-content",
+              cursor: "pointer",
+              height: "fit-content",
+            }}
+            onClick={() => searchPrefUser()}
+          >
+            <p style={{ color: "white" }}>Rechercher</p>
           </div>
         </div>
       </div>

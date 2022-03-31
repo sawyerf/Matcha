@@ -33,6 +33,14 @@ const UserMenuMatch = ({
     setMatchList(res.data);
   }, [refreshMatchList]);
 
+  useEffect(async () => {
+    const res = await axios.get("/users/matchs");
+    if ("error" in res.data) {
+      console.log("Error: ", res.data.message);
+    }
+    setMatchList(res.data);
+  }, [localStorage.getItem("token")]);
+
   const seeProfile = (data) => {
     setOtherProfileData(data);
     navigate("/otherprofile");
