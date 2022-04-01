@@ -21,6 +21,7 @@ function App() {
   const [displayMenu, setDisplayMenu] = useState(false);
   const [refreshMatchList, setRefreshMatchList] = useState(false);
   const [notifMessage, setNotifMessage] = useState("");
+  const [messageToPush, setMessageToPush] = useState(null);
 
   useEffect(async () => {
     console.log(localStorage.getItem("token"));
@@ -68,6 +69,7 @@ function App() {
             setNotifMessage={setNotifMessage}
             refreshMatchList={refreshMatchList}
             setErrorMsg={setErrorMsg}
+            setMessageToPush={setMessageToPush}
           />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -124,6 +126,8 @@ function App() {
                   setErrorMsg={setErrorMsg}
                   setNotifMessage={setNotifMessage}
                   socket={socket}
+                  messageToPush={messageToPush}
+                  setMessageToPush={setMessageToPush}
                 />
               }
             />

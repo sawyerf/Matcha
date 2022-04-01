@@ -52,6 +52,7 @@ const UserMenu = ({
   setNotifMessage,
   refreshMatchList,
   setErrorMsg,
+  setMessageToPush,
 }) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -87,7 +88,13 @@ const UserMenu = ({
 
   useEffect(() => {
     socket.on("notif", (notif) => displayNotif(notif.msg));
+    socket.on("message", (msg) => writeMessage(msg));
   }, [socket]);
+
+  const writeMessage = (msg) => {
+    setNotifMessage("Message de " + msg.from);
+    setMessageToPush(msg);
+  };
 
   return (
     <div

@@ -10,7 +10,7 @@ const useStyles = makeStyles({
   root: {
     width: "calc(100vw - 250px)",
     backgroundColor: "#F1F1F1",
-    textAlign: "-webkit-center",
+    textAlign: "center",
   },
   card: {
     backgroundColor: "white",
@@ -20,6 +20,8 @@ const useStyles = makeStyles({
     marginTop: "70px",
     padding: "20px",
     position: "relative",
+    marginRight: "auto",
+    marginLeft: "auto",
   },
   matchCard: {
     width: "250px",
@@ -52,13 +54,17 @@ const useStyles = makeStyles({
   },
 });
 
-const Message = ({ otherProfileData, myProfileData, setNotifMessage }) => {
+const Message = ({
+  otherProfileData,
+  myProfileData,
+  setNotifMessage,
+  messageToPush,
+  setMessageToPush,
+}) => {
   const classes = useStyles();
   const messagesEndRef = useRef(null);
   const [messageToSend, setMessageToSend] = useState("");
   const [discussion, setDiscussion] = useState();
-  const [messageToPush, setMessageToPush] = useState(null);
-  const socket = useContext(SocketContext);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -76,11 +82,6 @@ const Message = ({ otherProfileData, myProfileData, setNotifMessage }) => {
       }
     }
     await setMessageToSend("");
-  };
-
-  const writeMessage = (msg) => {
-    setNotifMessage("Message de " + msg.from);
-    setMessageToPush(msg);
   };
 
   useEffect(async () => {
@@ -108,10 +109,6 @@ const Message = ({ otherProfileData, myProfileData, setNotifMessage }) => {
       setMessageToPush(null);
     }
   }, [messageToPush]);
-
-  useEffect(() => {
-    socket.on("message", (msg) => writeMessage(msg));
-  }, [socket]);
 
   useEffect(() => {
     scrollToBottom();
@@ -143,7 +140,7 @@ const Message = ({ otherProfileData, myProfileData, setNotifMessage }) => {
               })}
             <div ref={messagesEndRef} />
           </div>
-          <div style={{ marginTop: "10px", width: "90%", display: "flex" }}>
+          <div style={{ marginTop: "10px", width: "100%", display: "flex" }}>
             <textarea
               style={{
                 resize: "none",

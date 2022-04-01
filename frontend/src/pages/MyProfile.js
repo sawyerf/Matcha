@@ -12,7 +12,7 @@ const useStyles = makeStyles({
   root: {
     width: "calc(100vw - 250px)",
     backgroundColor: "#F1F1F1",
-    textAlign: "-webkit-center",
+    textAlign: "center",
   },
   card: {
     backgroundColor: "white",
@@ -23,6 +23,8 @@ const useStyles = makeStyles({
     overflowY: "scroll",
     paddingTop: "20px",
     paddingBottom: "20px",
+    marginRight: "auto",
+    marginLeft: "auto",
   },
   textField: {
     width: "200px",
@@ -340,7 +342,7 @@ const MyProfile = ({
               width: "440px",
             }}
           >
-            <div>
+            <div style={{ marginLeft: "110px" }}>
               <p style={{ marginBottom: "5px" }}>Addresse e-mail</p>
               <TextField
                 className={classes.textFieldBio}
@@ -443,12 +445,162 @@ const MyProfile = ({
               }}
             />
           </div>
+          {/* -------------------------------------- TAGS ----------------------------------------------- */}
+          <h4
+            style={{
+              marginBottom: "10px",
+              marginTop: "10px",
+            }}
+          >
+            Tags
+          </h4>
+          <div
+            style={{
+              justifyContent: "space-between",
+              display: "flex",
+              width: "440px",
+              marginBottom: "5px",
+              marginRight: "auto",
+              marginLeft: "auto",
+            }}
+          >
+            <div>
+              <input
+                checked={tags.includes("#music") ? true : false}
+                type="checkbox"
+                id="#music"
+                name="music"
+                value="music"
+                onChange={handleChangeTags}
+              />
+              <label htmlFor="music" style={{ marginLeft: "5px" }}>
+                Musique
+              </label>
+            </div>
+            <div>
+              <input
+                checked={tags.includes("#voyage") ? true : false}
+                type="checkbox"
+                id="#voyage"
+                name="voyage"
+                value="voyage"
+                onChange={handleChangeTags}
+              />
+              <label htmlFor="voyage" style={{ marginLeft: "5px" }}>
+                Voyage
+              </label>
+            </div>
+            <div>
+              <input
+                checked={tags.includes("#cuisine") ? true : false}
+                type="checkbox"
+                id="#cuisine"
+                name="cuisine"
+                value="cuisine"
+                onChange={handleChangeTags}
+              />
+              <label htmlFor="cuisine" style={{ marginLeft: "5px" }}>
+                Cuisine
+              </label>
+            </div>
+            <div>
+              <input
+                checked={tags.includes("#programmation") ? true : false}
+                type="checkbox"
+                id="#programmation"
+                name="programmation"
+                value="programmation"
+                onChange={handleChangeTags}
+              />
+              <label htmlFor="programmation" style={{ marginLeft: "5px" }}>
+                Programmation
+              </label>
+            </div>
+          </div>
+          <div
+            style={{
+              justifyContent: "space-between",
+              display: "flex",
+              width: "440px",
+              marginRight: "auto",
+              marginLeft: "auto",
+            }}
+          >
+            <div>
+              <input
+                checked={tags.includes("#gaming") ? true : false}
+                type="checkbox"
+                id="#gaming"
+                name="gaming"
+                value="gaming"
+                onChange={handleChangeTags}
+              />
+              <label htmlFor="gaming" style={{ marginLeft: "5px" }}>
+                Gaming
+              </label>
+            </div>
+            <div>
+              <input
+                checked={tags.includes("#poney") ? true : false}
+                type="checkbox"
+                id="#poney"
+                name="poney"
+                value="poney"
+                onChange={handleChangeTags}
+              />
+              <label htmlFor="poney" style={{ marginLeft: "5px" }}>
+                Poney
+              </label>
+            </div>
+            <div>
+              <input
+                checked={tags.includes("#sport") ? true : false}
+                type="checkbox"
+                id="#sport"
+                name="sport"
+                value="sport"
+                onChange={handleChangeTags}
+              />
+              <label htmlFor="sport" style={{ marginLeft: "5px" }}>
+                Sport
+              </label>
+            </div>
+            <div>
+              <input
+                checked={tags.includes("#fitness") ? true : false}
+                type="checkbox"
+                id="#fitness"
+                name="fitness"
+                value="fitness"
+                onChange={handleChangeTags}
+              />
+              <label htmlFor="fitness" style={{ marginLeft: "5px" }}>
+                Fitness
+              </label>
+            </div>
+            <div>
+              <input
+                checked={tags.includes("#danse") ? true : false}
+                type="checkbox"
+                id="#danse"
+                name="danse"
+                value="danse"
+                onChange={handleChangeTags}
+              />
+              <label htmlFor="danse" style={{ marginLeft: "5px" }}>
+                Danse
+              </label>
+            </div>
+          </div>
+          {/* ---------------------------------------- END TAGS ------------------------------------- */}
           <div style={{ marginTop: "20px", marginBottom: "20px" }}>
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",
                 width: "440px",
+                marginRight: "auto",
+                marginLeft: "auto",
               }}
             >
               <div className={classes.profilPlus}>
@@ -620,6 +772,8 @@ const MyProfile = ({
                 display: "flex",
                 justifyContent: "space-evenly",
                 width: "440px",
+                marginRight: "auto",
+                marginLeft: "auto",
               }}
             >
               <div className={classes.profilPlus}>
@@ -732,149 +886,6 @@ const MyProfile = ({
               </div>
             </div>
           </div>
-          {/* -------------------------------------- TAGS ----------------------------------------------- */}
-          <h4
-            style={{
-              marginBottom: "10px",
-            }}
-          >
-            Tags
-          </h4>
-          <div
-            style={{
-              justifyContent: "space-between",
-              display: "flex",
-              width: "440px",
-              marginBottom: "5px",
-            }}
-          >
-            <div>
-              <input
-                checked={tags.includes("#music") ? true : false}
-                type="checkbox"
-                id="#music"
-                name="music"
-                value="music"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="music" style={{ marginLeft: "5px" }}>
-                Musique
-              </label>
-            </div>
-            <div>
-              <input
-                checked={tags.includes("#voyage") ? true : false}
-                type="checkbox"
-                id="#voyage"
-                name="voyage"
-                value="voyage"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="voyage" style={{ marginLeft: "5px" }}>
-                Voyage
-              </label>
-            </div>
-            <div>
-              <input
-                checked={tags.includes("#cuisine") ? true : false}
-                type="checkbox"
-                id="#cuisine"
-                name="cuisine"
-                value="cuisine"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="cuisine" style={{ marginLeft: "5px" }}>
-                Cuisine
-              </label>
-            </div>
-            <div>
-              <input
-                checked={tags.includes("#programmation") ? true : false}
-                type="checkbox"
-                id="#programmation"
-                name="programmation"
-                value="programmation"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="programmation" style={{ marginLeft: "5px" }}>
-                Programmation
-              </label>
-            </div>
-          </div>
-          <div
-            style={{
-              justifyContent: "space-between",
-              display: "flex",
-              width: "440px",
-            }}
-          >
-            <div>
-              <input
-                checked={tags.includes("#gaming") ? true : false}
-                type="checkbox"
-                id="#gaming"
-                name="gaming"
-                value="gaming"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="gaming" style={{ marginLeft: "5px" }}>
-                Gaming
-              </label>
-            </div>
-            <div>
-              <input
-                checked={tags.includes("#poney") ? true : false}
-                type="checkbox"
-                id="#poney"
-                name="poney"
-                value="poney"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="poney" style={{ marginLeft: "5px" }}>
-                Poney
-              </label>
-            </div>
-            <div>
-              <input
-                checked={tags.includes("#sport") ? true : false}
-                type="checkbox"
-                id="#sport"
-                name="sport"
-                value="sport"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="sport" style={{ marginLeft: "5px" }}>
-                Sport
-              </label>
-            </div>
-            <div>
-              <input
-                checked={tags.includes("#fitness") ? true : false}
-                type="checkbox"
-                id="#fitness"
-                name="fitness"
-                value="fitness"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="fitness" style={{ marginLeft: "5px" }}>
-                Fitness
-              </label>
-            </div>
-            <div>
-              <input
-                checked={tags.includes("#danse") ? true : false}
-                type="checkbox"
-                id="#danse"
-                name="danse"
-                value="danse"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="danse" style={{ marginLeft: "5px" }}>
-                Danse
-              </label>
-            </div>
-          </div>
-          {/* ---------------------------------------- END TAGS ------------------------------------- */}
         </div>
       </div>
     </div>

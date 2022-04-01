@@ -9,7 +9,7 @@ const useStyles = makeStyles({
   root: {
     width: "calc(100vw - 250px)",
     backgroundColor: "#F1F1F1",
-    textAlign: "-webkit-center",
+    textAlign: "center",
   },
   card: {
     backgroundColor: "white",
@@ -20,6 +20,8 @@ const useStyles = makeStyles({
     paddingTop: "20px",
     paddingBottom: "20px",
     position: "relative",
+    marginRight: "auto",
+    marginLeft: "auto",
   },
   matchCard: {
     width: "250px",
