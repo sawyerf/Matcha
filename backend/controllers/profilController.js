@@ -8,7 +8,7 @@ import { sendmail } from '../utils/mail';
 import { checkProfilUid } from '../utils/chekProfil';
 import { locationByIp } from '../utils/location';
 
-require('dotenv').config()
+require('dotenv').config();
 
 const setInfo = async (req, res) => {
     let ret;
@@ -83,7 +83,7 @@ const changeMail = async (req, res) => {
             } else {
                 sendmail(req.me.email,
                     'Welcome ' + req.me.username,
-                    `Hi ${req.me.username},\nhttp://localhost:3000/profil/validmail/${keymail}\nBye !`
+                    `Hi ${req.me.username},\n${process.env.HOST}/profil/validmail/${keymail}\nBye !`
                 );
                 checkProfilUid(req.me.uid);
                 res.status(200).json();

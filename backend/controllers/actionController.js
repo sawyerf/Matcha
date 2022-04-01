@@ -24,6 +24,7 @@ const match = async (req, res, liked) => {
                 res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
             } else if (ret === true) {
                 global.io.sockets.to(liked.uid).emit('notif', {act: 'match', username: req.me.username, msg:`You match with ${req.me.username}`});
+                global.io.sockets.to(req.me.uid).emit('notif', {act: 'match', username: liked.username, msg:`You match with ${liked.username}`});
                 res.status(200).json({ 'match': true });
             }
         } else if (isMatchExist === true) {

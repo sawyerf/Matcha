@@ -4,6 +4,8 @@ import { checkBody } from '../utils/checkBody';
 import { hashPassword } from '../utils/hash';
 import { checkProfilUid } from '../utils/chekProfil';
 
+require('dotenv').config();
+
 const validMail = async (req, res) => {
     const user = await userModels.selectBy('keymail', req.params.key);
 
@@ -17,7 +19,8 @@ const validMail = async (req, res) => {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
             checkProfilUid(user.uid);
-            res.status(200).json();
+            res.redirect(301, `${process.env.HOST}`);
+            // res.status(200).json();
         }
     }
 }
@@ -68,7 +71,7 @@ const askReset = async (req, res) => {
         } else {
             sendmail(req.body.email,
                 'Reset Password',
-                `Hello ${user.username}\nClick on the link to change your password\nhttps://localhost/no/resetpass/${user.keypass}\n`
+                `Hello ${user.username}\nClick on the link to change your password\n${process.env.HOST}/no/resetpass/${user.keypass}\n`
             );
             res.status(200).json();
         }

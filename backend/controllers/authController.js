@@ -7,6 +7,8 @@ import { checkBody } from '../utils/checkBody';
 import jwt from '../utils/jwt';
 import { sendmail } from '../utils/mail';
 
+require('dotenv').config();
+
 const login = async (req, res) => {
     const isCheck = checkBody({
         'username': 'string',
@@ -95,7 +97,7 @@ const register = async (req, res) => {
                 if (ret === true) {
                     sendmail(req.body.email,
                         'Welcome ' + req.body.username,
-                        `Hi ${req.body.username},\nhttp://localhost:3000/profil/validmail/${keymail}\nBye !`);
+                        `Hi ${req.body.username},\n${process.env.HOST}/profil/validmail/${keymail}\nBye !`);
                     res.status(201).json();
                 } else {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });

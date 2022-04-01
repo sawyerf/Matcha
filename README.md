@@ -25,22 +25,19 @@ docker-compose -f docker-compose.yml up -d
 - ~~Consultation des visite~~
 - ~~Notif quand delike match~~
 - ~~Voir si utilisateur est en ligne~~
-- Faire la geolocalisation
+- ~~Faire la geolocalisation~~
+- List visit plus info
+- change keypass after
+- Valid mail pour connecter
+- Notif non lu
 
 ### Frontend
-- Suppression des images
-- Affichage des images dans le /myprofil
-- Faire les notification + notif de message
-- Regler le probleme de raffraichissement des pages
-- Pouvoir delik2 un match
-- Gerer la gestion d'erreur
-- Quand token rediriger vers le reste
-- Quand on se login rediriger direct vers les offers si les info sont bien remplis
-- Rediriger vers login apres s'etre register
-- Faire quelque chose si il n'y a pas d'image de profil en haut a gauche
+- Gerer la gestion d'erreur (botif pour pas validation mail ou pas profil complet)
 - Faire quelque chose si il n'y a plus de offer
-- Faire les recherche
-- Ne pas afficher tout les message recu par socket
+- Faire les recherche sort
+- Liste visit et like
+- Reset password
+- Geolocalisation
 
 ## API
 | Method | url                         | Description             |

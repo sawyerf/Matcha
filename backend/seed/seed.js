@@ -37,7 +37,7 @@ const generateUser = (hash) => {
     const username = casual.username
 
     const user = {
-        'email': casual.email,
+        'email': `${username}@matcha.fr`,
         'username': username,
         'firstname': casual.first_name,
         'lastname': casual.last_name,

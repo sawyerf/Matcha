@@ -1,6 +1,5 @@
 import userModels from '../models/user';
 import jwt from '../utils/jwt'
-// import messageController from '../controllers/messageController';
 
 export const initSocket = (io) => {
     console.log('Start Socket');
@@ -17,7 +16,6 @@ export const initSocket = (io) => {
                 userModels.setVal(socket.me.uid, 'last_visit', new Date(DateNow).toISOString());
             }
         })
-        // socket.on('message', (data) => messageController.sendMessage(socket, data));
         
         socket.on('disconnect', () => {
             console.log('disconnect')
