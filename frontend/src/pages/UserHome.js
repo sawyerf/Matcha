@@ -34,7 +34,7 @@ const useStyles = makeStyles({
   },
 });
 
-const UserHome = ({ setOtherProfileData }) => {
+const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [otherProfil, setOtherProfile] = useState(null);
@@ -44,7 +44,7 @@ const UserHome = ({ setOtherProfileData }) => {
   const [age, setAge] = useState([18, 30]);
   const [popularity, setPopularity] = useState([0, 100]);
   const [distance, setDistance] = useState(30);
-  const [tags, setTags] = useState("");
+  const [tags, setTags] = useState([]);
   const [preferenceList, setPreferenceList] = useState([]);
   const [indexPreferenceList, setIndexPreferenceList] = useState(0);
 
@@ -112,14 +112,19 @@ const UserHome = ({ setOtherProfileData }) => {
   };
 
   const searchPrefUser = async () => {
-    const res = await axios.post("/users/search", {
-      minAge: age[0],
-      maxAge: age[1],
-      minPopularity: popularity[0],
-      maxPopularity: popularity[1],
-      maxDistance: distance,
-      tags: ["#gaming"],
-    });
+    const res = await axios
+      .post("/users/search", {
+        minAge: age[0],
+        maxAge: age[1],
+        minPopularity: popularity[0],
+        maxPopularity: popularity[1],
+        maxDistance: distance,
+        tags: tags,
+      })
+      .catch((err) => {
+        console.log(err);
+        setErrorMsg("La recherche a échoué");
+      });
     console.log(res.data[0]);
     console.log(otherProfil);
     if (res.data[0] && preferenceList !== res.data) {
@@ -129,7 +134,9 @@ const UserHome = ({ setOtherProfileData }) => {
       await setOtherProfile(res.data[0]);
       await setDisplayedImage(res.data[0].images[0]);
       await setDisplayedImageNb(0);
+      setErrorMsg(null);
     } else {
+      setErrorMsg("Personne ne se trouve dans cette liste");
     }
   };
 
@@ -181,18 +188,19 @@ const UserHome = ({ setOtherProfileData }) => {
     setDistance(newValue);
   };
 
-  const handleChangeTags = (event) => {
+  const handleChangeTags = async (event) => {
     let tagsCpy = tags;
+    console.log(tagsCpy);
     if (event.target.checked === true) {
-      if (tagsCpy !== "") tagsCpy += "," + event.target.id;
-      else tagsCpy = event.target.id;
+      tagsCpy.push(event.target.id);
     } else {
-      if (tagsCpy.includes("," + event.target.id))
-        tagsCpy = tagsCpy.replace("," + event.target.id, "");
-      else if (tagsCpy.includes(event.target.id))
-        tagsCpy = tagsCpy.replace(event.target.id, "");
+      const index = tagsCpy.indexOf(event.target.id);
+      if (index > -1) {
+        tagsCpy.splice(index, 1); // 2nd parameter means remove one item only
+      }
     }
-    setTags(tagsCpy);
+    console.log(tagsCpy);
+    setTags([...tagsCpy]);
   };
 
   return (
@@ -392,7 +400,7 @@ const UserHome = ({ setOtherProfileData }) => {
             >
               <div>
                 <input
-                  checked={tags.includes("#music") ? true : false}
+                  checked={tags.indexOf("#music") !== -1 ? true : false}
                   type="checkbox"
                   id="#music"
                   name="music"
@@ -405,7 +413,7 @@ const UserHome = ({ setOtherProfileData }) => {
               </div>
               <div>
                 <input
-                  checked={tags.includes("#voyage") ? true : false}
+                  checked={tags.indexOf("#voyage") !== -1 ? true : false}
                   type="checkbox"
                   id="#voyage"
                   name="voyage"
@@ -418,7 +426,7 @@ const UserHome = ({ setOtherProfileData }) => {
               </div>
               <div>
                 <input
-                  checked={tags.includes("#cuisine") ? true : false}
+                  checked={tags.indexOf("#cuisine") !== -1 ? true : false}
                   type="checkbox"
                   id="#cuisine"
                   name="cuisine"
@@ -440,7 +448,7 @@ const UserHome = ({ setOtherProfileData }) => {
             >
               <div>
                 <input
-                  checked={tags.includes("#programmation") ? true : false}
+                  checked={tags.indexOf("#programmation") !== -1 ? true : false}
                   type="checkbox"
                   id="#programmation"
                   name="programmation"
@@ -453,7 +461,7 @@ const UserHome = ({ setOtherProfileData }) => {
               </div>
               <div style={{ marginLeft: "-57px" }}>
                 <input
-                  checked={tags.includes("#fitness") ? true : false}
+                  checked={tags.indexOf("#fitness") !== -1 ? true : false}
                   type="checkbox"
                   id="#fitness"
                   name="fitness"
@@ -466,7 +474,7 @@ const UserHome = ({ setOtherProfileData }) => {
               </div>
               <div>
                 <input
-                  checked={tags.includes("#danse") ? true : false}
+                  checked={tags.indexOf("#danse") !== -1 ? true : false}
                   type="checkbox"
                   id="#danse"
                   name="danse"
@@ -487,7 +495,7 @@ const UserHome = ({ setOtherProfileData }) => {
             >
               <div>
                 <input
-                  checked={tags.includes("#gaming") ? true : false}
+                  checked={tags.indexOf("#gaming") !== -1 ? true : false}
                   type="checkbox"
                   id="#gaming"
                   name="gaming"
@@ -500,7 +508,7 @@ const UserHome = ({ setOtherProfileData }) => {
               </div>
               <div style={{ marginLeft: "-17px" }}>
                 <input
-                  checked={tags.includes("#poney") ? true : false}
+                  checked={tags.indexOf("#poney") !== -1 ? true : false}
                   type="checkbox"
                   id="#poney"
                   name="poney"
@@ -513,7 +521,7 @@ const UserHome = ({ setOtherProfileData }) => {
               </div>
               <div>
                 <input
-                  checked={tags.includes("#sport") ? true : false}
+                  checked={tags.indexOf("#sport") !== -1 ? true : false}
                   type="checkbox"
                   id="#sport"
                   name="sport"

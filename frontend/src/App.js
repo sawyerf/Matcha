@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgottenPassword from "./pages/ForgottenPassword";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import UserHome from "./pages/UserHome";
@@ -58,13 +59,21 @@ function App() {
             setDisplayMenu={setDisplayMenu}
             setNotifMessage={setNotifMessage}
             refreshMatchList={refreshMatchList}
+            setErrorMsg={setErrorMsg}
           />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
+            <Route
+              path="/login"
+              element={<Login setErrorMsg={setErrorMsg} />}
+            />
             <Route
               path="/register"
               element={<Register setErrorMsg={setErrorMsg} />}
+            />
+            <Route
+              path="/forgottenpassword"
+              element={<ForgottenPassword setErrorMsg={setErrorMsg} />}
             />
             <Route
               path="/otherprofile"

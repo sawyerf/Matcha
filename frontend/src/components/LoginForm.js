@@ -4,10 +4,9 @@ import axios from "axios";
 import { Box, TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const LoginForm = () => {
+const LoginForm = ({ setErrorMsg }) => {
   const [username, setUsername] = useState("");
   const [passwd, setPasswd] = useState("");
-  const [msgError, setError] = useState("");
   const navigate = useNavigate();
 
   const handleChangeUsername = (event) => {
@@ -19,21 +18,20 @@ const LoginForm = () => {
   };
 
   const loginApi = async (username, passwd) => {
-    const res = await axios.post("/auth/login", {
-      username: username,
-      password: passwd,
-    });
-    if ("error" in res.data) {
-      console.log("Error: ", res.data.message);
-      setError("Fail to connect `" + res.data.message + "`");
-    } else {
-      if (res.data.token) {
-        localStorage.setItem("token", res.data.token);
-        axios.defaults.headers.common["Authorization"] =
-          localStorage.getItem("token");
-        navigate("/myprofile");
-      }
-      setError("bg le mec");
+    const res = await axios
+      .post("/auth/login", {
+        username: username,
+        password: passwd,
+      })
+      .catch((err) => {
+        console.log(err);
+        setErrorMsg("La recherche a échoué");
+      });
+    if (res.data.token) {
+      localStorage.setItem("token", res.data.token);
+      axios.defaults.headers.common["Authorization"] =
+        localStorage.getItem("token");
+      navigate("/myprofile");
     }
   };
 
@@ -45,7 +43,6 @@ const LoginForm = () => {
 
   return (
     <Box className="box-form">
-      <p> {msgError} </p>
       <TextField
         required
         id="outlined-input"

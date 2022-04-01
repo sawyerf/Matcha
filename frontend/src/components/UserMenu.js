@@ -51,6 +51,7 @@ const UserMenu = ({
   setDisplayMenu,
   setNotifMessage,
   refreshMatchList,
+  setErrorMsg,
 }) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -61,7 +62,8 @@ const UserMenu = ({
   }
 
   function navigateToUserHome() {
-    navigate("/userhome");
+    if (myProfileData.images[0]) navigate("/userhome");
+    else setErrorMsg("Remplissez votre profil entièrement");
   }
 
   function logOut() {

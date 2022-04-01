@@ -21,42 +21,24 @@ const useStyles = makeStyles({
   },
 });
 
-const Login = ({ setErrorMsg }) => {
+const ForgottenPassword = ({ setErrorMsg }) => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [passwd, setPasswd] = useState("");
+  const [email, setEmail] = useState("");
 
-  const handleChangeUsername = (event) => {
-    setUsername(event.target.value);
-  };
-
-  const handleChangePasswd = (event) => {
-    setPasswd(event.target.value);
-  };
-
-  const loginApi = async (username, passwd) => {
-    const res = await axios
-      .post("/auth/login", {
-        username: username,
-        password: passwd,
-      })
-      .catch((err) => {
-        console.log(err);
-        setErrorMsg("Identifiant incorrect");
-      });
-    if (res.data.token) {
-      localStorage.setItem("token", res.data.token);
-      axios.defaults.headers.common["Authorization"] =
-        localStorage.getItem("token");
-      navigate("/myprofile");
-    }
+  const handleChangeEmail = (event) => {
+    setEmail(event.target.value);
   };
 
   const handleSubmit = (event) => {
-    console.log(username, passwd);
-    loginApi(username, passwd);
-    event.preventDefault();
+    const res = axios
+      .post("/no/askreset", {
+        email: email,
+      })
+      .catch((err) => {
+        console.log(err);
+        setErrorMsg("Cette adresse n'existe pas");
+      });
   };
 
   return (
@@ -86,21 +68,14 @@ const Login = ({ setErrorMsg }) => {
             required
             id="outlined-input"
             type="text"
-            label="Username"
-            value={username}
-            onChange={handleChangeUsername}
-          />
-          <TextField
-            id="outlined-password-input"
-            label="Password"
-            type="password"
-            value={passwd}
-            onChange={handleChangePasswd}
+            label="Email"
+            value={email}
+            onChange={handleChangeEmail}
           />
         </div>
         <div style={{ marginTop: "80px" }}>
           <Button variant="contained" onClick={handleSubmit}>
-            Login
+            Envoyer Mail
           </Button>
         </div>
       </div>
@@ -108,4 +83,4 @@ const Login = ({ setErrorMsg }) => {
   );
 };
 
-export default Login;
+export default ForgottenPassword;

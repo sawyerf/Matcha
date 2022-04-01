@@ -214,6 +214,11 @@ const MyProfile = ({
 
   useEffect(async () => {
     if (myProfileData !== null && myProfileData.images[0]) {
+      setImage1(null);
+      setImage2(null);
+      setImage3(null);
+      setImage4(null);
+      setImage5(null);
       console.log(myProfileData);
       myProfileData.images[0] && setImage1(myProfileData.images[0]);
       myProfileData.images[1] && setImage2(myProfileData.images[1]);

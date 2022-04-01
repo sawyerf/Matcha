@@ -148,6 +148,18 @@ const OtherProfile = ({
               <p style={{ marginBottom: "10px" }}>
                 Bio : {otherProfileData && otherProfileData.bio}
               </p>
+              {otherProfileData && otherProfileData.isOnline === false ? (
+                <p style={{ marginBottom: "10px" }}>
+                  Dernière visite :
+                  {otherProfileData && otherProfileData.last_visit
+                    ? otherProfileData.last_visit.substring(0, 10)
+                    : "Jamais"}
+                </p>
+              ) : (
+                <p style={{ marginBottom: "10px" }}>
+                  Cet utilisateur est connecté
+                </p>
+              )}
               <p style={{ marginBottom: "10px" }}>
                 {otherProfileData && otherProfileData.tags.replaceAll(",", " ")}
               </p>
