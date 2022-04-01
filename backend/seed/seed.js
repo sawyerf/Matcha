@@ -1,5 +1,6 @@
 const casual = require('casual').fr_FR;
-import { client } from '../models/connection'
+import { client } from '../models/connection';
+import { hashPassword } from '../utils/hash';
 
 const generateTags = (tags) => {
     let ret = [];
@@ -29,17 +30,18 @@ const generateImage = () => {
 
     return images[(Math.random() * images.length) | 0];
 }
-const generateUser = () => {
+const generateUser = (hash) => {
     const gender = ['H', 'F'];
     const sexuality = ['H', 'F', 'HF'];
     const tags = ['#music', '#voyage', '#cuisine', '#sport', '#fitness', '#poney', '#programmation', '#gaming', '#danse']
+    const username = casual.username
 
     const user = {
         'email': casual.email,
-        'username': casual.username,
+        'username': username,
         'firstname': casual.first_name,
         'lastname': casual.last_name,
-        'password': '$2b$10$i2mzQl6vU59t53eXp3ZlxueyiVTLeQTRhrHB3zq.kabbDduUD7BH.',
+        'password': hash,
         'birthday': casual.date('YYYY-MM-DD') + 'T00:00:00.000Z',
         'gender': gender[(Math.random() * 2) | 0],
         'sexuality': sexuality[(Math.random() * 3) | 0],
@@ -51,6 +53,8 @@ const generateUser = () => {
         'isOK': true,
         'images': [generateImage(), generateImage()],
         'validmail': true,
+        'keymail': `fake_${username}_keymail`,
+        'keypass': `fake_${username}_keymail`,
     };
     return user;
 }
@@ -59,9 +63,9 @@ const addUser = async (newUser) => {
     let res;
     try {
         res = await client.query(
-            `INSERT INTO users (email, username, firstname, lastname, password, birthday, gender, sexuality, bio, popularity, tags, latitude, longitude, isOK, validmail, images)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`,
-            [newUser.email, newUser.username, newUser.firstname, newUser.lastname, newUser.password, newUser.birthday, newUser.gender, newUser.sexuality, newUser.bio, newUser.popularity, newUser.tags, newUser.latitude, newUser.longitude, newUser.isOK, newUser.validmail, newUser.images]
+            `INSERT INTO users (email, username, firstname, lastname, password, birthday, gender, sexuality, bio, popularity, tags, latitude, longitude, isOK, validmail, images, keymail, keypass)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`,
+            [newUser.email, newUser.username, newUser.firstname, newUser.lastname, newUser.password, newUser.birthday, newUser.gender, newUser.sexuality, newUser.bio, newUser.popularity, newUser.tags, newUser.latitude, newUser.longitude, newUser.isOK, newUser.validmail, newUser.images, newUser.keymail, newUser.keypass]
         );
     } catch (error) {
         // console.log(error);
@@ -72,8 +76,10 @@ const addUser = async (newUser) => {
 
 const main = async (max) => {
     let promise;
+    const hash = '$2b$10$cpJIU1MKKjVoDgA3kjo2nOKiTzbm0vjxbepJqIW3Anke/c1NTyKFS'; // await hashPassword('lol');
+
     for (let i = 0; i < max; i++) {
-        promise = addUser(generateUser());
+        promise = addUser(generateUser(hash));
     }
     await promise;
     console.log('voila');
