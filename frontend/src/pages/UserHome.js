@@ -8,12 +8,12 @@ import RightArrow from "../components/Icons/RightArrow";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Slider from "@mui/material/Slider";
-
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 const useStyles = makeStyles({
   root: {
     width: "calc(100vw - 250px)",
     backgroundColor: "#F1F1F1",
-    textAlign: "-webkit-center",
   },
   matchImage: {
     position: "relative",
@@ -32,6 +32,10 @@ const useStyles = makeStyles({
     borderRadius: "8px",
     marginTop: "45px",
   },
+  select: {
+    height: "40px",
+    width: "120px",
+  },
 });
 
 const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
@@ -45,6 +49,7 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
   const [popularity, setPopularity] = useState([0, 100]);
   const [distance, setDistance] = useState(30);
   const [tags, setTags] = useState([]);
+  const [filter, setFilter] = useState();
   const [preferenceList, setPreferenceList] = useState([]);
   const [indexPreferenceList, setIndexPreferenceList] = useState(0);
 
@@ -176,6 +181,10 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
     navigate("/otherprofile");
   };
 
+  const handleChangeFilter = (event) => {
+    setFilter(event.target.value);
+  };
+
   const handleChangeAge = (event, newValue) => {
     setAge(newValue);
   };
@@ -204,7 +213,7 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
   };
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex", textAlignLast: "center" }}>
       <div className={classes.root}>
         <div
           className={classes.matchCard}
@@ -312,6 +321,8 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
             display: "flex",
             justifyContent: "space-between",
             width: "350px",
+            marginRight: "auto",
+            marginLeft: "auto",
           }}
         >
           <div
@@ -534,21 +545,36 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
               </div>
             </div>
           </div>
-          <div
-            style={{
-              marginTop: "30px",
-              marginLeft: "10px",
-              background: "linear-gradient(135deg, #EB58A2, orange)",
-              borderRadius: "8px",
-              border: "solid 1px white",
-              padding: "5px 17px",
-              width: "fit-content",
-              cursor: "pointer",
-              height: "fit-content",
-            }}
-            onClick={() => searchPrefUser()}
-          >
-            <p style={{ color: "white" }}>Rechercher</p>
+          <div>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              placeHolder="Filtrer par"
+              value={filter}
+              label="Filtrer par"
+              className={classes.select}
+              onChange={handleChangeFilter}
+            >
+              <MenuItem value={1}>Age</MenuItem>
+              <MenuItem value={2}>Popularité</MenuItem>
+              <MenuItem value={3}>Distance</MenuItem>
+            </Select>
+            <div
+              style={{
+                marginTop: "15px",
+                marginLeft: "10px",
+                background: "linear-gradient(135deg, #EB58A2, orange)",
+                borderRadius: "8px",
+                border: "solid 1px white",
+                padding: "5px 17px",
+                width: "fit-content",
+                cursor: "pointer",
+                height: "fit-content",
+              }}
+              onClick={() => searchPrefUser()}
+            >
+              <p style={{ color: "white" }}>Rechercher</p>
+            </div>
           </div>
         </div>
       </div>

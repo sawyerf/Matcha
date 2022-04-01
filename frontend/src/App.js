@@ -46,6 +46,14 @@ function App() {
     }
   }, [errorMsg]);
 
+  useEffect(async () => {
+    if (notifMessage !== null) {
+      setTimeout(() => {
+        setNotifMessage(null);
+      }, 5000);
+    }
+  }, [notifMessage]);
+
   return (
     <div style={{ display: "flex" }}>
       <BrowserRouter>
@@ -145,7 +153,7 @@ function App() {
                 {errorMsg}
               </p>
             </div>
-          ) : notifMessage ? (
+          ) : notifMessage && !notifMessage.includes(myProfileData.username) ? (
             <div
               style={{
                 position: "absolute",

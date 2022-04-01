@@ -52,7 +52,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Message = ({ otherProfileData, myProfileData }) => {
+const Message = ({ otherProfileData, myProfileData, setNotifMessage }) => {
   const classes = useStyles();
   const messagesEndRef = useRef(null);
   const [messageToSend, setMessageToSend] = useState("");
@@ -79,7 +79,6 @@ const Message = ({ otherProfileData, myProfileData }) => {
   };
 
   const writeMessage = (msg) => {
-    console.log(msg);
     setNotifMessage("Message de " + msg.from);
     setMessageToPush(msg);
   };
