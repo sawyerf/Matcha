@@ -129,6 +129,8 @@ const search = async (req, res) => {
                         ouser.isLike = isLike.islike;
                     }    
                     delete ouser.uid;
+                    delete ouser.latitude
+                    delete ouser.longitude
                     newUsers.push(ouser);
                 }
             }
