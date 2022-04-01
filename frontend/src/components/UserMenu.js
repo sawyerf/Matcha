@@ -86,7 +86,7 @@ const UserMenu = ({
   };
 
   useEffect(() => {
-    socket.on("notification", (notif) => displayNotif(notif));
+    socket.on("notif", (notif) => displayNotif(notif));
   }, [socket]);
 
   return (
