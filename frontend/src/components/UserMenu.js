@@ -141,9 +141,9 @@ const UserMenu = ({
           <img
             style={{ height: "30px", width: "30px", borderRadius: "16px" }}
             src={
-              myProfileData && myProfileData.images
+              myProfileData && myProfileData.images && myProfileData.images[0]
                 ? myProfileData.images[0]
-                : ""
+                : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzFhQ-2EAoeS6qbmv4PeqGPsw7oa1uPmaVow&usqp=CAU"
             }
           />
           <p
