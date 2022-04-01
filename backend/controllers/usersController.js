@@ -108,7 +108,8 @@ const search = async (req, res) => {
         } else {
             const newUsers = [];
             for (const ouser of users) {
-                if (distance([req.me.latitude, req.me.longitude], [ouser.latitude, ouser.longitude]) > req.body.maxDistance) continue;
+                ouser.distance = distance([req.me.latitude, req.me.longitude], [ouser.latitude, ouser.longitude]);
+                if (ouser.distance > req.body.maxDistance) continue;
                 const Tags = ouser.tags.split(',');
                 let isIn = true;
                 for (const tag of req.body.tags) {
@@ -119,6 +120,14 @@ const search = async (req, res) => {
                 }
                 if (isIn == true && blocks.indexOf(ouser.uid) == -1) {
                     ouser.isOnline = isOnline(ouser.uid);
+                    const isLike = await likeModels.select(ouser.uid, req.me.uid);
+                    if (isLike === false) {
+                        return res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+                    } else if (isLike === null) {
+                        ouser.isLike = false;
+                    } else {
+                        ouser.isLike = isLike.islike;
+                    }    
                     delete ouser.uid;
                     newUsers.push(ouser);
                 }

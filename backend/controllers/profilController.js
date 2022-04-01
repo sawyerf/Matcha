@@ -105,7 +105,11 @@ const addImage = async (req, res) => {
         } else {
             const name_file = file.md5 + type[file.mimetype];
 
-            file.mv(__dirname + '/../uploads/' + name_file)
+            try {
+                await file.mv(__dirname + '/../uploads/' + name_file);
+            } catch {
+                return res.status(400).json({ 'error': 1, 'message': 'Image not Upload' });
+            }
             let images = req.me.images;
             if (images === null) images = [];
             images.push(`${process.env.HOST}/images/${name_file}`);
@@ -114,7 +118,7 @@ const addImage = async (req, res) => {
                 res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
             } else {
                 checkProfilUid(req.me.uid);
-                res.status(200).json({image: `${process.env.HOST}/images/${name_file}`});
+                res.status(200).json({ image: `${process.env.HOST}/images/${name_file}` });
             }
         }
     }
