@@ -114,6 +114,7 @@ function App() {
                   otherProfileData={otherProfileData}
                   myProfileData={myProfileData}
                   setErrorMsg={setErrorMsg}
+                  setNotifMessage={setNotifMessage}
                   socket={socket}
                 />
               }

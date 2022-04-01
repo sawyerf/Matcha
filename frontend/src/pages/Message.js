@@ -80,6 +80,7 @@ const Message = ({ otherProfileData, myProfileData }) => {
 
   const writeMessage = (msg) => {
     console.log(msg);
+    setNotifMessage("Message de " + msg.from);
     setMessageToPush(msg);
   };
 
