@@ -24,6 +24,7 @@ export const jwtMiddleware = async (req, res, next) => {
             if (isOK === false) {
                 res.status(400).json({ 'error': 1, 'message': 'SQL Error' });
             } else {
+                
                 next();
             }
         }

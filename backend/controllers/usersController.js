@@ -8,7 +8,6 @@ import { scoreMatch } from '../utils/score';
 import { locationByIp, distance } from '../utils/location';
 import { isOnline } from '../utils/online';
 import messageModels from '../models/message';
-import user from '../models/user';
 
 const matchs = async (req, res) => {
     const uidMatchs = await matchModels.selectByUser(req.me.uid);
@@ -167,7 +166,7 @@ const visit = async (req, res) => {
                 if (ret === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else {
-                    global.io.sockets.to(user.uid).emit('notif', { act: 'visit', username: req.me.uid, msg: `${req.me.uid} visit you` });
+                    global.io.sockets.to(user.uid).emit('notif', { act: 'visit', username: req.me.username, msg: `${req.me.username} visit you` });
                     res.status(200).json();
                 }
             }

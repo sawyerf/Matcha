@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import userModels from '../models/user';
 import { sendmail } from '../utils/mail';
 import { checkProfilUid } from '../utils/chekProfil';
+import { locationByIp } from '../utils/location';
 
 require('dotenv').config()
 
@@ -150,6 +151,28 @@ const delImage = async (req, res) => {
     }
 }
 
+const setLocation = async (req, res) => {
+    const isCheck = checkBody({
+        'latitude': 'number',
+        'longitude': 'number'
+    }, req.body);
+
+    if (isCheck === false) {
+        res.status(400).json({ 'error': 1, 'message': 'Bad Content' });
+    } else {
+        if (req.body.latitude === 0.0 && req.body.longitude === 0.0) {
+            [req.body.latitude, req.body.longitude] = locationByIp('62.210.32.247');
+        }
+        console.log(req.me.uid, req.body.latitude, req.body.longitude)
+        const isOK = userModels.setLocation(req.me.uid, req.body.latitude, req.body.longitude);
+        if (isOK === false) {
+            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+        } else {
+            res.status(200).json();
+        }
+    }
+}
+
 const me = async (req, res) => {
     delete req.me.password;
     delete req.me.validmail;
@@ -163,5 +186,6 @@ export default {
     addImage,
     delImage,
     changeMail,
+    setLocation,
     me,
 }

@@ -33,6 +33,24 @@ const setInfo = async (uid, gender, sexuality, tags, bio, firstname, lastname) =
     return true;
 }
 
+const setLocation = async (uid, latitude, longitude) => {
+    let res;
+
+    console.log(latitude, longitude, typeof latitude, typeof longitude)
+    try {
+        res = await client.query(
+            `UPDATE users
+            SET latitude=$2, longitude=$3
+            WHERE uid=$1`,
+            [uid, latitude, longitude]
+        );
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+    return true;
+}
+
 const selectByUids = async (uids) => {
     let res;
     const sql = `SELECT uid, username, date_part('year', age(birthday)) AS age, gender, sexuality, bio, tags, popularity, latitude, longitude, last_visit, images
@@ -179,4 +197,5 @@ export default {
     setInfo,
     search,
     updateMail,
+    setLocation,
 };
