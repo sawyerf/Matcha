@@ -2,6 +2,7 @@ import { makeStyles } from "@mui/styles";
 import { useNavigate } from "react-router-dom";
 import Disconnection from "@mui/icons-material/NoMeetingRoom";
 import Match from "@mui/icons-material/Favorite";
+import Notif from "@mui/icons-material/Notifications";
 import UserMenuMatch from "./UserMenuMatch";
 import UserMenuMessage from "./UserMenuMessage";
 import { useState, useEffect, useContext } from "react";
@@ -57,6 +58,7 @@ const UserMenu = ({
   const classes = useStyles();
   const navigate = useNavigate();
   const [matchDisplay, setMatchDisplay] = useState(true);
+  const [notifDisplay, setNotifDisplay] = useState(false);
 
   function navigateToMyProfile() {
     navigate("/myprofile");
@@ -115,6 +117,71 @@ const UserMenu = ({
           }}
           onClick={logOut}
         />
+        <Notif
+          style={{
+            position: "absolute",
+            color: "#EEEEEE",
+            borderRadius: "16px",
+            background: "rgba(50, 50, 50, 0.2)",
+            padding: "3px",
+            right: "90px",
+            top: "9px",
+            cursor: "pointer",
+          }}
+          onClick={() => setNotifDisplay(!notifDisplay)}
+        />
+        <div
+          style={{
+            border: "solid 1px lightgrey",
+            width: "200px",
+            height: "300px",
+            backgroundColor: "white",
+            position: "absolute",
+            right: "0px",
+            top: "50px",
+            zIndex: "10",
+            display: notifDisplay ? "" : "none",
+          }}
+        >
+          <div
+            style={{
+              fontWeight: "600",
+              margin: "5px",
+              marginBottom: "10px",
+              paddingBottom: "5px",
+              borderBottom: "solid 1px black",
+              display: "flex",
+            }}
+          >
+            <Notif
+              style={{
+                color: "#000000",
+                borderRadius: "16px",
+              }}
+            />
+            <p
+              style={{
+                fontWeight: "600",
+                marginTop: "3px",
+              }}
+            >
+              Notification Récentes
+            </p>
+          </div>
+          {/* BOUCLE POUR AFFICHER LES NOTIFS */}
+          <p
+            style={{
+              fontSize: "12px",
+              fontWeight: "600",
+              margin: "5px",
+              paddingBottom: "5px",
+              borderBottom: "solid 1px lightgray",
+            }}
+          >
+            Notification
+          </p>
+          {/* FIN BOUCLE POUR AFFICHER LES NOTIFS */}
+        </div>
         <Match
           style={{
             position: "absolute",

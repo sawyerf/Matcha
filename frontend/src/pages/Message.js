@@ -1,10 +1,6 @@
 import { useState, useEffect, useRef, useContext } from "react";
-import UserMenu from "../components/UserMenu";
 import { makeStyles } from "@mui/styles";
 import axios from "axios";
-import SendMessageIcon from "../components/Icons/SendMessageIcon";
-import { SocketContext } from "../context/socket";
-import { LocalShippingOutlined } from "@mui/icons-material";
 
 const useStyles = makeStyles({
   root: {
@@ -158,7 +154,6 @@ const Message = ({
               }
               onKeyPress={(e) => (e.key === "Enter" ? sendMessage() : null)}
             />
-            <SendMessageIcon onClick={sendMessage} />
           </div>
         </div>
       </div>
