@@ -67,8 +67,8 @@ CREATE TABLE messages (
 );
 
 CREATE TABLE notifs (
-    id_user int;
-    content text;
+    id_user int,
+    content text,
     date timestamp
 );
 

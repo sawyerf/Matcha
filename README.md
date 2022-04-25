@@ -37,6 +37,7 @@ docker-compose -f docker-compose.yml up -d
 - Liste visit et like
 - Reset password
 - Geolocalisation
+- Raffraichissement dans otherprofile
 
 ## API
 | Method | url                         | Description             |

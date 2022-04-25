@@ -31,6 +31,6 @@ export const initSocket = (io) => {
 export const sendNotif = (uids, type, content) => {
     for (const uid of uids) {
         global.io.sockets.to(uid).emit(type, content);
-        userModels.insert(uid, content);
+        notifModel.insert(uid, content['msg']);
     }
 }

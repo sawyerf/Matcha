@@ -175,9 +175,9 @@ const setLocation = async (req, res) => {
 }
 
 const me = async (req, res) => {
-    const notifs = notifModels.select(req.me.uid);
+    const notifs = await notifModels.select(req.me.uid);
 
-    if (notifs === true) {
+    if (notifs !== false) {
         req.me.notifs = notifs;
     }
     delete req.me.password;

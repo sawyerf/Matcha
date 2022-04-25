@@ -1,4 +1,4 @@
-import { client } from './connection'
+import { client } from './connection';
 
 const insert = async (uid, content) => {
     let res;
@@ -20,7 +20,7 @@ const select = async (uid) => {
 
     try {
         res = await client.query(
-            `SELECT (content, date) FROM notifs
+            `SELECT content, date FROM notifs
             WHERE (id_user=$1)`,
             [uid]
         );
@@ -44,4 +44,10 @@ const del = async (uid) => {
         return false;
     }
     return true;
+}
+
+export default {
+    insert,
+    select,
+    del
 }
