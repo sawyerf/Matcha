@@ -27,8 +27,8 @@ docker-compose -f docker-compose.yml up -d
 - ~~Voir si utilisateur est en ligne~~
 - ~~Faire la geolocalisation~~
 - ~~List visit plus info~~
+- ~~Notif non lu~~
 - change keypass after
-- Notif non lu
 
 ### Frontend
 - Gerer la gestion d'erreur (botif pour pas validation mail ou pas profil complet)
@@ -38,6 +38,7 @@ docker-compose -f docker-compose.yml up -d
 - Reset password
 - Geolocalisation
 - Raffraichissement dans otherprofile
+- Mettre mdp oublie dans le login
 
 ## API
 | Method | url                         | Description             |

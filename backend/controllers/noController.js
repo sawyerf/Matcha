@@ -3,6 +3,7 @@ import { sendmail } from '../utils/mail';
 import { checkBody } from '../utils/checkBody';
 import { hashPassword } from '../utils/hash';
 import { checkProfilUid } from '../utils/chekProfil';
+import { v4 as uuidv4 } from 'uuid';
 
 require('dotenv').config();
 
@@ -69,10 +70,14 @@ const askReset = async (req, res) => {
         } else if (user === null) {
             res.status(404).json({ 'error': 1, 'message': 'Email not found' });
         } else {
-            sendmail(req.body.email,
-                'Reset Password',
-                `Hello ${user.username}\nClick on the link to change your password\n${process.env.HOST}/no/resetpass/${user.keypass}\n`
-            );
+            const uid = uuidv4()
+            const isOK  = await userModels.setVal(user.uid, 'keypass', uid);
+            if (isOK == true) {
+                sendmail(req.body.email,
+                    'Reset Password',
+                    `Hello ${user.username}\nClick on the link to change your password\n${process.env.HOST}/no/resetpass/${uid}\n`
+                );
+            }
             res.status(200).json();
         }
     }
