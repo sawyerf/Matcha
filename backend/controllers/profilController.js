@@ -4,6 +4,7 @@ import { checkBody } from '../utils/checkBody';
 import { hashPassword } from '../utils/hash';
 import { v4 as uuidv4 } from 'uuid';
 import userModels from '../models/user';
+import notifModels from '../models/notif';
 import { sendmail } from '../utils/mail';
 import { checkProfilUid } from '../utils/chekProfil';
 import { locationByIp } from '../utils/location';
@@ -174,10 +175,20 @@ const setLocation = async (req, res) => {
 }
 
 const me = async (req, res) => {
+    const notifs = notifModels.select(req.me.uid);
+
+    if (notifs === true) {
+        req.me.notifs = notifs;
+    }
     delete req.me.password;
     delete req.me.validmail;
     delete req.me.uid;
     res.status(200).json(req.me);
+}
+
+const readNotif = async (req, res) => {
+    notifModels.del(req.me.uid);
+    res.status(200);
 }
 
 export default {

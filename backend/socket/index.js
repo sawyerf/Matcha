@@ -1,5 +1,6 @@
 import userModels from '../models/user';
-import jwt from '../utils/jwt'
+import jwt from '../utils/jwt';
+import notifModel from '../models/notif';
 
 export const initSocket = (io) => {
     console.log('Start Socket');
@@ -25,4 +26,11 @@ export const initSocket = (io) => {
             }
         });
     });
+}
+
+export const sendNotif = (uids, type, content) => {
+    for (const uid of uids) {
+        global.io.sockets.to(uid).emit(type, content);
+        userModels.insert(uid, content);
+    }
 }

@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS "blocks";
 DROP TABLE IF EXISTS "reports";
 DROP TABLE IF EXISTS "history";
 DROP TABLE IF EXISTS "messages";
+DROP TABLE IF EXISTS "notifs";
 
 CREATE TABLE users (
     uid SERIAL PRIMARY KEY,
@@ -62,6 +63,12 @@ CREATE TABLE messages (
     id_from int,
     id_to int,
     msg text,
+    date timestamp
+);
+
+CREATE TABLE notifs (
+    id_user int;
+    content text;
     date timestamp
 );
 

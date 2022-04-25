@@ -30,6 +30,7 @@ const select = async (uid1, uid2) => {
     }
     return res.rows;
 }
+
 const selectLast = async (uid1, uid2) => {
     let res;
 

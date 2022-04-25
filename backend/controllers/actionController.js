@@ -1,4 +1,5 @@
 import { checkBody } from '../utils/checkBody';
+import { sendNotif } from '../socket';
 import likeModels from '../models/like.js';
 import matchModels from '../models/match.js';
 import userModels from '../models/user.js';
@@ -12,7 +13,7 @@ const match = async (req, res, liked) => {
     if (isMatch == null) {
         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
     } else if (isMatch === false) {
-        global.io.sockets.to(liked.uid).emit('notif', {act: 'like', username: req.me.username, msg:`${req.me.username} like you`});
+        sendNotif([liked.uid], 'notif', {act: 'like', username: req.me.username, msg:`${req.me.username} like you`});
         res.status(200).json({ 'match': false });
     } else if (isMatch === true) {
         const isMatchExist = await matchModels.isExist(req.me.uid, liked.uid);
@@ -23,8 +24,8 @@ const match = async (req, res, liked) => {
             if (ret === false) {
                 res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
             } else if (ret === true) {
-                global.io.sockets.to(liked.uid).emit('notif', {act: 'match', username: req.me.username, msg:`You match with ${req.me.username}`});
-                global.io.sockets.to(req.me.uid).emit('notif', {act: 'match', username: liked.username, msg:`You match with ${liked.username}`});
+                sendNotif([liked.uid], 'notif', {act: 'match', username: req.me.username, msg:`You match with ${req.me.username}`});
+                sendNotif([req.me.uid], 'notif', {act: 'match', username: liked.username, msg:`You match with ${liked.username}`});
                 res.status(200).json({ 'match': true });
             }
         } else if (isMatchExist === true) {
@@ -44,7 +45,7 @@ const unmatch = async (req, res, liked) => {
         if (isOK === false) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
-            global.io.sockets.to(liked.uid).emit('notif', {act: 'unmatch', username: req.me.username, msg:`You unmatch with ${req.me.username}`});
+            sendNotif([liked.uid], 'notif', {act: 'unmatch', username: req.me.username, msg:`You unmatch with ${req.me.username}`});
             res.status(200).json({ 'match': false });
         }
     }

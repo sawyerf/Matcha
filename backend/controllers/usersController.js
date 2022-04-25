@@ -8,6 +8,8 @@ import { scoreMatch } from '../utils/score';
 import { locationByIp, distance } from '../utils/location';
 import { isOnline } from '../utils/online';
 import messageModels from '../models/message';
+import { sendNotif } from '../socket';
+
 
 const matchs = async (req, res) => {
     const uidMatchs = await matchModels.selectByUser(req.me.uid);
@@ -33,6 +35,9 @@ const matchs = async (req, res) => {
                 }
                 match.isOnline = isOnline(match.uid);
                 delete match.uid;
+                delete match.latitude;
+                delete match.longitude;
+                delete match.sexuality
             }
             res.status(200).json(matchs);
         }
@@ -166,7 +171,7 @@ const visit = async (req, res) => {
                 if (ret === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else {
-                    global.io.sockets.to(user.uid).emit('notif', { act: 'visit', username: req.me.username, msg: `${req.me.username} visit you` });
+                    sendNotif([user.uid], 'notif', { act: 'visit', username: req.me.username, msg: `${req.me.username} visit you` });
                     res.status(200).json();
                 }
             }
@@ -180,22 +185,21 @@ const myVisits = async (req, res) => {
     if (visits === false) {
         res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
     } else {
+        console.log(Object.keys(visits))
         const users = await userModels.selectByUids(Object.keys(visits));
         if (users === null) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
-            const ret_visits = [];
             for (const visit of Object.keys(visits)) {
                 const user = users.find((post, index) => {
-                    console.log(visit, post.uid);
                     if (post.uid == visit) return true;
                 })
-                ret_visits.push({
-                    username: user.username,
-                    last_visit: visits[visit],
-                })
+                user.last_visit = visits[visit];
+                delete user.uid;
+                delete user.latitude
+                delete user.longitude
             }
-            res.status(200).json(ret_visits);
+            res.status(200).json(users);
         }
     }
 }

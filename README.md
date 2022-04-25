@@ -26,9 +26,8 @@ docker-compose -f docker-compose.yml up -d
 - ~~Notif quand delike match~~
 - ~~Voir si utilisateur est en ligne~~
 - ~~Faire la geolocalisation~~
-- List visit plus info
+- ~~List visit plus info~~
 - change keypass after
-- Valid mail pour connecter
 - Notif non lu
 
 ### Frontend
