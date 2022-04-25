@@ -1,12 +1,12 @@
 import { client } from './connection';
 
-const insert = async (uid, content) => {
+const insert = async (uid, type, content) => {
     let res;
     try {
         res = await client.query(
-            `INSERT INTO notifs (id_user, content, date)
-                VALUES ($1, $2, NOW())`,
-            [uid, content]
+            `INSERT INTO notifs (id_user, type, content, date)
+                VALUES ($1, $2, $3, NOW())`,
+            [uid, type, content]
         );
     } catch (error) {
         console.log(error);
@@ -20,7 +20,7 @@ const select = async (uid) => {
 
     try {
         res = await client.query(
-            `SELECT content, date FROM notifs
+            `SELECT content, type, date FROM notifs
             WHERE (id_user=$1)`,
             [uid]
         );

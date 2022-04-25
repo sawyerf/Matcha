@@ -188,7 +188,7 @@ const me = async (req, res) => {
 
 const readNotif = async (req, res) => {
     notifModels.del(req.me.uid);
-    res.status(200);
+    res.status(200).json();
 }
 
 export default {
@@ -199,4 +199,5 @@ export default {
     changeMail,
     setLocation,
     me,
+    readNotif,
 }

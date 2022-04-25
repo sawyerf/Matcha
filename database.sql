@@ -69,6 +69,7 @@ CREATE TABLE messages (
 CREATE TABLE notifs (
     id_user int,
     content text,
+    type varchar,
     date timestamp
 );
 

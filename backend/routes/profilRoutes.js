@@ -10,3 +10,4 @@ profilRouter.post('/changemail', async (req, res) => profilController.changeMail
 profilRouter.post('/setlocation', async (req, res) => profilController.setLocation(req, res));
 profilRouter.post('/image', async (req, res) => profilController.addImage(req, res));
 profilRouter.delete('/image', async (req, res) => profilController.delImage(req, res));
+profilRouter.get('/readnotif', async (req, res) => profilController.readNotif(req, res));
