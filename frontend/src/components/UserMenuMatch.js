@@ -34,11 +34,39 @@ const UserMenuMatch = ({
   }, [refreshMatchList]);
 
   useEffect(async () => {
+    let fullList = [];
     const res = await axios.get("/users/matchs");
     if ("error" in res.data) {
       console.log("Error: ", res.data.message);
     }
-    setMatchList(res.data);
+    res.data.forEach((data) => {
+      data.mlv = "m";
+    });
+    fullList = res.data;
+    const resLike = await axios.get("/users/likes");
+    if ("error" in resLike.data) {
+      console.log("Error: ", resLike.data.message);
+    }
+    resLike.data.forEach((like) => {
+      let equal = false;
+      res.data.forEach((match) => {
+        if (like.username === match.username) equal = true;
+      });
+      if (equal === false) {
+        like.mlv = "l";
+        fullList.push(like);
+      }
+    });
+    const resVisit = await axios.get("/users/visit");
+    if ("error" in resVisit.data) {
+      console.log("Error: ", resVisit.data.message);
+    }
+    resVisit.data.forEach((visit) => {
+      visit.mlv = "v";
+      fullList.push(visit);
+    });
+    console.log(fullList);
+    setMatchList(fullList);
   }, [localStorage.getItem("token")]);
 
   const seeProfile = (data) => {
@@ -50,6 +78,7 @@ const UserMenuMatch = ({
     <div
       style={{
         margin: "20px",
+        maxHeight: "calc(100% - 30px)",
         marginTop: "10px",
         display: matchDisplay ? "flex" : "none",
         justifyContent: "space-between",
@@ -64,6 +93,14 @@ const UserMenuMatch = ({
               <div
                 className={classes.matchCard}
                 onClick={() => seeProfile(data)}
+                style={{
+                  boxShadow:
+                    data.mlv === "m"
+                      ? "0 0 5px red"
+                      : data.mlv === "l"
+                      ? "0 0 5px green"
+                      : "0 0 5px blue",
+                }}
               >
                 <img
                   src={

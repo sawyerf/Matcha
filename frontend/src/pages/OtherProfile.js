@@ -165,7 +165,7 @@ const OtherProfile = ({
               <p style={{ marginBottom: "10px" }}>
                 {otherProfileData && otherProfileData.tags.replaceAll(",", " ")}
               </p>
-              {otherProfileData.isLike === false ? (
+              {otherProfileData.mlv !== "m" ? (
                 ""
               ) : (
                 <div
