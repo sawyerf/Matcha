@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgottenPassword from "./pages/ForgottenPassword";
+import ResetPassword from "./pages/ResetPassword";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import UserHome from "./pages/UserHome";
@@ -84,6 +85,10 @@ function App() {
             <Route
               path="/forgottenpassword"
               element={<ForgottenPassword setErrorMsg={setErrorMsg} />}
+            />
+            <Route
+              path="/resetpassword"
+              element={<ResetPassword setErrorMsg={setErrorMsg} />}
             />
             <Route
               path="/otherprofile"

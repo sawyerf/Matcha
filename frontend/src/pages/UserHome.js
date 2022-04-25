@@ -162,10 +162,9 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
   };
 
   useEffect(async () => {
-    const res = await axios.get("/users/offer");
-    if ("error" in res.data) {
-      console.log("Error: ", res.data.message);
-    }
+    const res = await axios.get("/users/offer").catch((err) => {
+      setErrorMsg(err.response.data.message);
+    });
     res.data && setOtherProfile(res.data.offers);
     setDisplayedImage(res.data.offers.images[0]);
   }, []);
@@ -181,8 +180,32 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
     navigate("/otherprofile");
   };
 
-  const handleChangeFilter = (event) => {
-    setFilter(event.target.value);
+  const handleChangeFilter = async (event) => {
+    console.log(preferenceList);
+    if (preferenceList && preferenceList[0]) {
+      let prefListCpy = [];
+      if (event.target.value === 1) {
+        prefListCpy = await preferenceList.sort(function (a, b) {
+          return a.age - b.age;
+        });
+      } else if (event.target.value === 2) {
+        prefListCpy = await preferenceList.sort(function (a, b) {
+          return b.popularity - a.popularity;
+        });
+      } else if (event.target.value === 3) {
+        prefListCpy = await preferenceList.sort(function (a, b) {
+          return a.distance - b.distance;
+        });
+      }
+      console.log(event.target.value);
+      await setPreferenceList(prefListCpy);
+      await setOtherProfile(preferenceList[0]);
+      await setDisplayedImage(preferenceList[0].images[0]);
+      await setIndexPreferenceList(0);
+      await setDisplayedImageNb(0);
+      console.log(event.target.value);
+      setFilter(event.target.value);
+    } else setErrorMsg("Recherchez une liste d'abord");
   };
 
   const handleChangeAge = (event, newValue) => {
