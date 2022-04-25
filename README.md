@@ -28,7 +28,7 @@ docker-compose -f docker-compose.yml up -d
 - ~~Faire la geolocalisation~~
 - ~~List visit plus info~~
 - ~~Notif non lu~~
-- change keypass after
+- ~~change keypass after~~
 
 ### Frontend
 - Gerer la gestion d'erreur (botif pour pas validation mail ou pas profil complet)

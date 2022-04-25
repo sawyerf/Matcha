@@ -179,6 +179,9 @@ const me = async (req, res) => {
 
     if (notifs !== false) {
         req.me.notifs = notifs;
+        for (const notif of req.me.notifs) {
+            notif.content = JSON.parse(notif.content)
+        }
     }
     delete req.me.password;
     delete req.me.validmail;

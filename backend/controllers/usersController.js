@@ -204,6 +204,45 @@ const myVisits = async (req, res) => {
     }
 }
 
+const bigHistory = async (req, res) => {
+    const visits = await historyModels.select(req.me.uid);
+    const uidsMyLiker = await likeModels.selectMyLiker(req.me.uid);
+    const uidMatchs = await matchModels.selectByUser(req.me.uid);
+    let uids = []
+    
+    if (visits == false || uidsMyLiker == false || uidMatchs == false) {
+        return res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+    }
+    const uidsVisits = Object.keys(visits);
+    uids = uids.concat(uidsVisits, uidsMyLiker, uidMatchs);
+    uids = uids.filter(function(item, pos) {
+        return uids.indexOf(item) == pos || uids.indexOf(item.toString()) == pos;
+    })
+    const users = await userModels.selectByUids(uids);
+    if (users === null) {
+        res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
+    } else {
+        for (const user of users) {
+            if (uidsVisits.indexOf(user.uid.toString()) != -1) {
+                user.isVisit = true;
+                user.last_visit = visits[visit];
+            }
+            if (uidsMyLiker.indexOf(user.uid) != -1) {
+                user.isLiker = true;
+            }
+            if (uidMatchs.indexOf(user.uid) != -1) {
+                user.isMatchs = true;
+            }
+            user.isOnline = isOnline(user.uid);
+            delete user.uid;
+            delete user.latitude;
+            delete user.longitude;
+            delete user.sexuality;
+        }
+    }
+    res.status(200).json(users);
+}
+
 export default {
     matchs,
     likes,
@@ -211,4 +250,5 @@ export default {
     search,
     visit,
     myVisits,
+    bigHistory,
 }
