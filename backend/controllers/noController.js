@@ -20,7 +20,7 @@ const validMail = async (req, res) => {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
             checkProfilUid(user.uid);
-            res.redirect(301, `${process.env.HOST}`);
+            res.redirect(301, `${process.env.HOST}/login`);
             // res.status(200).json();
         }
     }
@@ -75,7 +75,7 @@ const askReset = async (req, res) => {
             if (isOK == true) {
                 sendmail(req.body.email,
                     'Reset Password',
-                    `Hello ${user.username}\nClick on the link to change your password\n${process.env.HOST}/no/resetpass/${uid}\n`
+                    `Hello ${user.username}\nClick on the link to change your password\n${process.env.HOST}/resetpassword/${uid}\n`
                 );
             }
             res.status(200).json();
