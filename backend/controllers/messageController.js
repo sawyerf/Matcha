@@ -2,6 +2,7 @@ import userModels from '../models/user';
 import messageModels from '../models/message';
 import matchModels from '../models/match';
 import { sendNotif } from '../socket';
+import notifModels from '../models/notif'
 import { checkBody } from '../utils/checkBody';
 
 const sendMessage = async (req, res) => {
@@ -31,6 +32,7 @@ const sendMessage = async (req, res) => {
                 } else {
                     global.io.sockets.to(req.me.uid).emit('message', { from: req.me.username, to: user.username, msg: req.body.message });
                     sendNotif([user.uid], 'message', { from: req.me.username, to: user.username, msg: req.body.message });
+                    await notifModels.delMessage(req.me.uid, req.body.username);
                     res.status(200).json()
                 }
             }
@@ -75,6 +77,7 @@ const roomMessage = async (req, res) => {
                         delete msg.id_match;
                     }
                     res.status(200).json(messages);
+                    await notifModels.delMessage(req.me.uid, req.query.username);
                 }
             }
         }
