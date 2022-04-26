@@ -21,7 +21,6 @@ const validMail = async (req, res) => {
         } else {
             checkProfilUid(user.uid);
             res.redirect(301, `${process.env.HOST}/login`);
-            // res.status(200).json();
         }
     }
 }
@@ -45,6 +44,8 @@ const resetPass = async (req, res) => {
             if (hashPass == null) {
                 res.status(500).json({ 'error': 1, 'message': 'Error hash' });
             } else {
+                // Attention j'ai pas test2
+                await userModels.setVal(user.uid, 'keypass', null);
                 const isOK = await userModels.setVal(user.uid, 'password', hashPass);
                 if (isOK === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });

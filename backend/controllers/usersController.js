@@ -233,6 +233,7 @@ const bigHistory = async (req, res) => {
             if (uidMatchs.indexOf(user.uid) != -1) {
                 user.isMatchs = true;
             }
+            user.distance = distance([req.me.latitude, req.me.longitude], [user.latitude, user.longitude]);
             user.isOnline = isOnline(user.uid);
             delete user.uid;
             delete user.latitude;

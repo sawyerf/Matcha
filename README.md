@@ -29,16 +29,17 @@ docker-compose -f docker-compose.yml up -d
 - ~~List visit plus info~~
 - ~~Notif non lu~~
 - ~~change keypass after~~
+- Tester le reset password (psk keypass = null)
 
 ### Frontend
-- Gerer la gestion d'erreur (botif pour pas validation mail ou pas profil complet)
-- Faire quelque chose si il n'y a plus de offer
-- Faire les recherche sort
-- Liste visit et like
+- ~~Gerer la gestion d'erreur (botif pour pas validation mail ou pas profil complet)~~
+- ~~Faire quelque chose si il n'y a plus de offer~~
+- ~~Faire les recherche sort~~
+- ~~Liste visit et like~~
 - Reset password
-- Geolocalisation
-- Raffraichissement dans otherprofile
-- Mettre mdp oublie dans le login
+- ~~Geolocalisation~~
+- ~~Raffraichissement dans otherprofile~~
+- ~~Mettre mdp oublie dans le login~~
 
 ## API
 | Method | url                         | Description             |
