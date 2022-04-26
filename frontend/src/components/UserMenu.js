@@ -114,7 +114,7 @@ const UserMenu = ({
   useEffect(() => {
     socket.on("notif", (notif) => displayNotif(notif.msg));
     socket.on("message", (msg) => writeMessage(msg));
-    if (navigator.geolocation) {
+    if (navigator.geolocation && localStorage.getItem("token")) {
       navigator.geolocation.getCurrentPosition(sendLocation, sendZero);
     }
   }, [socket]);
