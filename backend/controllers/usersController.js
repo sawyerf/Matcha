@@ -210,7 +210,7 @@ const bigHistory = async (req, res) => {
     const uidMatchs = await matchModels.selectByUser(req.me.uid);
     let uids = []
     
-    if (visits == false || uidsMyLiker == false || uidMatchs == false) {
+    if (visits === false || uidsMyLiker === false || uidMatchs === false) {
         return res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
     }
     const uidsVisits = Object.keys(visits);
