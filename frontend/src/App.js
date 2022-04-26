@@ -87,7 +87,7 @@ function App() {
               element={<ForgottenPassword setErrorMsg={setErrorMsg} />}
             />
             <Route
-              path="/resetpassword"
+              path="/resetpassword/:keypass"
               element={<ResetPassword setErrorMsg={setErrorMsg} />}
             />
             <Route

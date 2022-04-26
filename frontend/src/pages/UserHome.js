@@ -10,6 +10,8 @@ import axios from "axios";
 import Slider from "@mui/material/Slider";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import DoNotDisturbIcon from "@mui/icons-material/DoNotDisturb";
+
 const useStyles = makeStyles({
   root: {
     width: "calc(100vw - 250px)",
@@ -248,7 +250,20 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
           }}
         >
           <div style={{ display: "flex" }}>
-            <div className={classes.matchImage}>
+            <div
+              style={{
+                marginRight: "auto",
+                marginLeft: "auto",
+                marginTop: "225px",
+                display: otherProfil ? "none" : "",
+              }}
+            >
+              <DoNotDisturbIcon fontSize={"large"} />
+            </div>
+            <div
+              className={classes.matchImage}
+              style={{ display: otherProfil ? "" : "none" }}
+            >
               <div
                 style={{ position: "absolute", top: "200px" }}
                 onClick={() => previousImg()}
@@ -572,7 +587,7 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              placeHolder="Filtrer par"
+              placeholder="Filtrer par"
               value={filter}
               label="Filtrer par"
               className={classes.select}

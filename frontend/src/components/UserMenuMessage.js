@@ -25,11 +25,13 @@ const UserMenuMessage = ({
   const [messageList, setMessageList] = useState();
 
   useEffect(async () => {
-    const res = await axios.get("/users/matchs");
-    if ("error" in res.data) {
-      console.log("Error: ", res.data.message);
+    if (localStorage.getItem("token")) {
+      const res = await axios.get("/users/matchs");
+      if ("error" in res.data) {
+        console.log("Error: ", res.data.message);
+      }
+      setMessageList(res.data);
     }
-    setMessageList(res.data);
   }, [localStorage.getItem("token")]);
 
   const readMessage = (data) => {

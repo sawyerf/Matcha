@@ -26,47 +26,41 @@ const UserMenuMatch = ({
   const [matchList, setMatchList] = useState(null);
 
   useEffect(async () => {
-    const res = await axios.get("/users/matchs");
-    if ("error" in res.data) {
-      console.log("Error: ", res.data.message);
+    if (localStorage.getItem("token")) {
+      let fullList = [];
+
+      const resList = await axios.get("/users/bighistory");
+      if ("error" in resList.data) {
+        console.log("Error: ", resList.data.message);
+      }
+      resList.data.forEach((data) => {
+        if (data.isMatchs === true) data.mlv = "m";
+        else if (data.isLiker === true) data.mlv = "l";
+        else if (data.isVisit === true) data.mlv = "v";
+      });
+      fullList = resList.data;
+
+      setMatchList(fullList);
     }
-    setMatchList(res.data);
   }, [refreshMatchList]);
 
   useEffect(async () => {
-    let fullList = [];
-    const res = await axios.get("/users/matchs");
-    if ("error" in res.data) {
-      console.log("Error: ", res.data.message);
-    }
-    res.data.forEach((data) => {
-      data.mlv = "m";
-    });
-    fullList = res.data;
-    const resLike = await axios.get("/users/likes");
-    if ("error" in resLike.data) {
-      console.log("Error: ", resLike.data.message);
-    }
-    resLike.data.forEach((like) => {
-      let equal = false;
-      res.data.forEach((match) => {
-        if (like.username === match.username) equal = true;
-      });
-      if (equal === false) {
-        like.mlv = "l";
-        fullList.push(like);
+    if (localStorage.getItem("token")) {
+      let fullList = [];
+
+      const resList = await axios.get("/users/bighistory");
+      if ("error" in resList.data) {
+        console.log("Error: ", resList.data.message);
       }
-    });
-    const resVisit = await axios.get("/users/visit");
-    if ("error" in resVisit.data) {
-      console.log("Error: ", resVisit.data.message);
+      resList.data.forEach((data) => {
+        if (data.isMatchs === true) data.mlv = "m";
+        else if (data.isLiker === true) data.mlv = "l";
+        else if (data.isVisit === true) data.mlv = "v";
+      });
+      fullList = resList.data;
+
+      setMatchList(fullList);
     }
-    resVisit.data.forEach((visit) => {
-      visit.mlv = "v";
-      fullList.push(visit);
-    });
-    console.log(fullList);
-    setMatchList(fullList);
   }, [localStorage.getItem("token")]);
 
   const seeProfile = (data) => {
@@ -77,7 +71,7 @@ const UserMenuMatch = ({
   return (
     <div
       style={{
-        margin: "20px",
+        margin: "17px",
         maxHeight: "calc(100% - 30px)",
         marginTop: "10px",
         display: matchDisplay ? "flex" : "none",
@@ -89,7 +83,7 @@ const UserMenuMatch = ({
       {matchList &&
         matchList.map((data, key) => {
           return (
-            <div key={key}>
+            <div key={key} style={{ padding: "3px" }}>
               <div
                 className={classes.matchCard}
                 onClick={() => seeProfile(data)}

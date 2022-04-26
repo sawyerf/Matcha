@@ -37,8 +37,9 @@ const ForgottenPassword = ({ setErrorMsg }) => {
       })
       .catch((err) => {
         console.log(err);
-        setErrorMsg("Cette adresse n'existe pas");
+        setErrorMsg("Cette adresse n'existe pas, le mail n'a pas été envoyé");
       });
+    navigate("/login");
   };
 
   return (
@@ -75,7 +76,7 @@ const ForgottenPassword = ({ setErrorMsg }) => {
         </div>
         <div style={{ marginTop: "80px" }}>
           <Button variant="contained" onClick={handleSubmit}>
-            Envoyer Mail
+            Reset Password
           </Button>
         </div>
       </div>

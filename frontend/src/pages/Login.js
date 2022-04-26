@@ -19,6 +19,20 @@ const useStyles = makeStyles({
     border: "solid 1px white",
     fontSize: "30px",
   },
+  buttonMdp: {
+    width: "150px",
+    height: "fit-content",
+    color: "white",
+    borderRadius: "8px",
+    cursor: "pointer",
+    padding: "5px",
+    textAlign: "center",
+    marginTop: "55px",
+    fontSize: "16px",
+    position: "absolute",
+    left: "15px",
+    bottom: "15px",
+  },
 });
 
 const Login = ({ setErrorMsg }) => {
@@ -103,6 +117,12 @@ const Login = ({ setErrorMsg }) => {
             Login
           </Button>
         </div>
+      </div>
+      <div
+        className={classes.buttonMdp}
+        onClick={() => navigate("/forgottenpassword")}
+      >
+        Mot de passe oublié
       </div>
     </div>
   );

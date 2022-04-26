@@ -81,20 +81,26 @@ const Message = ({
   };
 
   useEffect(async () => {
-    const res = await axios.get("/message/room", {
-      params: { username: otherProfileData.username },
-    });
-    if ("error" in res.data) {
-      console.log("Error: ", res.data.message);
+    if (otherProfileData) {
+      const res = await axios.get("/message/room", {
+        params: { username: otherProfileData.username },
+      });
+      if ("error" in res.data) {
+        console.log("Error: ", res.data.message);
+      }
+      setDiscussion(res.data);
     }
-    setDiscussion(res.data);
   }, [otherProfileData]);
 
   useEffect(async () => {
     console.log(discussion);
     if (
-      (messageToPush && messageToPush.from === otherProfileData.username) ||
-      messageToPush.from === myProfileData.username
+      (messageToPush &&
+        messageToPush.from &&
+        messageToPush.from === otherProfileData.username) ||
+      (messageToPush &&
+        messageToPush.from &&
+        messageToPush.from === myProfileData.username)
     ) {
       console.log(messageToPush);
       console.log(otherProfileData.username);

@@ -141,6 +141,7 @@ const UserMenu = ({
             top: "50px",
             zIndex: "10",
             display: notifDisplay ? "" : "none",
+            overflow: "scroll",
           }}
         >
           <div
@@ -169,17 +170,28 @@ const UserMenu = ({
             </p>
           </div>
           {/* BOUCLE POUR AFFICHER LES NOTIFS */}
-          <p
-            style={{
-              fontSize: "12px",
-              fontWeight: "600",
-              margin: "5px",
-              paddingBottom: "5px",
-              borderBottom: "solid 1px lightgray",
-            }}
-          >
-            Notification
-          </p>
+          {myProfileData &&
+            myProfileData.notifs &&
+            myProfileData.notifs.map((data) => {
+              console.log(myProfileData);
+
+              return (
+                <p
+                  style={{
+                    fontSize: "12px",
+                    fontWeight: "600",
+                    margin: "5px",
+                    paddingBottom: "5px",
+                    borderBottom: "solid 1px lightgray",
+                  }}
+                >
+                  {data.type === "message"
+                    ? `${data.content.from} texted : "${data.content.msg}"`
+                    : data.content.msg}
+                </p>
+              );
+            })}
+
           {/* FIN BOUCLE POUR AFFICHER LES NOTIFS */}
         </div>
         <Match
