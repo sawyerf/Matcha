@@ -36,7 +36,7 @@ const login = async (req, res) => {
                         res.status(200).json({ 'token': jwtToken });
                     }
                 } else {
-                    res.status(200).json({ 'error': 1, 'message': 'Bad password' });
+                    res.status(401).json({ 'error': 1, 'message': 'Bad password' });
                 }
             } catch (error) {
                 console.log(error);
