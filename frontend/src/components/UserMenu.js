@@ -12,8 +12,8 @@ const useStyles = makeStyles({
   root: {
     position: "relative",
     backgroundColor: "white",
-    width: "250px",
-    height: "100vh",
+    width: "100vw",
+    height: "250px",
   },
   topMenu: {
     height: "50px",
@@ -198,11 +198,12 @@ const UserMenu = ({
           {/* BOUCLE POUR AFFICHER LES NOTIFS */}
           {myProfileData &&
             myProfileData.notifs &&
-            myProfileData.notifs.map((data) => {
+            myProfileData.notifs.map((data, key) => {
               console.log(myProfileData);
 
               return (
                 <p
+                  key={key}
                   style={{
                     fontSize: "12px",
                     fontWeight: "600",

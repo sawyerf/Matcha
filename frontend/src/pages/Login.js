@@ -85,7 +85,7 @@ const Login = ({ setErrorMsg }) => {
         style={{
           marginLeft: "auto",
           marginRight: "auto",
-          marginTop: "35vh",
+          paddingTop: "35vh",
           borderRadius: "8px",
           textAlign: "center",
         }}

@@ -14,7 +14,7 @@ import DoNotDisturbIcon from "@mui/icons-material/DoNotDisturb";
 
 const useStyles = makeStyles({
   root: {
-    width: "calc(100vw - 250px)",
+    width: "100vw",
     backgroundColor: "#F1F1F1",
   },
   matchImage: {
@@ -394,12 +394,14 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
         </div>
         <div
           style={{
-            display: "flex",
             justifyContent: "center",
             marginTop: "10px",
+            width: "fit-content",
+            marginRight: "auto",
+            marginLeft: "auto",
           }}
         >
-          <div style={{ float: "left", marginLeft: "20px" }}>
+          <div style={{ marginLeft: "20px" }}>
             <div style={{ display: "flex", width: "230px" }}>
               <p style={{ marginRight: "63px", marginTop: "4px" }}>Age</p>
               <Slider
@@ -583,7 +585,7 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
               </div>
             </div>
           </div>
-          <div>
+          <div style={{ display: "flex" }}>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
@@ -599,8 +601,8 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
             </Select>
             <div
               style={{
-                marginTop: "15px",
-                marginLeft: "10px",
+                marginTop: "4px",
+                marginLeft: "auto",
                 background: "linear-gradient(135deg, #EB58A2, orange)",
                 borderRadius: "8px",
                 border: "solid 1px white",

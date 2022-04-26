@@ -57,7 +57,7 @@ function App() {
   }, [notifMessage]);
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{}}>
       <BrowserRouter>
         <SocketContext.Provider value={socket}>
           <UserMenu
