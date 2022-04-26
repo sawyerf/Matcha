@@ -116,6 +116,22 @@ const update = async (id_liker, id_liked, like) => {
     }
     return true
 }
+
+const del = async (id_liker, id_liked) => {
+    let res;
+    try {
+        res = await client.query(
+            `DELETE FROM likes
+                WHERE (id_liker=$1 AND id_liked=$2) OR (id_liker=$2 AND id_liked=$1)`,
+            [id_liker, id_liked]
+        );
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+    return true;
+}
+
 export default {
     select,
     insert,
@@ -124,4 +140,5 @@ export default {
     selectMyLiker,
     selectMyLike,
     selectMyJudge,
+    del,
 }

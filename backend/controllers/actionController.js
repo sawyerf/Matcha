@@ -5,6 +5,7 @@ import matchModels from '../models/match.js';
 import userModels from '../models/user.js';
 import blockModels from '../models/block';
 import reportModels from '../models/report';
+import historyModels from '../models/history';
 
 const match = async (req, res, liked) => {
     let ret;
@@ -64,7 +65,7 @@ const caculatePopularity = async (user) => {
             }
         }
         const popularity = (likes.like * 100) / (likes.like + likes.dislike);
-        userModels.setVal(user.uid, 'popularity', popularity);
+        userModels.setVal(user.uid, 'popularity', popularity.toFixed(0));
     }
 }
 
@@ -133,6 +134,9 @@ const report = async (req, res) => {
                 const isAdd = await reportModels.insert(req.me.uid, reported.uid);
                 let blockAdd = true;
                 if (blockExist === false) blockAdd = await blockModels.insert(req.me.uid, reported.uid);
+                await likeModels.del(req.me.uid, reported.uid);
+                await matchModels.del(req.me.uid, reported.uid);
+                await historyModels.del(req.me.uid, reported.uid);
                 if (isAdd === false || blockAdd === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else {
@@ -164,6 +168,9 @@ const block = async (req, res) => {
                 res.status(200).json({ 'message': 'Already Blocked' });
             } else {
                 const isAdd = await blockModels.insert(req.me.uid, blocked.uid);
+                await likeModels.del(req.me.uid, blocked.uid);
+                await matchModels.del(req.me.uid, blocked.uid);
+                await historyModels.del(req.me.uid, blocked.uid);
                 if (isAdd === false) {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
                 } else {

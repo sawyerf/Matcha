@@ -107,6 +107,7 @@ const search = async (req, res) => {
     } else {
         const users = await userModels.search(req.me.uid, req.me.gender, req.me.sexuality, req.body);
         const blocks = await blockModels.selectBlocked(req.me.uid);
+        const likes = await likeModels.selectMyLike(req.me.uid);
         if (users === false || blocks === false) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else {
@@ -122,7 +123,7 @@ const search = async (req, res) => {
                         break;
                     }
                 }
-                if (isIn == true && blocks.indexOf(ouser.uid) == -1) {
+                if (isIn == true && blocks.indexOf(ouser.uid) == -1 && likes.indexOf(ouser.uid) == -1) {
                     ouser.isOnline = isOnline(ouser.uid);
                     const isLike = await likeModels.select(ouser.uid, req.me.uid);
                     if (isLike === false) {

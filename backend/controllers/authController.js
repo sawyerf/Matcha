@@ -15,7 +15,7 @@ const login = async (req, res) => {
         'password': 'string'
     }, req.body);
     if (isCheck === false) {
-        res.status(400).json({ 'error': 1, 'message': 'Bad Content' })
+        res.status(401).json({ 'error': 1, 'message': 'Bad Content' })
     } else {
         const user = await userModels.selectBy('username', req.body.username);
         if (user === false) {
@@ -30,9 +30,9 @@ const login = async (req, res) => {
                     const DateNow = Date.now();
                     const isOK = await userModels.setVal(user.uid, 'last_visit', new Date(DateNow).toISOString());
                     if (isOK === false) {
-                        res.status(400).json({ 'error': 1, 'message': 'SQL Error' })
+                        res.status(400).json({ 'error': 1, 'message': 'SQL Error' });
                     } else {
-                        res.cookie('token', jwtToken)
+                        res.cookie('token', jwtToken);
                         res.status(200).json({ 'token': jwtToken });
                     }
                 } else {
@@ -97,7 +97,7 @@ const register = async (req, res) => {
                 if (ret === true) {
                     sendmail(req.body.email,
                         'Welcome ' + req.body.username,
-                        `Hi ${req.body.username},\n${process.env.HOST}/profil/validmail/${keymail}\nBye !`);
+                        `Hi ${req.body.username},\n${process.env.HOST}/api/no/validmail/${keymail}\nBye !`);
                     res.status(201).json();
                 } else {
                     res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
