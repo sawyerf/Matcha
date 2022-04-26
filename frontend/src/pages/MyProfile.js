@@ -10,16 +10,14 @@ import axios from "axios";
 
 const useStyles = makeStyles({
   root: {
-    width: "calc(100vw - 250px)",
+    width: "100vw",
     backgroundColor: "#F1F1F1",
     textAlign: "center",
   },
   card: {
     backgroundColor: "white",
-    width: "550px",
     height: "70vh",
     borderRadius: "16px",
-    marginTop: "70px",
     overflowY: "scroll",
     paddingTop: "20px",
     paddingBottom: "20px",
@@ -27,14 +25,14 @@ const useStyles = makeStyles({
     marginLeft: "auto",
   },
   textField: {
-    width: "200px",
+    width: "140px",
     heigt: "40px",
   },
   input: {
     height: "40px",
   },
   textFieldBio: {
-    width: "440px",
+    width: "280px",
   },
   inputBio: {},
   profilPlus: {
@@ -327,9 +325,15 @@ const MyProfile = ({
         <div className={classes.card}>
           <h3 style={{ marginBottom: "20px" }}>Modification du Profil</h3>
           <button onClick={() => saveProfil()}>Sauvegarder</button>
-          <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-            <div>
-              <p style={{ marginBottom: "5px" }}>Nom</p>
+          <div style={{ display: "flex" }}>
+            <div style={{ marginLeft: "auto", marginRight: "10px" }}>
+              <p
+                style={{
+                  marginBottom: "5px",
+                }}
+              >
+                Nom
+              </p>
               <TextField
                 className={classes.textField}
                 placeholder="Nom"
@@ -341,7 +345,7 @@ const MyProfile = ({
                 }}
               />
             </div>
-            <div>
+            <div style={{ marginRight: "auto" }}>
               <p style={{ marginBottom: "5px" }}>Prénom</p>
               <TextField
                 className={classes.textField}
@@ -360,10 +364,9 @@ const MyProfile = ({
               display: "flex",
               justifyContent: "space-evenly",
               marginTop: "20px",
-              width: "440px",
             }}
           >
-            <div style={{ marginLeft: "110px" }}>
+            <div>
               <p style={{ marginBottom: "5px" }}>Addresse e-mail</p>
               <TextField
                 className={classes.textFieldBio}

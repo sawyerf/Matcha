@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
-    width: "calc(100vw - 250px)",
+    width: "100vw",
     backgroundColor: "#F1F1F1",
     textAlign: "center",
   },

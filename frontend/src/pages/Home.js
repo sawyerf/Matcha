@@ -47,7 +47,7 @@ const Home = () => {
         style={{
           marginLeft: "auto",
           marginRight: "auto",
-          marginTop: "35vh",
+          paddingTop: "35vh",
           borderRadius: "8px",
           display: "flex",
           justifyContent: "space-evenly",
