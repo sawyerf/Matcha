@@ -6,6 +6,7 @@ import Notif from "@mui/icons-material/Notifications";
 import UserMenuMatch from "./UserMenuMatch";
 import UserMenuMessage from "./UserMenuMessage";
 import { useState, useEffect, useContext } from "react";
+import axios from "axios";
 
 const useStyles = makeStyles({
   root: {
@@ -88,9 +89,34 @@ const UserMenu = ({
     setNotifMessage(notif);
   };
 
+  const sendLocation = (position) => {
+    const res = axios
+      .post("/profil/setlocation", {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const sendZero = () => {
+    const res = axios
+      .post("/profil/setlocation", {
+        latitude: 0,
+        longitude: 0,
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     socket.on("notif", (notif) => displayNotif(notif.msg));
     socket.on("message", (msg) => writeMessage(msg));
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(sendLocation, sendZero);
+    }
   }, [socket]);
 
   const writeMessage = (msg) => {

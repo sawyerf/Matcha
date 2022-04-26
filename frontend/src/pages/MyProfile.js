@@ -72,6 +72,8 @@ const MyProfile = ({
   const [emailCpy, setEmailCpy] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState("");
   const [bio, setBio] = useState("");
   const [tags, setTags] = useState("");
   const [image1, setImage1] = useState(null);
@@ -96,6 +98,14 @@ const MyProfile = ({
 
   const handleChangeFirstName = (event) => {
     setFirstName(event.target.value);
+  };
+
+  const handleChangeLongitude = (event) => {
+    setLongitude(event.target.value);
+  };
+
+  const handleChangeLatitude = (event) => {
+    setLatitude(event.target.value);
   };
 
   const handleChangeLastName = (event) => {
@@ -143,6 +153,17 @@ const MyProfile = ({
   };
 
   const saveProfil = async () => {
+    if (latitude && longitude) {
+      const resPos = axios
+        .post("/profil/setlocation", {
+          latitude: parseFloat(latitude),
+          longitude: parseFloat(longitude),
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
     const res = await axios
       .all([
         axios.post("/profil/setinfo", {
@@ -423,6 +444,40 @@ const MyProfile = ({
                 <MenuItem value={"Homosexuel"}>Homosexuel</MenuItem>
                 <MenuItem value={"Bisexuel"}>Bisexuel</MenuItem>
               </Select>
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              marginTop: "20px",
+            }}
+          >
+            <div>
+              <p style={{ marginBottom: "5px" }}>Latitude</p>
+              <TextField
+                className={classes.textField}
+                placeholder="Latitude"
+                type="number"
+                onChange={handleChangeLatitude}
+                value={latitude} // mettre le nom actuelle
+                inputprops={{
+                  className: classes.input,
+                }}
+              />
+            </div>
+            <div>
+              <p style={{ marginBottom: "5px" }}>Longitude</p>
+              <TextField
+                className={classes.textField}
+                placeholder="Longitude"
+                type="number"
+                onChange={handleChangeLongitude}
+                value={longitude} // mettre le nom actuelle
+                inputprops={{
+                  className: classes.input,
+                }}
+              />
             </div>
           </div>
           <div

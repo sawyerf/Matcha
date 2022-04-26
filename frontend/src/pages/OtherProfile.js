@@ -63,17 +63,24 @@ const OtherProfile = ({
   };
 
   useEffect(async () => {
-    setDisplayedImage(otherProfileData.images[displayedImageNb]);
+    setDisplayedImage(
+      otherProfileData &&
+        otherProfileData.images &&
+        otherProfileData.images[displayedImageNb]
+    );
   }, [displayedImageNb]);
 
   useEffect(async () => {
-    otherProfileData &&
-      otherProfileData.images &&
-      otherProfileData.images[0] &&
-      setDisplayedImage(otherProfileData.images[0]);
-    axios.post("/users/visit", {
-      username: otherProfileData.username,
-    });
+    if (otherProfileData) {
+      otherProfileData &&
+        otherProfileData.images &&
+        otherProfileData.images[0] &&
+        setDisplayedImage(otherProfileData.images[0]);
+      axios.post("/users/visit", {
+        username: otherProfileData.username,
+      });
+    }
+    if (!otherProfileData) navigate("/userhome");
   }, [otherProfileData]);
 
   return (
@@ -165,7 +172,7 @@ const OtherProfile = ({
               <p style={{ marginBottom: "10px" }}>
                 {otherProfileData && otherProfileData.tags.replaceAll(",", " ")}
               </p>
-              {otherProfileData.mlv !== "m" ? (
+              {otherProfileData && otherProfileData.mlv !== "m" ? (
                 ""
               ) : (
                 <div
