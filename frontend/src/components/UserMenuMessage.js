@@ -30,7 +30,13 @@ const UserMenuMessage = ({
       if ("error" in res.data) {
         console.log("Error: ", res.data.message);
       }
-      setMessageList(res.data);
+      const sortedMatchs = res.data.sort((a, b) => {
+        if (a.message == b.message) return 0;
+        if (a.message == null) {return new Date(b.message.date).getTime()}
+        if (b.message == null) {return null - new Date(a.message.date).getTime()}
+        return new Date(b.message.date).getTime() - new Date(a.message.date).getTime();
+      })
+      setMessageList(sortedMatchs);
     }
   }, [localStorage.getItem("token")]);
 
