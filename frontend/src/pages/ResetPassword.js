@@ -24,19 +24,24 @@ const useStyles = makeStyles({
 const ResetPassword = ({ setErrorMsg }) => {
   const classes = useStyles();
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleChangePassword = (event) => {
     setPassword(event.target.value);
   };
 
   const handleSubmit = (event) => {
+    var result = /[^/]*$/.exec(window.location.href)[0];
     const res = axios
-      .post("/no/askreset", {
-        password: password,
+      .post(`/no/resetpass/${result}`, {
+        new_password: password,
+      })
+      .then(() => {
+        navigate("/login");
       })
       .catch((err) => {
         console.log(err);
-        setErrorMsg("Cette adresse n'existe pas");
+        setErrorMsg("Error ! 1Majuscule, 1Car. spécial, 8Car. mini, 1 chiffre");
       });
   };
 

@@ -57,7 +57,7 @@ const Login = ({ setErrorMsg }) => {
       })
       .catch((err) => {
         console.log(err);
-        setErrorMsg("Identifiant incorrect");
+        setErrorMsg("Identifiant/Mot de passe incorrect");
       });
     if (res.data.token) {
       localStorage.setItem("token", res.data.token);
