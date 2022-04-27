@@ -50,7 +50,6 @@ docker-compose -f docker-compose.yml up -d
 - ~~La longitude et latitude ne sont pas affiche dans la modif profil~~
 - ~~Quand le mail n'est pas valide et qu'on essaye d'acceder au offer il y a pas de message d'erreur~~:
 - ~~On peut pas like les Personne qui nous on like dans le menu a gauche~~
-- ~~Quand on recoit un message ca ne defile pas~~
 - ~~Pas d'appel a readnotif pour dire que les notif on etait lu (/api/profil/readnotif)~~
 - ~~Quand on fait une recherche avec aucun resultat et qu'on le trie ca creer une erreur (ca depends~~
 - ~~Margin plus grande recherche~~
@@ -61,9 +60,11 @@ docker-compose -f docker-compose.yml up -d
 - ~~Bug affichage message en haut~~
 - ~~Rouge plus rouge pour les notifs~~
 - ~~Notif state pour visit/like/match~~
-- Quand on fait une recherche le trie n'est pas pris en compte
 - Warning et error
-- "A Geolocation request can only be fulfilled in a secure context."
+- Quand on recoit un message ca ne defile pas
+- Quand on fait une recherche le trie n'est pas pris en compte
+- Quand le socket perd la connection il essaye pas de se reconnecter
+- "A Geolocation request can only be fulfilled in a secure context." (C'est a cause du HTTP)
 
 
 ## API
