@@ -114,7 +114,7 @@ const UserMenu = ({
   };
 
   useEffect(() => {
-    socket.on("notif", (notif) => displayNotif(notif.msg));
+    socket.on("notif", (notif) => writeNotif(notif));
     socket.on("message", (msg) => writeMessage(msg));
     if (navigator.geolocation && localStorage.getItem("token")) {
       navigator.geolocation.getCurrentPosition(sendLocation, sendZero);
@@ -134,6 +134,26 @@ const UserMenu = ({
         myProfileData.notifs.push(msgToPush);
     }
   }, [messageToPush]);
+
+  useEffect(() => {
+    if (notifToPush) {
+      let msgToPush = {
+        content: {
+          from: notifToPush.from ? `${notifToPush.from}` : "",
+          msg: `${notifToPush.msg}`,
+        },
+      };
+      myProfileData &&
+        myProfileData.notifs &&
+        myProfileData.notifs.push(msgToPush);
+    }
+    console.log(notifToPush);
+  }, [notifToPush]);
+
+  const writeNotif = (notif) => {
+    setNotifToPush(notif);
+    displayNotif(notif.msg);
+  };
 
   const writeMessage = (msg) => {
     setNotifMessage("Message de " + msg.from);
