@@ -51,14 +51,14 @@ docker-compose -f docker-compose.yml up -d
 - ~~Quand le mail n'est pas valide et qu'on essaye d'acceder au offer il y a pas de message d'erreur~~:
 - ~~On peut pas like les Personne qui nous on like dans le menu a gauche~~
 - Warning et error
-- Quand on recoit un message ca ne defile pas
+- ~~Quand on recoit un message ca ne defile pas~~
 - ~~Pas d'appel a readnotif pour dire que les notif on etait lu (/api/profil/readnotif)~~
-- Quand on fait une recherche avec aucun resultat et qu'on le trie ca creer une erreur (ca depends)
+- ~~Quand on fait une recherche avec aucun resultat et qu'on le trie ca creer une erreur (ca depends~~
 - ~~ Margin plus grande recherche~~
 - ~~Prendre tout la largeur pour lescomposant de recherche~~
 - ~~Prendre plus de place pour le modif profil~~
 - ~~Prendre plus de place pour le otherprofile~~
-- Photo message sont etire et pas croper
+- ~~Photo message sont etire et pas croper~~
 - ~~Bug affichage message en haut~~
 - "A Geolocation request can only be fulfilled in a secure context."
 - ~~Rouge plus rouge pour les notifs~~

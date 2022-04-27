@@ -78,6 +78,8 @@ const UserMenuMessage = ({
                     height: "50px",
                     width: "50px",
                     borderRadius: "16px",
+                    objectFit: "cover",
+                    objectPosition: "50% 50%",
                   }}
                   src={
                     data && data.images && data.images[0]

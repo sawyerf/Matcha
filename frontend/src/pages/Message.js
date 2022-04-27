@@ -105,6 +105,7 @@ const Message = ({
       let discussionCpy = discussion;
       discussionCpy && discussionCpy.push(messageToPush);
       setDiscussion([...discussionCpy]);
+      scrollToBottom();
       setMessageToPush(null);
     }
   }, [messageToPush]);
