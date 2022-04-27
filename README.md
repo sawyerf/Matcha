@@ -41,19 +41,23 @@ docker-compose -f docker-compose.yml up -d
 - ~~Raffraichissement dans otherprofile~~
 - ~~Mettre mdp oublie dans le login~~
 - ~~Mobile (?)~~
-- Warning et error
 - ~~Menu a gauche taille firefox~~
 - ~~Mauvais message d'erreur: Quand changement mail pour un deja utiliseri~~
 - ~~Quand on recoit une nouvelle notif elle est pas ajoute dans les notif recentes~~
 - ~~Rien ne dit qu'il y a de nouvelle notif (pastille)~~
-- Pas d'appel a readnotif pour dire que les notif on etait lu (/api/profil/readnotif)
-- Quand on fait une recherche avec aucun resultat et qu'on le trie ca creer une erreur (ca depends)
 - ~~Quand le token a expire bug graphic (example de token expire: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsInVzZXJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQGxvbC5jb20iLCJpYXQiOjE2fQ.Jm1TI3bfoxcHqjMkhJ41rKSl4F5RRViurQfIY7gCscQ`)~~
 - ~~Quand token expire et qu'on va sur le login ca nous redirige vers le profil~~
-- Quand on recoit un message ca ne defile pas
--  ~~ La longitude et latitude ne sont pas affiche dans la modif profil~~
--  ~~Quand le mail n'est pas valide et qu'on essaye d'acceder au offer il y a pas de message d'erreur~~:
+- ~~La longitude et latitude ne sont pas affiche dans la modif profil~~
+- ~~Quand le mail n'est pas valide et qu'on essaye d'acceder au offer il y a pas de message d'erreur~~:
 - ~~On peut pas like les Personne qui nous on like dans le menu a gauche~~
+- Warning et error
+- Quand on recoit un message ca ne defile pas
+- Pas d'appel a readnotif pour dire que les notif on etait lu (/api/profil/readnotif)
+- Quand on fait une recherche avec aucun resultat et qu'on le trie ca creer une erreur (ca depends)
+- Margin plus grande recherche
+- Prendre tout la largeur pour lescomposant de recherche
+- Prendre plus de place pour le modif profil
+
 
 ## API
 | Method | url                         | Description             |
