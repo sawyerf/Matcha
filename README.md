@@ -61,11 +61,12 @@ docker-compose -f docker-compose.yml up -d
 - ~~Bug affichage message en haut~~
 - ~~Rouge plus rouge pour les notifs~~
 - ~~Notif state pour visit/like/match~~
+- ~~Quand on fait une recherche le trie n'est pas pris en compte~~
+- ~~"A Geolocation request can only be fulfilled in a secure context." (C'est a cause du HTTP)~~
+- ~~Quand on recoit un message ca ne defile pas~~
 - Warning et error
-- Quand on recoit un message ca ne defile pas
-- Quand on fait une recherche le trie n'est pas pris en compte
 - Quand le socket perd la connection il essaye pas de se reconnecter
-- "A Geolocation request can only be fulfilled in a secure context." (C'est a cause du HTTP)
+- Meme image sur profil que sur offer
 
 
 ## API
