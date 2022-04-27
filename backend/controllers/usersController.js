@@ -36,7 +36,6 @@ const matchs = async (req, res) => {
                 delete match.uid;
                 delete match.latitude;
                 delete match.longitude;
-                delete match.sexuality
             }
             res.status(200).json(matchs);
         }
@@ -198,7 +197,6 @@ const bigHistory = async (req, res) => {
             delete user.uid;
             delete user.latitude;
             delete user.longitude;
-            delete user.sexuality;
         }
     }
     res.status(200).json(users);

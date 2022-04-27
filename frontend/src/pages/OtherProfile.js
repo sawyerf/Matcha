@@ -94,9 +94,9 @@ const OtherProfile = ({
     <div style={{ display: "flex" }}>
       <div className={classes.root}>
         <div className={classes.card}>
-          <div style={{ }}>
-            <div>
-              <div style={{ position: "relative", marginBottom: "10px" }}>
+          <div>
+            <div >
+              <div style={{ position: "relative", marginBottom: "10px", boxShadow: "1px 1px 1px 1px #9E9E9E", borderRadius: "8px"}}>
                 <div
                   style={{ position: "absolute", top: "170px", left: "20px" }}
                   onClick={() => previousImg()}
@@ -107,28 +107,37 @@ const OtherProfile = ({
                   style={{
                     position: "absolute",
                     width: "100%",
-                    bottom: "20px",
+                    bottom: "0px",
                     zIndex: "10",
                   }}
                 >
                   <div style={{ display: "flex", marginLeft: "10px" }}>
                     <p
-                      style={{
-                        color: "white",
-                        fontWeight: "600",
-                        fontSize: "18px",
-                      }}
+                    style={{
+                      color: "white",
+                      fontWeight: "600",
+                      fontSize: "20px",
+                    }}
                     >
                       {otherProfileData && otherProfileData.username}
                     </p>
                     <p
-                      style={{
-                        marginLeft: "5px",
-                        color: "white",
-                        fontSize: "18px",
-                      }}
+                    style={{
+                      color: "white",
+                      fontSize: "16px",
+                      marginTop: "4px",
+                      marginLeft: "10px",
+                    }}
                     >
                       {otherProfileData && otherProfileData.age}
+                      {otherProfileData && otherProfileData.gender}
+                      {' - '}
+                      {otherProfileData && otherProfileData.sexuality === otherProfileData.gender
+                      ? "Gay"
+                      : otherProfileData && (otherProfileData.sexuality === "HF" || otherProfileData.sexuality === "FH")
+                      ? "Bi"
+                      : "Hétéro"}
+
                     </p>
                   </div>
                   <div style={{ display: "flex", marginLeft: "10px" }}>
@@ -137,10 +146,10 @@ const OtherProfile = ({
                       color: "white",
                       fontSize: "14px",
                       float: "left",
-                      marginTop: "5px",
+                      marginTop: "8px",
                     }}
                   >
-                    A {otherProfileData && otherProfileData.distance}km de vous
+                     à {otherProfileData && otherProfileData.distance}km de vous
                   </p>
                   </div>
                   <div style={{ display: "flex", justifyContent: "space-evenly" }}>
@@ -196,38 +205,24 @@ const OtherProfile = ({
               </div>
               <div
                 style={{
-                  marginLeft: "30px",
-                  marginRight: "20px",
+                  marginLeft: "10px",
+                  marginRight: "auto",
                   textAlign: "left",
                 }}
               >
-                <p style={{ marginBottom: "10px" }}>
-                  Genre :{" "}
-                  {otherProfileData && otherProfileData.gender === "H"
-                    ? "Homme"
-                    : "Femme"}
-                </p>
-                <p style={{ marginBottom: "10px" }}>
-                  Recherche :{" "}
-                  {otherProfileData && otherProfileData.sexuality === "H"
-                    ? "Homme"
-                    : otherProfileData && otherProfileData.sexuality === "F"
-                    ? "Femme"
-                    : "Homme et Femme"}
-                </p>
 
-                <p style={{ marginBottom: "10px" }}>
-                  Popularité : {otherProfileData && otherProfileData.popularity}
-                </p>
                 <p style={{ marginBottom: "10px" }}>
                   Bio : {otherProfileData && otherProfileData.bio}
                 </p>
+                <p style={{ marginBottom: "10px" }}>
+                  Popularité : {otherProfileData && otherProfileData.popularity}
+                </p>
                 {otherProfileData && otherProfileData.isOnline === false ? (
                   <p style={{ marginBottom: "10px" }}>
-                    Dernière visite :
+                    Dernière visite : 
                     {otherProfileData && otherProfileData.last_visit
                       ? otherProfileData.last_visit.substring(0, 10)
-                      : "Jamais"}
+                      : " Jamais"}
                   </p>
                 ) : (
                   <p style={{ marginBottom: "10px" }}>
