@@ -64,20 +64,22 @@ const Register = ({ setErrorMsg }) => {
   };
 
   const registerApi = async (username, passwd) => {
-    setErrorMsg("Fail to register");
-    const res = await axios.post("/auth/register", {
-      username: username,
-      password: passwd,
-      email: email,
-      age: age,
-      firstname: firstName,
-      lastname: lastName,
-    });
-    if (res.status === 201) {
-      setErrorMsg("");
-      navigate("/login");
-    } else {
-    }
+    const res = await axios
+      .post("/auth/register", {
+        username: username,
+        password: passwd,
+        email: email,
+        age: age,
+        firstname: firstName,
+        lastname: lastName,
+      })
+      .then(() => {
+        setErrorMsg("");
+        navigate("/login");
+      })
+      .catch((err) => {
+        setErrorMsg("Fail to register");
+      });
   };
 
   const handleSubmit = (event) => {
@@ -97,7 +99,7 @@ const Register = ({ setErrorMsg }) => {
         style={{
           marginLeft: "auto",
           marginRight: "auto",
-          marginTop: "22vh",
+          paddingTop: "22vh",
           borderRadius: "8px",
           display: "flex",
           justifyContent: "space-evenly",
@@ -116,7 +118,7 @@ const Register = ({ setErrorMsg }) => {
             <TextField
               required
               className="input-form"
-              id="outlined-input"
+              id="outlined-input-username"
               type="text"
               label="Username"
               value={username}
@@ -125,7 +127,7 @@ const Register = ({ setErrorMsg }) => {
             <TextField
               required
               className="input-form"
-              id="outlined-input"
+              id="outlined-input-email"
               type="text"
               label="Email"
               value={email}
@@ -173,7 +175,7 @@ const Register = ({ setErrorMsg }) => {
             <TextField
               required
               className="input-form"
-              id="outlined-input"
+              id="outlined-input-firstname"
               type="text"
               label="firstname"
               value={firstName}
@@ -182,7 +184,7 @@ const Register = ({ setErrorMsg }) => {
             <TextField
               required
               className="input-form"
-              id="outlined-input"
+              id="outlined-input-lastname"
               type="text"
               label="lastname"
               value={lastName}

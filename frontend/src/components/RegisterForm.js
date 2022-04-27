@@ -67,7 +67,7 @@ const RegisterForm = () => {
       <TextField
         required
         className="input-form"
-        id="outlined-input"
+        id="outlined-input-username"
         type="text"
         label="Username"
         value={username}
@@ -76,7 +76,7 @@ const RegisterForm = () => {
       <TextField
         required
         className="input-form"
-        id="outlined-input"
+        id="outlined-input-email"
         type="text"
         label="Email"
         value={email}
@@ -101,7 +101,7 @@ const RegisterForm = () => {
       <TextField
         required
         className="input-form"
-        id="outlined-input"
+        id="outlined-input-firstname"
         type="text"
         label="firstname"
         value={firstName}
@@ -110,7 +110,7 @@ const RegisterForm = () => {
       <TextField
         required
         className="input-form"
-        id="outlined-input"
+        id="outlined-input-lastname"
         type="text"
         label="lastname"
         value={lastName}

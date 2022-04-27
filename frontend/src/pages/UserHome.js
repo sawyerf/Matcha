@@ -160,7 +160,7 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
     setDisplayedImage(res.data.offers.images[0]);
   }, []);
 
-  useEffect(async () => {
+  useEffect(() => {
     setDisplayedImage(
       otherProfil && otherProfil.images && otherProfil.images[displayedImageNb]
     );

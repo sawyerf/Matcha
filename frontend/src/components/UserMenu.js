@@ -147,7 +147,6 @@ const UserMenu = ({
         myProfileData.notifs &&
         myProfileData.notifs.push(msgToPush);
     }
-    console.log(notifToPush);
   }, [notifToPush]);
 
   const writeNotif = (notif) => {
@@ -161,10 +160,9 @@ const UserMenu = ({
   };
 
   const readNotif = () => {
-    console.log(myProfileData);
     if (!notifDisplay) {
       const res = axios.get("/profil/readnotif", {}).catch((err) => {
-        console.log(err);
+        setErrorMsg(err.response.data.message);
       });
     } else if (notifDisplay) myProfileData.notifs = [];
     setNotifDisplay(!notifDisplay);

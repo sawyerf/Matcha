@@ -35,10 +35,12 @@ const ForgottenPassword = ({ setErrorMsg }) => {
       .post("/no/askreset", {
         email: email,
       })
+      .then(() => {
+        navigate("/login");
+      })
       .catch((err) => {
         setErrorMsg("Cette adresse n'existe pas, le mail n'a pas été envoyé");
       });
-    navigate("/login");
   };
 
   return (
