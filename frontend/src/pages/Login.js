@@ -56,10 +56,9 @@ const Login = ({ setErrorMsg }) => {
         password: passwd,
       })
       .catch((err) => {
-        console.log(err);
         setErrorMsg("Identifiant/Mot de passe incorrect");
       });
-    if (res.data.token) {
+    if (res && res.data && res.data.token) {
       localStorage.setItem("token", res.data.token);
       axios.defaults.headers.common["Authorization"] =
         localStorage.getItem("token");
@@ -68,7 +67,6 @@ const Login = ({ setErrorMsg }) => {
   };
 
   const handleSubmit = (event) => {
-    console.log(username, passwd);
     loginApi(username, passwd);
     event.preventDefault();
   };

@@ -81,7 +81,6 @@ const Register = ({ setErrorMsg }) => {
   };
 
   const handleSubmit = (event) => {
-    console.log(username, passwd);
     registerApi(username, passwd);
     event.preventDefault();
   };

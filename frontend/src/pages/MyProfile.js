@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
-import UserMenu from "../components/UserMenu";
 import { TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
@@ -16,7 +14,6 @@ const useStyles = makeStyles({
   },
   card: {
     backgroundColor: "white",
-    height: "70vh",
     borderRadius: "16px",
     overflowY: "scroll",
     paddingTop: "20px",
@@ -61,6 +58,7 @@ const MyProfile = ({
   setOtherProfileData,
   setErrorMsg,
 }) => {
+  const navigate = useNavigate();
   const classes = useStyles();
   const [gender, setGender] = useState("");
   const [orientation, setOrientation] = useState("");
@@ -70,21 +68,21 @@ const MyProfile = ({
   const [emailCpy, setEmailCpy] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [latitude, setLatitude] = useState(null);
+  const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [bio, setBio] = useState("");
   const [tags, setTags] = useState("");
-  const [image1, setImage1] = useState(null);
-  const [image2, setImage2] = useState(null);
-  const [image3, setImage3] = useState(null);
-  const [image4, setImage4] = useState(null);
-  const [image5, setImage5] = useState(null);
+  const [image1, setImage1] = useState();
+  const [image2, setImage2] = useState();
+  const [image3, setImage3] = useState();
+  const [image4, setImage4] = useState();
+  const [image5, setImage5] = useState();
 
-  const [imageToUpload1, setImageToUpload1] = useState(null);
-  const [imageToUpload2, setImageToUpload2] = useState(null);
-  const [imageToUpload3, setImageToUpload3] = useState(null);
-  const [imageToUpload4, setImageToUpload4] = useState(null);
-  const [imageToUpload5, setImageToUpload5] = useState(null);
+  const [imageToUpload1, setImageToUpload1] = useState();
+  const [imageToUpload2, setImageToUpload2] = useState();
+  const [imageToUpload3, setImageToUpload3] = useState();
+  const [imageToUpload4, setImageToUpload4] = useState();
+  const [imageToUpload5, setImageToUpload5] = useState();
 
   const handleChangeGender = (event) => {
     setGender(event.target.value);
@@ -133,7 +131,6 @@ const MyProfile = ({
       },
     });
     setImage(null);
-    console.log("deleteImg");
   };
 
   const handleChangeTags = (event) => {
@@ -158,7 +155,7 @@ const MyProfile = ({
           longitude: parseFloat(longitude),
         })
         .catch((err) => {
-          console.log(err);
+          setErrorMsg(err.response.data.message);
         });
     }
 
@@ -199,18 +196,15 @@ const MyProfile = ({
         })
       )
       .catch((err) => {
-        setErrorMsg("Remplissez tout les champs texte");
+        setErrorMsg(err.response.data.message);
       });
   };
 
   useEffect(async () => {
-    const res = await axios.get("/profil/me");
-    if ("error" in res.data) {
-      console.log("Error: ", res.data.message);
-      setErrorMsg(res.data.message);
-    }
-    console.log(res.data);
-
+    const res = await axios.get("/profil/me").catch((err) => {
+      setErrorMsg(err.response.data.message);
+      navigate("/");
+    });
     res.data.email && setEmail(res.data.email);
     res.data.email && setEmailCpy(res.data.email);
     res.data.tags && setTags(res.data.tags);
@@ -240,7 +234,6 @@ const MyProfile = ({
       setImage3(null);
       setImage4(null);
       setImage5(null);
-      console.log(myProfileData);
       myProfileData.images[0] && setImage1(myProfileData.images[0]);
       myProfileData.images[1] && setImage2(myProfileData.images[1]);
       myProfileData.images[2] && setImage3(myProfileData.images[2]);
@@ -253,11 +246,9 @@ const MyProfile = ({
     if (imageToUpload1) {
       const form = new FormData();
       form.append("file", imageToUpload1);
-      const res = await axios.post("/profil/image", form);
-      if ("error" in res.data) {
-        console.log("Error: ", res.data.message);
-        setErrorMsg(res.data.message);
-      }
+      const res = await axios.post("/profil/image", form).catch((err) => {
+        setErrorMsg(err.response.data.message);
+      });
       const res2 = await axios.get("/profil/me").catch(function (error) {});
       res2.data && setMyProfileData(res2.data);
     }
@@ -267,11 +258,9 @@ const MyProfile = ({
     if (imageToUpload2) {
       const form = new FormData();
       form.append("file", imageToUpload2);
-      const res = await axios.post("/profil/image", form);
-      if ("error" in res.data) {
-        console.log("Error: ", res.data.message);
-        setErrorMsg(res.data.message);
-      }
+      const res = await axios.post("/profil/image", form).catch((err) => {
+        setErrorMsg(err.response.data.message);
+      });
       const res2 = await axios.get("/profil/me").catch(function (error) {});
       res2.data && setMyProfileData(res2.data);
     }
@@ -281,11 +270,9 @@ const MyProfile = ({
     if (imageToUpload3) {
       const form = new FormData();
       form.append("file", imageToUpload3);
-      const res = await axios.post("/profil/image", form);
-      if ("error" in res.data) {
-        console.log("Error: ", res.data.message);
-        setErrorMsg(res.data.message);
-      }
+      const res = await axios.post("/profil/image", form).catch((err) => {
+        setErrorMsg(err.response.data.message);
+      });
       const res2 = await axios.get("/profil/me").catch(function (error) {});
       res2.data && setMyProfileData(res2.data);
     }
@@ -295,11 +282,9 @@ const MyProfile = ({
     if (imageToUpload4) {
       const form = new FormData();
       form.append("file", imageToUpload4);
-      const res = await axios.post("/profil/image", form);
-      if ("error" in res.data) {
-        console.log("Error: ", res.data.message);
-        setErrorMsg(res.data.message);
-      }
+      const res = await axios.post("/profil/image", form).catch((err) => {
+        setErrorMsg(err.response.data.message);
+      });
       const res2 = await axios.get("/profil/me").catch(function (error) {});
       res2.data && setMyProfileData(res2.data);
     }
@@ -309,11 +294,9 @@ const MyProfile = ({
     if (imageToUpload5) {
       const form = new FormData();
       form.append("file", imageToUpload5);
-      const res = await axios.post("/profil/image", form);
-      if ("error" in res.data) {
-        console.log("Error: ", res.data.message);
-        setErrorMsg(res.data.message);
-      }
+      const res = await axios.post("/profil/image", form).catch((err) => {
+        setErrorMsg(err.response.data.message);
+      });
       const res2 = await axios.get("/profil/me").catch(function (error) {});
       res2.data && setMyProfileData(res2.data);
     }
@@ -383,11 +366,10 @@ const MyProfile = ({
           <div
             style={{
               display: "flex",
-              justifyContent: "space-evenly",
               marginTop: "20px",
             }}
           >
-            <div>
+            <div style={{ marginLeft: "auto", marginRight: "10px" }}>
               <p style={{ marginBottom: "5px" }}>Nouveau mot de passe</p>
               <TextField
                 className={classes.textField}
@@ -399,7 +381,7 @@ const MyProfile = ({
                 }}
               />
             </div>
-            <div>
+            <div style={{ marginRight: "auto" }}>
               <p style={{ marginBottom: "5px" }}>Ancien mot de passe</p>
               <TextField
                 className={classes.textField}
@@ -420,7 +402,7 @@ const MyProfile = ({
               marginTop: "20px",
             }}
           >
-            <div>
+            <div style={{ marginLeft: "auto", marginRight: "10px" }}>
               <p style={{ marginBottom: "5px" }}>Genre</p>
               <Select
                 value={gender}
@@ -435,7 +417,7 @@ const MyProfile = ({
                 <MenuItem value={"Femme"}>Femme</MenuItem>
               </Select>
             </div>
-            <div>
+            <div style={{ marginRight: "auto" }}>
               <p style={{ marginBottom: "5px" }}>Orientation</p>
               <Select
                 value={orientation}
@@ -456,7 +438,7 @@ const MyProfile = ({
               marginTop: "20px",
             }}
           >
-            <div>
+            <div style={{ marginLeft: "auto", marginRight: "10px" }}>
               <p style={{ marginBottom: "5px" }}>Latitude</p>
               <TextField
                 className={classes.textField}
@@ -469,7 +451,7 @@ const MyProfile = ({
                 }}
               />
             </div>
-            <div>
+            <div style={{ marginRight: "auto" }}>
               <p style={{ marginBottom: "5px" }}>Longitude</p>
               <TextField
                 className={classes.textField}
@@ -512,142 +494,139 @@ const MyProfile = ({
           >
             Tags
           </h4>
-          <div
-            style={{
-              justifyContent: "space-between",
-              display: "flex",
-              width: "440px",
-              marginBottom: "5px",
-              marginRight: "auto",
-              marginLeft: "auto",
-            }}
-          >
-            <div>
-              <input
-                checked={tags.includes("#music") ? true : false}
-                type="checkbox"
-                id="#music"
-                name="music"
-                value="music"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="music" style={{ marginLeft: "5px" }}>
-                Musique
-              </label>
+          <div style={{ display: "flex" }}>
+            <div
+              style={{
+                justifyContent: "space-between",
+                marginBottom: "5px",
+                marginRight: "40px",
+                marginLeft: "auto",
+              }}
+            >
+              <div>
+                <input
+                  checked={tags.includes("#music") ? true : false}
+                  type="checkbox"
+                  id="#music"
+                  name="music"
+                  value="music"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="music" style={{ marginLeft: "5px" }}>
+                  Musique
+                </label>
+              </div>
+              <div>
+                <input
+                  checked={tags.includes("#voyage") ? true : false}
+                  type="checkbox"
+                  id="#voyage"
+                  name="voyage"
+                  value="voyage"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="voyage" style={{ marginLeft: "5px" }}>
+                  Voyage
+                </label>
+              </div>
+              <div>
+                <input
+                  checked={tags.includes("#cuisine") ? true : false}
+                  type="checkbox"
+                  id="#cuisine"
+                  name="cuisine"
+                  value="cuisine"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="cuisine" style={{ marginLeft: "5px" }}>
+                  Cuisine
+                </label>
+              </div>
+              <div>
+                <input
+                  checked={tags.includes("#programmation") ? true : false}
+                  type="checkbox"
+                  id="#programmation"
+                  name="programmation"
+                  value="programmation"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="programmation" style={{ marginLeft: "5px" }}>
+                  Programmation
+                </label>
+              </div>
             </div>
-            <div>
-              <input
-                checked={tags.includes("#voyage") ? true : false}
-                type="checkbox"
-                id="#voyage"
-                name="voyage"
-                value="voyage"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="voyage" style={{ marginLeft: "5px" }}>
-                Voyage
-              </label>
-            </div>
-            <div>
-              <input
-                checked={tags.includes("#cuisine") ? true : false}
-                type="checkbox"
-                id="#cuisine"
-                name="cuisine"
-                value="cuisine"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="cuisine" style={{ marginLeft: "5px" }}>
-                Cuisine
-              </label>
-            </div>
-            <div>
-              <input
-                checked={tags.includes("#programmation") ? true : false}
-                type="checkbox"
-                id="#programmation"
-                name="programmation"
-                value="programmation"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="programmation" style={{ marginLeft: "5px" }}>
-                Programmation
-              </label>
-            </div>
-          </div>
-          <div
-            style={{
-              justifyContent: "space-between",
-              display: "flex",
-              width: "440px",
-              marginRight: "auto",
-              marginLeft: "auto",
-            }}
-          >
-            <div>
-              <input
-                checked={tags.includes("#gaming") ? true : false}
-                type="checkbox"
-                id="#gaming"
-                name="gaming"
-                value="gaming"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="gaming" style={{ marginLeft: "5px" }}>
-                Gaming
-              </label>
-            </div>
-            <div>
-              <input
-                checked={tags.includes("#poney") ? true : false}
-                type="checkbox"
-                id="#poney"
-                name="poney"
-                value="poney"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="poney" style={{ marginLeft: "5px" }}>
-                Poney
-              </label>
-            </div>
-            <div>
-              <input
-                checked={tags.includes("#sport") ? true : false}
-                type="checkbox"
-                id="#sport"
-                name="sport"
-                value="sport"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="sport" style={{ marginLeft: "5px" }}>
-                Sport
-              </label>
-            </div>
-            <div>
-              <input
-                checked={tags.includes("#fitness") ? true : false}
-                type="checkbox"
-                id="#fitness"
-                name="fitness"
-                value="fitness"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="fitness" style={{ marginLeft: "5px" }}>
-                Fitness
-              </label>
-            </div>
-            <div>
-              <input
-                checked={tags.includes("#danse") ? true : false}
-                type="checkbox"
-                id="#danse"
-                name="danse"
-                value="danse"
-                onChange={handleChangeTags}
-              />
-              <label htmlFor="danse" style={{ marginLeft: "5px" }}>
-                Danse
-              </label>
+            <div
+              style={{
+                justifyContent: "space-between",
+                marginRight: "auto",
+              }}
+            >
+              <div>
+                <input
+                  checked={tags.includes("#gaming") ? true : false}
+                  type="checkbox"
+                  id="#gaming"
+                  name="gaming"
+                  value="gaming"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="gaming" style={{ marginLeft: "5px" }}>
+                  Gaming
+                </label>
+              </div>
+              <div>
+                <input
+                  checked={tags.includes("#poney") ? true : false}
+                  type="checkbox"
+                  id="#poney"
+                  name="poney"
+                  value="poney"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="poney" style={{ marginLeft: "5px" }}>
+                  Poney
+                </label>
+              </div>
+              <div>
+                <input
+                  checked={tags.includes("#sport") ? true : false}
+                  type="checkbox"
+                  id="#sport"
+                  name="sport"
+                  value="sport"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="sport" style={{ marginLeft: "5px" }}>
+                  Sport
+                </label>
+              </div>
+              <div>
+                <input
+                  checked={tags.includes("#fitness") ? true : false}
+                  type="checkbox"
+                  id="#fitness"
+                  name="fitness"
+                  value="fitness"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="fitness" style={{ marginLeft: "5px" }}>
+                  Fitness
+                </label>
+              </div>
+              <div>
+                <input
+                  checked={tags.includes("#danse") ? true : false}
+                  type="checkbox"
+                  id="#danse"
+                  name="danse"
+                  value="danse"
+                  onChange={handleChangeTags}
+                />
+                <label htmlFor="danse" style={{ marginLeft: "5px" }}>
+                  Danse
+                </label>
+              </div>
             </div>
           </div>
           {/* ---------------------------------------- END TAGS ------------------------------------- */}
@@ -656,7 +635,7 @@ const MyProfile = ({
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                width: "440px",
+                width: "360px",
                 marginRight: "auto",
                 marginLeft: "auto",
               }}
@@ -695,7 +674,6 @@ const MyProfile = ({
                       name="image1"
                       style={{ display: "none" }}
                       onChange={(event) => {
-                        console.log(event.target.files[0]);
                         setImageToUpload1(event.target.files[0]);
                       }}
                     />
@@ -750,7 +728,6 @@ const MyProfile = ({
                       name="image2"
                       style={{ display: "none" }}
                       onChange={(event) => {
-                        console.log(event.target.files[0]);
                         setImageToUpload2(event.target.files[0]);
                       }}
                     />
@@ -804,7 +781,6 @@ const MyProfile = ({
                       name="image2"
                       style={{ display: "none" }}
                       onChange={(event) => {
-                        console.log(event.target.files[0]);
                         setImageToUpload3(event.target.files[0]);
                       }}
                     />
@@ -829,7 +805,7 @@ const MyProfile = ({
               style={{
                 display: "flex",
                 justifyContent: "space-evenly",
-                width: "440px",
+                width: "360px",
                 marginRight: "auto",
                 marginLeft: "auto",
               }}
@@ -868,7 +844,6 @@ const MyProfile = ({
                       name="image"
                       style={{ display: "none" }}
                       onChange={(event) => {
-                        console.log(event.target.files[0]);
                         setImageToUpload4(event.target.files[0]);
                       }}
                     />
@@ -922,7 +897,6 @@ const MyProfile = ({
                       name="image5"
                       style={{ display: "none" }}
                       onChange={(event) => {
-                        console.log(event.target.files[0]);
                         setImageToUpload5(event.target.files[0]);
                       }}
                     />

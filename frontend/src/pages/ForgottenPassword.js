@@ -36,7 +36,6 @@ const ForgottenPassword = ({ setErrorMsg }) => {
         email: email,
       })
       .catch((err) => {
-        console.log(err);
         setErrorMsg("Cette adresse n'existe pas, le mail n'a pas été envoyé");
       });
     navigate("/login");

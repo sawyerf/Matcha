@@ -24,7 +24,6 @@ const LoginForm = ({ setErrorMsg }) => {
         password: passwd,
       })
       .catch((err) => {
-        console.log(err);
         setErrorMsg("La recherche a échoué");
       });
     if (res.data.token) {
@@ -36,7 +35,6 @@ const LoginForm = ({ setErrorMsg }) => {
   };
 
   const handleSubmit = (event) => {
-    console.log(username, passwd);
     loginApi(username, passwd);
     event.preventDefault();
   };

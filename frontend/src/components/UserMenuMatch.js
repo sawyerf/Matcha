@@ -20,6 +20,7 @@ const UserMenuMatch = ({
   otherProfileData,
   setOtherProfileData,
   refreshMatchList,
+  setErrorMsg,
 }) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -29,10 +30,9 @@ const UserMenuMatch = ({
     if (localStorage.getItem("token")) {
       let fullList = [];
 
-      const resList = await axios.get("/users/bighistory");
-      if ("error" in resList.data) {
-        console.log("Error: ", resList.data.message);
-      }
+      const resList = await axios.get("/users/bighistory").catch((err) => {
+        setErrorMsg(err.response.data.message);
+      });
       resList.data.forEach((data) => {
         if (data.isMatchs === true) data.mlv = "m";
         else if (data.isLiker === true) data.mlv = "l";
@@ -48,10 +48,10 @@ const UserMenuMatch = ({
     if (localStorage.getItem("token")) {
       let fullList = [];
 
-      const resList = await axios.get("/users/bighistory");
-      if ("error" in resList.data) {
-        console.log("Error: ", resList.data.message);
-      }
+      const resList = await axios.get("/users/bighistory").catch((err) => {
+        setErrorMsg(err.response.data.message);
+      });
+
       resList.data.forEach((data) => {
         if (data.isMatchs === true) data.mlv = "m";
         else if (data.isLiker === true) data.mlv = "l";

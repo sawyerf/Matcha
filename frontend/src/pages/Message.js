@@ -10,14 +10,13 @@ const useStyles = makeStyles({
   },
   card: {
     backgroundColor: "white",
-    width: "510px",
     height: "70vh",
     borderRadius: "16px",
     marginTop: "70px",
     padding: "20px",
     position: "relative",
-    marginRight: "auto",
-    marginLeft: "auto",
+    marginRight: "20px",
+    marginLeft: "20px",
   },
   matchCard: {
     width: "250px",
@@ -56,6 +55,7 @@ const Message = ({
   setNotifMessage,
   messageToPush,
   setMessageToPush,
+  setErrorMsg,
 }) => {
   const classes = useStyles();
   const messagesEndRef = useRef(null);
@@ -68,32 +68,32 @@ const Message = ({
 
   const sendMessage = async () => {
     if (messageToSend !== "" && messageToSend !== null) {
-      const res = await axios.post("/message/send", {
-        username: otherProfileData.username,
-        message: messageToSend,
-      });
-      if ("error" in res.data) {
-        console.log("Error: ", res.data.message);
-        //setErrorMsg(res.data.message);
-      }
+      const res = await axios
+        .post("/message/send", {
+          username: otherProfileData.username,
+          message: messageToSend,
+        })
+        .catch((err) => {
+          setErrorMsg(err.response.data.message);
+        });
     }
     await setMessageToSend("");
   };
 
   useEffect(async () => {
     if (otherProfileData) {
-      const res = await axios.get("/message/room", {
-        params: { username: otherProfileData.username },
-      });
-      if ("error" in res.data) {
-        console.log("Error: ", res.data.message);
-      }
+      const res = await axios
+        .get("/message/room", {
+          params: { username: otherProfileData.username },
+        })
+        .catch((err) => {
+          setErrorMsg(err.response.data.message);
+        });
       setDiscussion(res.data);
     }
   }, [otherProfileData]);
 
   useEffect(async () => {
-    console.log(discussion);
     if (
       (messageToPush &&
         messageToPush.from &&
@@ -102,9 +102,6 @@ const Message = ({
         messageToPush.from &&
         messageToPush.from === myProfileData.username)
     ) {
-      console.log(messageToPush);
-      console.log(otherProfileData.username);
-      console.log(myProfileData.username);
       let discussionCpy = discussion;
       discussionCpy.push(messageToPush);
       setDiscussion([...discussionCpy]);

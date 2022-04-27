@@ -55,6 +55,9 @@ const UserMenu = ({
   refreshMatchList,
   setErrorMsg,
   setMessageToPush,
+  messageToPush,
+  setNotifToPush,
+  notifToPush,
 }) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -85,7 +88,6 @@ const UserMenu = ({
   }, [localStorage.getItem("token")]);
 
   const displayNotif = (notif) => {
-    console.log(notif);
     setNotifMessage(notif);
   };
 
@@ -96,7 +98,7 @@ const UserMenu = ({
         longitude: position.coords.longitude,
       })
       .catch((err) => {
-        console.log(err);
+        setErrorMsg(err.response.data.message);
       });
   };
 
@@ -107,7 +109,7 @@ const UserMenu = ({
         longitude: 0,
       })
       .catch((err) => {
-        console.log(err);
+        setErrorMsg(err.response.data.message);
       });
   };
 
@@ -119,9 +121,30 @@ const UserMenu = ({
     }
   }, [socket]);
 
+  useEffect(() => {
+    if (messageToPush && myProfileData.username !== messageToPush.from) {
+      let msgToPush = {
+        content: {
+          from: messageToPush.from,
+          msg: `${messageToPush.from} texted : "${messageToPush.msg}"`,
+        },
+      };
+      myProfileData &&
+        myProfileData.notifs &&
+        myProfileData.notifs.push(msgToPush);
+    }
+  }, [messageToPush]);
+
   const writeMessage = (msg) => {
     setNotifMessage("Message de " + msg.from);
     setMessageToPush(msg);
+  };
+
+  const readNotif = () => {
+    /* const res = axios.post("/profil/readnotif", {}).catch((err) => {
+      console.log(err);
+    });*/
+    setNotifDisplay(!notifDisplay);
   };
 
   return (
@@ -146,15 +169,15 @@ const UserMenu = ({
         <Notif
           style={{
             position: "absolute",
-            color: "#EEEEEE",
             borderRadius: "16px",
             background: "rgba(50, 50, 50, 0.2)",
             padding: "3px",
             right: "90px",
             top: "9px",
             cursor: "pointer",
+            color: myProfileData && myProfileData.notifs ? "pink" : "#EEEEEE",
           }}
-          onClick={() => setNotifDisplay(!notifDisplay)}
+          onClick={() => readNotif()}
         />
         <div
           style={{
@@ -199,8 +222,6 @@ const UserMenu = ({
           {myProfileData &&
             myProfileData.notifs &&
             myProfileData.notifs.map((data, key) => {
-              console.log(myProfileData);
-
               return (
                 <p
                   key={key}
@@ -310,11 +331,13 @@ const UserMenu = ({
           otherProfileData={otherProfileData}
           setOtherProfileData={setOtherProfileData}
           refreshMatchList={refreshMatchList}
+          setErrorMsg={setErrorMsg}
         />
         <UserMenuMessage
           matchDisplay={matchDisplay}
           otherProfileData={otherProfileData}
           setOtherProfileData={setOtherProfileData}
+          setErrorMsg={setErrorMsg}
         />
       </div>
     </div>

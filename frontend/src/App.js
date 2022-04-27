@@ -23,19 +23,16 @@ function App() {
   const [refreshMatchList, setRefreshMatchList] = useState(false);
   const [notifMessage, setNotifMessage] = useState("");
   const [messageToPush, setMessageToPush] = useState(null);
+  const [notifToPush, setNotifToPush] = useState(null);
 
   useEffect(async () => {
-    console.log(localStorage.getItem("token"));
-
     if (localStorage.getItem("token")) {
       setDisplayMenu(true);
-      console.log(localStorage.getItem("token"));
       const res = await axios.get("/profil/me").catch(function (error) {
-        console.log(error);
+        setErrorMsg(error.response.data.message);
         setDisplayMenu(false);
       });
       res.data && setMyProfileData(res.data);
-      console.log("connect");
       socket.emit("token", localStorage.getItem("token"));
     }
   }, [localStorage.getItem("token")]);
@@ -71,6 +68,9 @@ function App() {
             refreshMatchList={refreshMatchList}
             setErrorMsg={setErrorMsg}
             setMessageToPush={setMessageToPush}
+            setNotifToPush={setNotifToPush}
+            notifToPush={notifToPush}
+            messageToPush={messageToPush}
           />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -133,6 +133,7 @@ function App() {
                   socket={socket}
                   messageToPush={messageToPush}
                   setMessageToPush={setMessageToPush}
+                  setErrorMsg={setErrorMsg}
                 />
               }
             />

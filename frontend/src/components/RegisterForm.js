@@ -9,7 +9,7 @@ import "../styles/index.scss";
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
   const [passwd, setPasswd] = useState("");
-  const [age, setAge] = useState(null);
+  const [age, setAge] = useState();
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -52,13 +52,11 @@ const RegisterForm = () => {
       setError("bg mon gars");
     }
     if ("error" in res.data) {
-      console.log("Error: ", res.data.message);
       setError("Fail to connect `" + res.data.message + "`");
     }
   };
 
   const handleSubmit = (event) => {
-    console.log(username, passwd);
     registerApi(username, passwd);
     event.preventDefault();
   };

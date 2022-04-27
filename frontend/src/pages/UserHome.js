@@ -57,10 +57,6 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
 
   const youMatch = async (liked) => {
     if (preferenceList && preferenceList.length - 1 > indexPreferenceList) {
-      console.log("LIKE DANS LA PREFERENCE LIST");
-      console.log(preferenceList.length);
-      console.log(indexPreferenceList);
-      console.log(preferenceList);
       await axios.post("/action/like", {
         username: otherProfil.username,
         islike: liked,
@@ -72,7 +68,6 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
       await setIndexPreferenceList(indexPreferenceList + 1);
       await setDisplayedImageNb(0);
     } else {
-      console.log("LIKE DANS LES OFFERS RANDOM");
       axios
         .all([
           await axios.post("/action/like", {
@@ -83,7 +78,6 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
         ])
         .then(
           axios.spread((data1, data2) => {
-            console.log("data1", data1, "data2", data2);
             data2.data && setOtherProfile(data2.data.offers);
             setDisplayedImage(data2.data.offers.images[0]);
             setDisplayedImageNb(0);
@@ -110,7 +104,6 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
       ])
       .then(
         axios.spread((data1, data2) => {
-          console.log("data1", data1, "data2", data2);
           data2.data && setOtherProfile(data2.data.offers);
           setDisplayedImage(data2.data.offers.images[0]);
           setDisplayedImageNb(0);
@@ -129,13 +122,9 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
         tags: tags,
       })
       .catch((err) => {
-        console.log(err);
-        setErrorMsg("La recherche a échoué");
+        setErrorMsg(err.response.data.message);
       });
-    console.log(res.data[0]);
-    console.log(otherProfil);
     if (res.data[0] && preferenceList !== res.data) {
-      console.log("NOUVELLE LISTE DE PREFERENCE");
       await setPreferenceList(res.data);
       await setIndexPreferenceList(0);
       await setOtherProfile(res.data[0]);
@@ -155,7 +144,6 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
       ])
       .then(
         axios.spread((data1, data2) => {
-          console.log("data1", data1, "data2", data2);
           data2.data && setOtherProfile(data2.data.offers);
           setDisplayedImage(data2.data.offers.images[0]);
           setDisplayedImageNb(0);
@@ -166,6 +154,7 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
   useEffect(async () => {
     const res = await axios.get("/users/offer").catch((err) => {
       setErrorMsg(err.response.data.message);
+      if (err.response.data.message === "Bad Token") navigate("/");
     });
     res.data && setOtherProfile(res.data.offers);
     setDisplayedImage(res.data.offers.images[0]);
@@ -183,7 +172,6 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
   };
 
   const handleChangeFilter = async (event) => {
-    console.log(preferenceList);
     if (preferenceList && preferenceList[0]) {
       let prefListCpy = [];
       if (event.target.value === 1) {
@@ -199,13 +187,11 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
           return a.distance - b.distance;
         });
       }
-      console.log(event.target.value);
       await setPreferenceList(prefListCpy);
       await setOtherProfile(preferenceList[0]);
       await setDisplayedImage(preferenceList[0].images[0]);
       await setIndexPreferenceList(0);
       await setDisplayedImageNb(0);
-      console.log(event.target.value);
       setFilter(event.target.value);
     } else setErrorMsg("Recherchez une liste d'abord");
   };
@@ -224,7 +210,6 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
 
   const handleChangeTags = async (event) => {
     let tagsCpy = tags;
-    console.log(tagsCpy);
     if (event.target.checked === true) {
       tagsCpy.push(event.target.id);
     } else {
@@ -233,7 +218,6 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
         tagsCpy.splice(index, 1); // 2nd parameter means remove one item only
       }
     }
-    console.log(tagsCpy);
     setTags([...tagsCpy]);
   };
 

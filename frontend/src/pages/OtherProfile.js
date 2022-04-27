@@ -13,8 +13,7 @@ const useStyles = makeStyles({
   },
   card: {
     backgroundColor: "white",
-    width: "550px",
-    height: "70vh",
+    width: "360px",
     borderRadius: "16px",
     marginTop: "70px",
     paddingTop: "20px",
@@ -41,7 +40,6 @@ const OtherProfile = ({
     otherProfileData && otherProfileData.images && otherProfileData.images[0]
   );
   const [displayedImageNb, setDisplayedImageNb] = useState(0);
-  console.log(otherProfileData);
 
   const previousImg = () => {
     if (displayedImageNb === 0) return;
@@ -57,6 +55,15 @@ const OtherProfile = ({
     await axios.post("/action/like", {
       username: otherProfileData.username,
       islike: false,
+    });
+    await setRefreshMatchList(!refreshMatchList);
+    await navigate("/userhome");
+  };
+
+  const likeMatch = async () => {
+    await axios.post("/action/like", {
+      username: otherProfileData.username,
+      islike: true,
     });
     await setRefreshMatchList(!refreshMatchList);
     await navigate("/userhome");
@@ -90,7 +97,7 @@ const OtherProfile = ({
           <h3 style={{ marginBottom: "20px" }}>
             Profil de {otherProfileData && otherProfileData.username}
           </h3>
-          <div style={{ display: "flex" }}>
+          <div>
             <div style={{ position: "relative" }}>
               <div
                 style={{ position: "absolute", top: "170px", left: "20px" }}
@@ -173,7 +180,29 @@ const OtherProfile = ({
                 {otherProfileData && otherProfileData.tags.replaceAll(",", " ")}
               </p>
               {otherProfileData && otherProfileData.mlv !== "m" ? (
-                ""
+                <div
+                  style={{
+                    width: "50px",
+                    height: "30px",
+                    borderRadius: "8px",
+                    backgroundColor: "green",
+                    boxShadow: "5px 5px 5px darkgreen",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => likeMatch()}
+                >
+                  <p
+                    style={{
+                      color: "white",
+                      fontWeight: "600",
+                      marginLeft: "7px",
+                      paddingTop: "5px",
+                      fontSize: "18px",
+                    }}
+                  >
+                    Like
+                  </p>
+                </div>
               ) : (
                 <div
                   style={{

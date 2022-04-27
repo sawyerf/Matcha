@@ -19,6 +19,7 @@ const UserMenuMessage = ({
   matchDisplay,
   otherProfileData,
   setOtherProfileData,
+  setErrorMsg,
 }) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -26,16 +27,23 @@ const UserMenuMessage = ({
 
   useEffect(async () => {
     if (localStorage.getItem("token")) {
-      const res = await axios.get("/users/matchs");
-      if ("error" in res.data) {
-        console.log("Error: ", res.data.message);
-      }
+      const res = await axios.get("/users/matchs").catch((err) => {
+        setErrorMsg(err.response.data.message);
+      });
+
       const sortedMatchs = res.data.sort((a, b) => {
         if (a.message == b.message) return 0;
-        if (a.message == null) {return new Date(b.message.date).getTime()}
-        if (b.message == null) {return null - new Date(a.message.date).getTime()}
-        return new Date(b.message.date).getTime() - new Date(a.message.date).getTime();
-      })
+        if (a.message == null) {
+          return new Date(b.message.date).getTime();
+        }
+        if (b.message == null) {
+          return null - new Date(a.message.date).getTime();
+        }
+        return (
+          new Date(b.message.date).getTime() -
+          new Date(a.message.date).getTime()
+        );
+      });
       setMessageList(sortedMatchs);
     }
   }, [localStorage.getItem("token")]);
