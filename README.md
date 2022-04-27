@@ -57,7 +57,7 @@ docker-compose -f docker-compose.yml up -d
 - ~~ Margin plus grande recherche~~
 - ~~Prendre tout la largeur pour lescomposant de recherche~~
 - ~~Prendre plus de place pour le modif profil~~
-- Prendre plus de place pour le otherprofile
+- ~~Prendre plus de place pour le otherprofile~~
 - Photo message sont etire et pas croper
 - ~~Bug affichage message en haut~~
 - "A Geolocation request can only be fulfilled in a secure context."

@@ -15,9 +15,9 @@ const useStyles = makeStyles({
     backgroundColor: "white",
     width: "360px",
     borderRadius: "16px",
-    marginTop: "70px",
-    paddingTop: "20px",
-    paddingBottom: "20px",
+    marginTop: "20px",
+    marginBottom: "20px",
+    padding: "20px",
     position: "relative",
     marginRight: "auto",
     marginLeft: "auto",
@@ -25,7 +25,6 @@ const useStyles = makeStyles({
   matchCard: {
     width: "250px",
     height: "400px",
-    marginLeft: "20px",
   },
 });
 
@@ -124,7 +123,7 @@ const OtherProfile = ({
                 style={{
                   position: "absolute",
                   top: "170px",
-                  right: "0",
+                  right: "20px",
                 }}
                 onClick={() => nextImg()}
               >
@@ -188,6 +187,8 @@ const OtherProfile = ({
                     backgroundColor: "green",
                     boxShadow: "5px 5px 5px darkgreen",
                     cursor: "pointer",
+                    marginRight: "auto",
+                    marginLeft: "auto",
                   }}
                   onClick={() => likeMatch()}
                 >
@@ -212,6 +213,8 @@ const OtherProfile = ({
                     backgroundColor: "red",
                     boxShadow: "5px 5px 5px darkred",
                     cursor: "pointer",
+                    marginRight: "auto",
+                    marginLeft: "auto",
                   }}
                   onClick={() => unlikeMatch()}
                 >
