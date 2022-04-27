@@ -62,6 +62,7 @@ docker-compose -f docker-compose.yml up -d
 - ~~Bug affichage message en haut~~
 - "A Geolocation request can only be fulfilled in a secure context."
 - ~~Rouge plus rouge pour les notifs~~
+- Notif state pour visit/like/match
 
 ## API
 | Method | url                         | Description             |
