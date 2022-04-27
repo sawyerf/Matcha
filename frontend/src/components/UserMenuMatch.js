@@ -33,12 +33,13 @@ const UserMenuMatch = ({
       const resList = await axios.get("/users/bighistory").catch((err) => {
         setErrorMsg(err.response.data.message);
       });
-      resList.data.forEach((data) => {
-        if (data.isMatchs === true) data.mlv = "m";
-        else if (data.isLiker === true) data.mlv = "l";
-        else if (data.isVisit === true) data.mlv = "v";
-      });
-      fullList = resList.data;
+      resList &&
+        resList.data.forEach((data) => {
+          if (data.isMatchs === true) data.mlv = "m";
+          else if (data.isLiker === true) data.mlv = "l";
+          else if (data.isVisit === true) data.mlv = "v";
+        });
+      fullList = resList ? resList.data : [];
 
       setMatchList(fullList);
     }
@@ -52,14 +53,16 @@ const UserMenuMatch = ({
         setErrorMsg(err.response.data.message);
       });
 
-      resList.data.forEach((data) => {
-        if (data.isMatchs === true) data.mlv = "m";
-        else if (data.isLiker === true) data.mlv = "l";
-        else if (data.isVisit === true) data.mlv = "v";
-      });
-      fullList = resList.data;
+      if (resList && resList.data) {
+        resList.data.forEach((data) => {
+          if (data.isMatchs === true) data.mlv = "m";
+          else if (data.isLiker === true) data.mlv = "l";
+          else if (data.isVisit === true) data.mlv = "v";
+        });
+        fullList = resList.data;
 
-      setMatchList(fullList);
+        setMatchList(fullList);
+      }
     }
   }, [localStorage.getItem("token")]);
 

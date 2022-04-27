@@ -387,7 +387,11 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
             marginLeft: "auto",
           }}
         >
-          <div style={{ marginLeft: "20px" }}>
+          <div
+            style={{
+              marginInline: "20px",
+            }}
+          >
             <div style={{ display: "flex" }}>
               <p style={{ marginRight: "63px", marginTop: "4px" }}>Age</p>
               <Slider
@@ -428,8 +432,8 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
           </div>
           <div
             style={{
+              marginInline: "20px",
               marginTop: "12px",
-              marginLeft: "15px",
               marginBottom: "15px",
             }}
           >
@@ -577,7 +581,7 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
               </div>
             </div>
           </div>
-          <div style={{ display: "flex" }}>
+          <div style={{ display: "flex", marginInline: "20px" }}>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"

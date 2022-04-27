@@ -15,14 +15,11 @@ const useStyles = makeStyles({
   card: {
     backgroundColor: "white",
     borderRadius: "16px",
-    overflowY: "scroll",
     paddingTop: "20px",
     paddingBottom: "20px",
     marginRight: "auto",
     marginLeft: "auto",
     width: "fit-content",
-    paddingLeft: "20px",
-    paddingRight: "20px",
     marginTop: "20px",
   },
   textField: {
@@ -233,7 +230,11 @@ const MyProfile = ({
   }, []);
 
   useEffect(async () => {
-    if (myProfileData !== null && myProfileData.images[0]) {
+    if (
+      myProfileData !== null &&
+      myProfileData.images &&
+      myProfileData.images[0]
+    ) {
       setImage1(null);
       setImage2(null);
       setImage3(null);
@@ -311,616 +312,618 @@ const MyProfile = ({
     <div style={{ display: "flex" }}>
       <div className={classes.root}>
         <div className={classes.card}>
-          <h3 style={{ marginBottom: "20px" }}>Modification du Profil</h3>
-          <button onClick={() => saveProfil()}>Sauvegarder</button>
-          <div style={{ display: "flex" }}>
-            <div style={{ marginLeft: "auto", marginRight: "10px" }}>
-              <p
-                style={{
-                  marginBottom: "5px",
-                }}
-              >
-                Nom
-              </p>
-              <TextField
-                className={classes.textField}
-                placeholder="Nom"
-                type="text"
-                onChange={handleChangeLastName}
-                value={lastName} // mettre le nom actuelle
-                inputprops={{
-                  className: classes.input,
-                }}
-              />
-            </div>
-            <div style={{ marginRight: "auto" }}>
-              <p style={{ marginBottom: "5px" }}>Prénom</p>
-              <TextField
-                className={classes.textField}
-                placeholder="Prénom"
-                type="text"
-                onChange={handleChangeFirstName}
-                value={firstName} // mettre le nom actuelle
-                inputprops={{
-                  className: classes.input,
-                }}
-              />
-            </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              marginTop: "20px",
-              width: "100%",
-            }}
-          >
-            <div style={{ width: "100%" }}>
-              <p style={{ marginBottom: "5px" }}>Addresse e-mail</p>
-              <TextField
-                className={classes.textField}
-                placeholder="Addresse e-mail"
-                type="text"
-                onChange={handleChangeEmail}
-                value={email} // mettre le nom actuelle
-                inputprops={{
-                  className: classes.input,
-                }}
-              />
-            </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              marginTop: "20px",
-            }}
-          >
-            <div style={{ marginLeft: "auto", marginRight: "10px" }}>
-              <p style={{ marginBottom: "5px" }}>Nouveau mot de passe</p>
-              <TextField
-                className={classes.textField}
-                placeholder="Nouveau mot de passe"
-                type="password"
-                onChange={handleChangeNewPassword}
-                inputprops={{
-                  className: classes.input,
-                }}
-              />
-            </div>
-            <div style={{ marginRight: "auto" }}>
-              <p style={{ marginBottom: "5px" }}>Ancien mot de passe</p>
-              <TextField
-                className={classes.textField}
-                placeholder="Ancien Mot de passe"
-                type="password"
-                onChange={handleChangeOldPassword}
-                inputprops={{
-                  className: classes.input,
-                }}
-              />
-            </div>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              marginTop: "20px",
-            }}
-          >
-            <div style={{ marginRight: "10px", width: "100%" }}>
-              <p style={{ marginBottom: "5px" }}>Genre</p>
-              <Select
-                value={gender}
-                label="Genre"
-                onChange={handleChangeGender}
-                className={classes.textField}
-                inputprops={{
-                  className: classes.input,
-                }}
-              >
-                <MenuItem value={"Homme"}>Homme</MenuItem>
-                <MenuItem value={"Femme"}>Femme</MenuItem>
-              </Select>
-            </div>
-            <div style={{ width: "100%" }}>
-              <p style={{ marginBottom: "5px" }}>Orientation</p>
-              <Select
-                value={orientation}
-                label="Orientation"
-                onChange={handleChangeOrientation}
-                className={classes.textField}
-              >
-                <MenuItem value={"Hétérosexuel"}>Hétérosexuel</MenuItem>
-                <MenuItem value={"Homosexuel"}>Homosexuel</MenuItem>
-                <MenuItem value={"Bisexuel"}>Bisexuel</MenuItem>
-              </Select>
-            </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              marginTop: "20px",
-            }}
-          >
-            <div style={{ marginLeft: "auto", marginRight: "10px" }}>
-              <p style={{ marginBottom: "5px" }}>Latitude</p>
-              <TextField
-                className={classes.textField}
-                placeholder="Latitude"
-                type="number"
-                onChange={handleChangeLatitude}
-                value={latitude} // mettre le nom actuelle
-                inputprops={{
-                  className: classes.input,
-                }}
-              />
-            </div>
-            <div style={{ marginRight: "auto" }}>
-              <p style={{ marginBottom: "5px" }}>Longitude</p>
-              <TextField
-                className={classes.textField}
-                placeholder="Longitude"
-                type="number"
-                onChange={handleChangeLongitude}
-                value={longitude} // mettre le nom actuelle
-                inputprops={{
-                  className: classes.input,
-                }}
-              />
-            </div>
-          </div>
-          <div
-            style={{
-              marginTop: "20px",
-              justifyContent: "space-evenly",
-            }}
-          >
-            <p style={{ marginBottom: "5px" }}>Bio</p>
-            <TextField
-              className={classes.textField}
-              multiline
-              rows={5}
-              placeholder="Bio"
-              type="text"
-              onChange={handleChangeBio}
-              defaultValue={bio} // mettre le nom actuelle
-              inputprops={{
-                className: classes.inputBio,
-              }}
-            />
-          </div>
-          {/* -------------------------------------- TAGS ----------------------------------------------- */}
-          <h4
-            style={{
-              marginBottom: "10px",
-              marginTop: "10px",
-            }}
-          >
-            Tags
-          </h4>
-          <div style={{ display: "flex" }}>
-            <div
-              style={{
-                justifyContent: "space-between",
-                marginBottom: "5px",
-                marginRight: "40px",
-                marginLeft: "auto",
-              }}
-            >
-              <div style={{ marginBottom: "5px" }}>
-                <input
-                  checked={tags.includes("#music") ? true : false}
-                  type="checkbox"
-                  id="#music"
-                  name="music"
-                  value="music"
-                  onChange={handleChangeTags}
+          <div style={{ paddingRight: "10px", paddingLeft: "10px" }}>
+            <h3 style={{ marginBottom: "20px" }}>Modification du Profil</h3>
+            <button onClick={() => saveProfil()}>Sauvegarder</button>
+            <div style={{ display: "flex" }}>
+              <div style={{ marginLeft: "auto", marginRight: "10px" }}>
+                <p
+                  style={{
+                    marginBottom: "5px",
+                  }}
+                >
+                  Nom
+                </p>
+                <TextField
+                  className={classes.textField}
+                  placeholder="Nom"
+                  type="text"
+                  onChange={handleChangeLastName}
+                  value={lastName} // mettre le nom actuelle
+                  inputprops={{
+                    className: classes.input,
+                  }}
                 />
-                <label htmlFor="music" style={{ marginLeft: "5px" }}>
-                  Musique
-                </label>
               </div>
-              <div style={{ marginBottom: "5px" }}>
-                <input
-                  checked={tags.includes("#voyage") ? true : false}
-                  type="checkbox"
-                  id="#voyage"
-                  name="voyage"
-                  value="voyage"
-                  onChange={handleChangeTags}
+              <div style={{ marginRight: "auto" }}>
+                <p style={{ marginBottom: "5px" }}>Prénom</p>
+                <TextField
+                  className={classes.textField}
+                  placeholder="Prénom"
+                  type="text"
+                  onChange={handleChangeFirstName}
+                  value={firstName} // mettre le nom actuelle
+                  inputprops={{
+                    className: classes.input,
+                  }}
                 />
-                <label htmlFor="voyage" style={{ marginLeft: "5px" }}>
-                  Voyage
-                </label>
-              </div>
-              <div style={{ marginBottom: "5px" }}>
-                <input
-                  checked={tags.includes("#cuisine") ? true : false}
-                  type="checkbox"
-                  id="#cuisine"
-                  name="cuisine"
-                  value="cuisine"
-                  onChange={handleChangeTags}
-                />
-                <label htmlFor="cuisine" style={{ marginLeft: "5px" }}>
-                  Cuisine
-                </label>
-              </div>
-              <div style={{ marginBottom: "5px" }}>
-                <input
-                  checked={tags.includes("#programmation") ? true : false}
-                  type="checkbox"
-                  id="#programmation"
-                  name="programmation"
-                  value="programmation"
-                  onChange={handleChangeTags}
-                />
-                <label htmlFor="programmation" style={{ marginLeft: "5px" }}>
-                  Programmation
-                </label>
-              </div>
-            </div>
-            <div
-              style={{
-                justifyContent: "space-between",
-                marginRight: "auto",
-              }}
-            >
-              <div style={{ marginBottom: "5px" }}>
-                <input
-                  checked={tags.includes("#gaming") ? true : false}
-                  type="checkbox"
-                  id="#gaming"
-                  name="gaming"
-                  value="gaming"
-                  onChange={handleChangeTags}
-                />
-                <label htmlFor="gaming" style={{ marginLeft: "5px" }}>
-                  Gaming
-                </label>
-              </div>
-              <div style={{ marginBottom: "5px" }}>
-                <input
-                  checked={tags.includes("#poney") ? true : false}
-                  type="checkbox"
-                  id="#poney"
-                  name="poney"
-                  value="poney"
-                  onChange={handleChangeTags}
-                />
-                <label htmlFor="poney" style={{ marginLeft: "5px" }}>
-                  Poney
-                </label>
-              </div>
-              <div style={{ marginBottom: "5px" }}>
-                <input
-                  checked={tags.includes("#sport") ? true : false}
-                  type="checkbox"
-                  id="#sport"
-                  name="sport"
-                  value="sport"
-                  onChange={handleChangeTags}
-                />
-                <label htmlFor="sport" style={{ marginLeft: "5px" }}>
-                  Sport
-                </label>
-              </div>
-              <div style={{ marginBottom: "5px" }}>
-                <input
-                  checked={tags.includes("#fitness") ? true : false}
-                  type="checkbox"
-                  id="#fitness"
-                  name="fitness"
-                  value="fitness"
-                  onChange={handleChangeTags}
-                />
-                <label htmlFor="fitness" style={{ marginLeft: "5px" }}>
-                  Fitness
-                </label>
-              </div>
-              <div style={{ marginBottom: "5px" }}>
-                <input
-                  checked={tags.includes("#danse") ? true : false}
-                  type="checkbox"
-                  id="#danse"
-                  name="danse"
-                  value="danse"
-                  onChange={handleChangeTags}
-                />
-                <label htmlFor="danse" style={{ marginLeft: "5px" }}>
-                  Danse
-                </label>
-              </div>
-            </div>
-          </div>
-          {/* ---------------------------------------- END TAGS ------------------------------------- */}
-          <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                width: "360px",
-                marginRight: "auto",
-                marginLeft: "auto",
-              }}
-            >
-              <div className={classes.profilPlus}>
-                {image1 ? (
-                  <>
-                    <img
-                      src={image1}
-                      alt="image1"
-                      className={classes.profilPicture}
-                      style={{
-                        objectFit: "cover",
-                        objectPosition: "50% 50%",
-                      }}
-                    />
-                    <p
-                      onClick={() => deleteImg(image1, setImage1)}
-                      style={{
-                        position: "absolute",
-                        top: "5px",
-                        right: "5px",
-                        color: "red",
-                        fontWeight: "600",
-                        fontSize: "12px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      X
-                    </p>{" "}
-                  </>
-                ) : (
-                  <label>
-                    <input
-                      type="file"
-                      name="image1"
-                      style={{ display: "none" }}
-                      onChange={(event) => {
-                        setImageToUpload1(event.target.files[0]);
-                      }}
-                    />
-                    <p
-                      style={{
-                        position: "absolute",
-                        top: "35px",
-                        left: "33px",
-                        color: "#DDDDDD",
-                        fontWeight: "600",
-                        fontSize: "60px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      +
-                    </p>
-                  </label>
-                )}
-              </div>
-              <div className={classes.profilPlus}>
-                {image2 ? (
-                  <>
-                    {" "}
-                    <img
-                      src={image2}
-                      alt="image2"
-                      className={classes.profilPicture}
-                      style={{
-                        objectFit: "cover",
-                        objectPosition: "50% 50%",
-                      }}
-                    />
-                    <p
-                      onClick={() => deleteImg(image2, setImage2)}
-                      style={{
-                        position: "absolute",
-                        top: "5px",
-                        right: "5px",
-                        color: "red",
-                        fontWeight: "600",
-                        fontSize: "12px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      X
-                    </p>{" "}
-                  </>
-                ) : (
-                  <label>
-                    <input
-                      type="file"
-                      name="image2"
-                      style={{ display: "none" }}
-                      onChange={(event) => {
-                        setImageToUpload2(event.target.files[0]);
-                      }}
-                    />
-                    <p
-                      style={{
-                        position: "absolute",
-                        top: "35px",
-                        left: "33px",
-                        color: "#DDDDDD",
-                        fontWeight: "600",
-                        fontSize: "60px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      +
-                    </p>
-                  </label>
-                )}
-              </div>
-              <div className={classes.profilPlus}>
-                {image3 ? (
-                  <>
-                    <img
-                      src={image3}
-                      alt="image3"
-                      className={classes.profilPicture}
-                      style={{
-                        objectFit: "cover",
-                        objectPosition: "50% 50%",
-                      }}
-                    />
-                    <p
-                      onClick={() => deleteImg(image3, setImage3)}
-                      style={{
-                        position: "absolute",
-                        top: "5px",
-                        right: "5px",
-                        color: "red",
-                        fontWeight: "600",
-                        fontSize: "12px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      X
-                    </p>
-                  </>
-                ) : (
-                  <label>
-                    <input
-                      type="file"
-                      name="image2"
-                      style={{ display: "none" }}
-                      onChange={(event) => {
-                        setImageToUpload3(event.target.files[0]);
-                      }}
-                    />
-                    <p
-                      style={{
-                        position: "absolute",
-                        top: "35px",
-                        left: "33px",
-                        color: "#DDDDDD",
-                        fontWeight: "600",
-                        fontSize: "60px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      +
-                    </p>
-                  </label>
-                )}
               </div>
             </div>
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-evenly",
-                width: "360px",
-                marginRight: "auto",
-                marginLeft: "auto",
+                marginTop: "20px",
+                width: "100%",
               }}
             >
-              <div className={classes.profilPlus}>
-                {image4 ? (
-                  <>
-                    <img
-                      src={image4}
-                      alt="image4"
-                      className={classes.profilPicture}
-                      style={{
-                        objectFit: "cover",
-                        objectPosition: "50% 50%",
-                      }}
-                    />
-                    <p
-                      onClick={() => deleteImg(image4, setImage4)}
-                      style={{
-                        position: "absolute",
-                        top: "5px",
-                        right: "5px",
-                        color: "red",
-                        fontWeight: "600",
-                        fontSize: "12px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      X
-                    </p>
-                  </>
-                ) : (
-                  <label>
-                    <input
-                      type="file"
-                      name="image"
-                      style={{ display: "none" }}
-                      onChange={(event) => {
-                        setImageToUpload4(event.target.files[0]);
-                      }}
-                    />
-                    <p
-                      style={{
-                        position: "absolute",
-                        top: "35px",
-                        left: "33px",
-                        color: "#DDDDDD",
-                        fontWeight: "600",
-                        fontSize: "60px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      +
-                    </p>
-                  </label>
-                )}
+              <div style={{ width: "100%" }}>
+                <p style={{ marginBottom: "5px" }}>Addresse e-mail</p>
+                <TextField
+                  className={classes.textField}
+                  placeholder="Addresse e-mail"
+                  type="text"
+                  onChange={handleChangeEmail}
+                  value={email} // mettre le nom actuelle
+                  inputprops={{
+                    className: classes.input,
+                  }}
+                />
               </div>
-              <div className={classes.profilPlus}>
-                {image5 ? (
-                  <>
-                    <img
-                      src={image5}
-                      alt="image5"
-                      className={classes.profilPicture}
-                      style={{
-                        objectFit: "cover",
-                        objectPosition: "50% 50%",
-                      }}
-                    />
-                    <p
-                      onClick={() => deleteImg(image5, setImage5)}
-                      style={{
-                        position: "absolute",
-                        top: "5px",
-                        right: "5px",
-                        color: "red",
-                        fontWeight: "600",
-                        fontSize: "12px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      X
-                    </p>
-                  </>
-                ) : (
-                  <label>
-                    <input
-                      type="file"
-                      name="image5"
-                      style={{ display: "none" }}
-                      onChange={(event) => {
-                        setImageToUpload5(event.target.files[0]);
-                      }}
-                    />
-                    <p
-                      style={{
-                        position: "absolute",
-                        top: "35px",
-                        left: "33px",
-                        color: "#DDDDDD",
-                        fontWeight: "600",
-                        fontSize: "60px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      +
-                    </p>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                marginTop: "20px",
+              }}
+            >
+              <div style={{ marginLeft: "auto", marginRight: "10px" }}>
+                <p style={{ marginBottom: "5px" }}>Nouveau mot de passe</p>
+                <TextField
+                  className={classes.textField}
+                  placeholder="Nouveau mot de passe"
+                  type="password"
+                  onChange={handleChangeNewPassword}
+                  inputprops={{
+                    className: classes.input,
+                  }}
+                />
+              </div>
+              <div style={{ marginRight: "auto" }}>
+                <p style={{ marginBottom: "5px" }}>Ancien mot de passe</p>
+                <TextField
+                  className={classes.textField}
+                  placeholder="Ancien Mot de passe"
+                  type="password"
+                  onChange={handleChangeOldPassword}
+                  inputprops={{
+                    className: classes.input,
+                  }}
+                />
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-evenly",
+                marginTop: "20px",
+              }}
+            >
+              <div style={{ marginRight: "10px", width: "100%" }}>
+                <p style={{ marginBottom: "5px" }}>Genre</p>
+                <Select
+                  value={gender}
+                  label="Genre"
+                  onChange={handleChangeGender}
+                  className={classes.textField}
+                  inputprops={{
+                    className: classes.input,
+                  }}
+                >
+                  <MenuItem value={"Homme"}>Homme</MenuItem>
+                  <MenuItem value={"Femme"}>Femme</MenuItem>
+                </Select>
+              </div>
+              <div style={{ width: "100%" }}>
+                <p style={{ marginBottom: "5px" }}>Orientation</p>
+                <Select
+                  value={orientation}
+                  label="Orientation"
+                  onChange={handleChangeOrientation}
+                  className={classes.textField}
+                >
+                  <MenuItem value={"Hétérosexuel"}>Hétérosexuel</MenuItem>
+                  <MenuItem value={"Homosexuel"}>Homosexuel</MenuItem>
+                  <MenuItem value={"Bisexuel"}>Bisexuel</MenuItem>
+                </Select>
+              </div>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-evenly",
+                marginTop: "20px",
+              }}
+            >
+              <div style={{ marginLeft: "auto", marginRight: "10px" }}>
+                <p style={{ marginBottom: "5px" }}>Latitude</p>
+                <TextField
+                  className={classes.textField}
+                  placeholder="Latitude"
+                  type="number"
+                  onChange={handleChangeLatitude}
+                  value={latitude} // mettre le nom actuelle
+                  inputprops={{
+                    className: classes.input,
+                  }}
+                />
+              </div>
+              <div style={{ marginRight: "auto" }}>
+                <p style={{ marginBottom: "5px" }}>Longitude</p>
+                <TextField
+                  className={classes.textField}
+                  placeholder="Longitude"
+                  type="number"
+                  onChange={handleChangeLongitude}
+                  value={longitude} // mettre le nom actuelle
+                  inputprops={{
+                    className: classes.input,
+                  }}
+                />
+              </div>
+            </div>
+            <div
+              style={{
+                marginTop: "20px",
+                justifyContent: "space-evenly",
+              }}
+            >
+              <p style={{ marginBottom: "5px" }}>Bio</p>
+              <TextField
+                className={classes.textField}
+                multiline
+                rows={5}
+                placeholder="Bio"
+                type="text"
+                onChange={handleChangeBio}
+                defaultValue={bio} // mettre le nom actuelle
+                inputprops={{
+                  className: classes.inputBio,
+                }}
+              />
+            </div>
+            {/* -------------------------------------- TAGS ----------------------------------------------- */}
+            <h4
+              style={{
+                marginBottom: "10px",
+                marginTop: "10px",
+              }}
+            >
+              Tags
+            </h4>
+            <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  justifyContent: "space-between",
+                  marginBottom: "5px",
+                  marginRight: "40px",
+                  marginLeft: "auto",
+                }}
+              >
+                <div style={{ marginBottom: "5px" }}>
+                  <input
+                    checked={tags.includes("#music") ? true : false}
+                    type="checkbox"
+                    id="#music"
+                    name="music"
+                    value="music"
+                    onChange={handleChangeTags}
+                  />
+                  <label htmlFor="music" style={{ marginLeft: "5px" }}>
+                    Musique
                   </label>
-                )}
+                </div>
+                <div style={{ marginBottom: "5px" }}>
+                  <input
+                    checked={tags.includes("#voyage") ? true : false}
+                    type="checkbox"
+                    id="#voyage"
+                    name="voyage"
+                    value="voyage"
+                    onChange={handleChangeTags}
+                  />
+                  <label htmlFor="voyage" style={{ marginLeft: "5px" }}>
+                    Voyage
+                  </label>
+                </div>
+                <div style={{ marginBottom: "5px" }}>
+                  <input
+                    checked={tags.includes("#cuisine") ? true : false}
+                    type="checkbox"
+                    id="#cuisine"
+                    name="cuisine"
+                    value="cuisine"
+                    onChange={handleChangeTags}
+                  />
+                  <label htmlFor="cuisine" style={{ marginLeft: "5px" }}>
+                    Cuisine
+                  </label>
+                </div>
+                <div style={{ marginBottom: "5px" }}>
+                  <input
+                    checked={tags.includes("#programmation") ? true : false}
+                    type="checkbox"
+                    id="#programmation"
+                    name="programmation"
+                    value="programmation"
+                    onChange={handleChangeTags}
+                  />
+                  <label htmlFor="programmation" style={{ marginLeft: "5px" }}>
+                    Programmation
+                  </label>
+                </div>
+              </div>
+              <div
+                style={{
+                  justifyContent: "space-between",
+                  marginRight: "auto",
+                }}
+              >
+                <div style={{ marginBottom: "5px" }}>
+                  <input
+                    checked={tags.includes("#gaming") ? true : false}
+                    type="checkbox"
+                    id="#gaming"
+                    name="gaming"
+                    value="gaming"
+                    onChange={handleChangeTags}
+                  />
+                  <label htmlFor="gaming" style={{ marginLeft: "5px" }}>
+                    Gaming
+                  </label>
+                </div>
+                <div style={{ marginBottom: "5px" }}>
+                  <input
+                    checked={tags.includes("#poney") ? true : false}
+                    type="checkbox"
+                    id="#poney"
+                    name="poney"
+                    value="poney"
+                    onChange={handleChangeTags}
+                  />
+                  <label htmlFor="poney" style={{ marginLeft: "5px" }}>
+                    Poney
+                  </label>
+                </div>
+                <div style={{ marginBottom: "5px" }}>
+                  <input
+                    checked={tags.includes("#sport") ? true : false}
+                    type="checkbox"
+                    id="#sport"
+                    name="sport"
+                    value="sport"
+                    onChange={handleChangeTags}
+                  />
+                  <label htmlFor="sport" style={{ marginLeft: "5px" }}>
+                    Sport
+                  </label>
+                </div>
+                <div style={{ marginBottom: "5px" }}>
+                  <input
+                    checked={tags.includes("#fitness") ? true : false}
+                    type="checkbox"
+                    id="#fitness"
+                    name="fitness"
+                    value="fitness"
+                    onChange={handleChangeTags}
+                  />
+                  <label htmlFor="fitness" style={{ marginLeft: "5px" }}>
+                    Fitness
+                  </label>
+                </div>
+                <div style={{ marginBottom: "5px" }}>
+                  <input
+                    checked={tags.includes("#danse") ? true : false}
+                    type="checkbox"
+                    id="#danse"
+                    name="danse"
+                    value="danse"
+                    onChange={handleChangeTags}
+                  />
+                  <label htmlFor="danse" style={{ marginLeft: "5px" }}>
+                    Danse
+                  </label>
+                </div>
+              </div>
+            </div>
+            {/* ---------------------------------------- END TAGS ------------------------------------- */}
+            <div style={{ marginTop: "20px", marginBottom: "20px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "360px",
+                  marginRight: "auto",
+                  marginLeft: "auto",
+                }}
+              >
+                <div className={classes.profilPlus}>
+                  {image1 ? (
+                    <>
+                      <img
+                        src={image1}
+                        alt="image1"
+                        className={classes.profilPicture}
+                        style={{
+                          objectFit: "cover",
+                          objectPosition: "50% 50%",
+                        }}
+                      />
+                      <p
+                        onClick={() => deleteImg(image1, setImage1)}
+                        style={{
+                          position: "absolute",
+                          top: "5px",
+                          right: "5px",
+                          color: "red",
+                          fontWeight: "600",
+                          fontSize: "12px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        X
+                      </p>{" "}
+                    </>
+                  ) : (
+                    <label>
+                      <input
+                        type="file"
+                        name="image1"
+                        style={{ display: "none" }}
+                        onChange={(event) => {
+                          setImageToUpload1(event.target.files[0]);
+                        }}
+                      />
+                      <p
+                        style={{
+                          position: "absolute",
+                          top: "35px",
+                          left: "33px",
+                          color: "#DDDDDD",
+                          fontWeight: "600",
+                          fontSize: "60px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        +
+                      </p>
+                    </label>
+                  )}
+                </div>
+                <div className={classes.profilPlus}>
+                  {image2 ? (
+                    <>
+                      {" "}
+                      <img
+                        src={image2}
+                        alt="image2"
+                        className={classes.profilPicture}
+                        style={{
+                          objectFit: "cover",
+                          objectPosition: "50% 50%",
+                        }}
+                      />
+                      <p
+                        onClick={() => deleteImg(image2, setImage2)}
+                        style={{
+                          position: "absolute",
+                          top: "5px",
+                          right: "5px",
+                          color: "red",
+                          fontWeight: "600",
+                          fontSize: "12px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        X
+                      </p>{" "}
+                    </>
+                  ) : (
+                    <label>
+                      <input
+                        type="file"
+                        name="image2"
+                        style={{ display: "none" }}
+                        onChange={(event) => {
+                          setImageToUpload2(event.target.files[0]);
+                        }}
+                      />
+                      <p
+                        style={{
+                          position: "absolute",
+                          top: "35px",
+                          left: "33px",
+                          color: "#DDDDDD",
+                          fontWeight: "600",
+                          fontSize: "60px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        +
+                      </p>
+                    </label>
+                  )}
+                </div>
+                <div className={classes.profilPlus}>
+                  {image3 ? (
+                    <>
+                      <img
+                        src={image3}
+                        alt="image3"
+                        className={classes.profilPicture}
+                        style={{
+                          objectFit: "cover",
+                          objectPosition: "50% 50%",
+                        }}
+                      />
+                      <p
+                        onClick={() => deleteImg(image3, setImage3)}
+                        style={{
+                          position: "absolute",
+                          top: "5px",
+                          right: "5px",
+                          color: "red",
+                          fontWeight: "600",
+                          fontSize: "12px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        X
+                      </p>
+                    </>
+                  ) : (
+                    <label>
+                      <input
+                        type="file"
+                        name="image2"
+                        style={{ display: "none" }}
+                        onChange={(event) => {
+                          setImageToUpload3(event.target.files[0]);
+                        }}
+                      />
+                      <p
+                        style={{
+                          position: "absolute",
+                          top: "35px",
+                          left: "33px",
+                          color: "#DDDDDD",
+                          fontWeight: "600",
+                          fontSize: "60px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        +
+                      </p>
+                    </label>
+                  )}
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-evenly",
+                  width: "360px",
+                  marginRight: "auto",
+                  marginLeft: "auto",
+                }}
+              >
+                <div className={classes.profilPlus}>
+                  {image4 ? (
+                    <>
+                      <img
+                        src={image4}
+                        alt="image4"
+                        className={classes.profilPicture}
+                        style={{
+                          objectFit: "cover",
+                          objectPosition: "50% 50%",
+                        }}
+                      />
+                      <p
+                        onClick={() => deleteImg(image4, setImage4)}
+                        style={{
+                          position: "absolute",
+                          top: "5px",
+                          right: "5px",
+                          color: "red",
+                          fontWeight: "600",
+                          fontSize: "12px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        X
+                      </p>
+                    </>
+                  ) : (
+                    <label>
+                      <input
+                        type="file"
+                        name="image"
+                        style={{ display: "none" }}
+                        onChange={(event) => {
+                          setImageToUpload4(event.target.files[0]);
+                        }}
+                      />
+                      <p
+                        style={{
+                          position: "absolute",
+                          top: "35px",
+                          left: "33px",
+                          color: "#DDDDDD",
+                          fontWeight: "600",
+                          fontSize: "60px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        +
+                      </p>
+                    </label>
+                  )}
+                </div>
+                <div className={classes.profilPlus}>
+                  {image5 ? (
+                    <>
+                      <img
+                        src={image5}
+                        alt="image5"
+                        className={classes.profilPicture}
+                        style={{
+                          objectFit: "cover",
+                          objectPosition: "50% 50%",
+                        }}
+                      />
+                      <p
+                        onClick={() => deleteImg(image5, setImage5)}
+                        style={{
+                          position: "absolute",
+                          top: "5px",
+                          right: "5px",
+                          color: "red",
+                          fontWeight: "600",
+                          fontSize: "12px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        X
+                      </p>
+                    </>
+                  ) : (
+                    <label>
+                      <input
+                        type="file"
+                        name="image5"
+                        style={{ display: "none" }}
+                        onChange={(event) => {
+                          setImageToUpload5(event.target.files[0]);
+                        }}
+                      />
+                      <p
+                        style={{
+                          position: "absolute",
+                          top: "35px",
+                          left: "33px",
+                          color: "#DDDDDD",
+                          fontWeight: "600",
+                          fontSize: "60px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        +
+                      </p>
+                    </label>
+                  )}
+                </div>
               </div>
             </div>
           </div>

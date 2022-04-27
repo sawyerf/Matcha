@@ -12,19 +12,18 @@ const useStyles = makeStyles({
     textAlign: "center",
   },
   card: {
-    backgroundColor: "white",
-    width: "360px",
+    width: "350px",
     borderRadius: "16px",
     marginTop: "20px",
     marginBottom: "20px",
-    padding: "20px",
+    paddingTop: "20px",
     position: "relative",
     marginRight: "auto",
     marginLeft: "auto",
   },
   matchCard: {
-    width: "250px",
-    height: "400px",
+    width: "350px",
+    height: "500px",
   },
 });
 
@@ -93,144 +92,191 @@ const OtherProfile = ({
     <div style={{ display: "flex" }}>
       <div className={classes.root}>
         <div className={classes.card}>
-          <h3 style={{ marginBottom: "20px" }}>
-            Profil de {otherProfileData && otherProfileData.username}
-          </h3>
-          <div>
-            <div style={{ position: "relative" }}>
-              <div
-                style={{ position: "absolute", top: "170px", left: "20px" }}
-                onClick={() => previousImg()}
-              >
-                <RightArrow rotate="rotate(180deg)" />
-              </div>
-              <img
-                src={
-                  otherProfileData &&
-                  otherProfileData.images &&
-                  otherProfileData.images[0]
-                    ? displayedImage
-                    : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzFhQ-2EAoeS6qbmv4PeqGPsw7oa1uPmaVow&usqp=CAU"
-                }
-                alt="ImageUser"
-                className={classes.matchCard}
-                style={{
-                  objectFit: "cover",
-                  objectPosition: "50% 50%",
-                }}
-              />
-              <div
-                style={{
-                  position: "absolute",
-                  top: "170px",
-                  right: "20px",
-                }}
-                onClick={() => nextImg()}
-              >
-                <RightArrow />
-              </div>
-            </div>
-            <div
-              style={{
-                marginLeft: "30px",
-                marginRight: "20px",
-                textAlign: "left",
-              }}
-            >
-              <p style={{ marginBottom: "10px" }}>
-                Age : {otherProfileData && otherProfileData.age}
-              </p>
-              <p style={{ marginBottom: "10px" }}>
-                Genre :{" "}
-                {otherProfileData && otherProfileData.gender === "H"
-                  ? "Homme"
-                  : "Femme"}
-              </p>
-              <p style={{ marginBottom: "10px" }}>
-                Recherche :{" "}
-                {otherProfileData && otherProfileData.sexuality === "H"
-                  ? "Homme"
-                  : otherProfileData && otherProfileData.sexuality === "F"
-                  ? "Femme"
-                  : "Homme et Femme"}
-              </p>
-              <p style={{ marginBottom: "10px" }}>
-                Distance : {otherProfileData && otherProfileData.distance}
-              </p>
-              <p style={{ marginBottom: "10px" }}>
-                Popularité : {otherProfileData && otherProfileData.popularity}
-              </p>
-              <p style={{ marginBottom: "10px" }}>
-                Bio : {otherProfileData && otherProfileData.bio}
-              </p>
-              {otherProfileData && otherProfileData.isOnline === false ? (
-                <p style={{ marginBottom: "10px" }}>
-                  Dernière visite :
-                  {otherProfileData && otherProfileData.last_visit
-                    ? otherProfileData.last_visit.substring(0, 10)
-                    : "Jamais"}
-                </p>
-              ) : (
-                <p style={{ marginBottom: "10px" }}>
-                  Cet utilisateur est connecté
-                </p>
-              )}
-              <p style={{ marginBottom: "10px" }}>
-                {otherProfileData && otherProfileData.tags.replaceAll(",", " ")}
-              </p>
-              {otherProfileData && otherProfileData.mlv !== "m" ? (
+          <div style={{ paddingLeft: "10px", paddingRight: "10px" }}>
+            <div>
+              <div style={{ position: "relative", marginBottom: "10px" }}>
+                <div
+                  style={{ position: "absolute", top: "170px", left: "20px" }}
+                  onClick={() => previousImg()}
+                >
+                  <RightArrow rotate="rotate(180deg)" />
+                </div>
                 <div
                   style={{
-                    width: "50px",
-                    height: "30px",
-                    borderRadius: "8px",
-                    backgroundColor: "green",
-                    boxShadow: "5px 5px 5px darkgreen",
-                    cursor: "pointer",
-                    marginRight: "auto",
-                    marginLeft: "auto",
+                    position: "absolute",
+                    bottom: "20px",
+                    left: "20px",
+                    zIndex: "10",
                   }}
-                  onClick={() => likeMatch()}
                 >
+                  <div style={{ display: "flex" }}>
+                    <p
+                      style={{
+                        color: "white",
+                        fontWeight: "600",
+                        fontSize: "18px",
+                      }}
+                    >
+                      {otherProfileData && otherProfileData.username}
+                    </p>
+                    <p
+                      style={{
+                        marginLeft: "5px",
+                        color: "white",
+                        fontSize: "18px",
+                      }}
+                    >
+                      {otherProfileData && otherProfileData.age}
+                    </p>
+                  </div>
                   <p
                     style={{
                       color: "white",
-                      fontWeight: "600",
-                      marginLeft: "7px",
-                      paddingTop: "5px",
-                      fontSize: "18px",
+                      fontSize: "14px",
+                      float: "left",
+                      marginTop: "5px",
                     }}
                   >
-                    Like
+                    A {otherProfileData && otherProfileData.distance}km de vous
                   </p>
                 </div>
-              ) : (
+
+                <img
+                  src={
+                    otherProfileData &&
+                    otherProfileData.images &&
+                    otherProfileData.images[0]
+                      ? displayedImage
+                      : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzFhQ-2EAoeS6qbmv4PeqGPsw7oa1uPmaVow&usqp=CAU"
+                  }
+                  alt="ImageUser"
+                  className={classes.matchCard}
+                  style={{
+                    objectFit: "cover",
+                    objectPosition: "50% 50%",
+                    borderRadius: "8px",
+                  }}
+                />
                 <div
                   style={{
-                    width: "70px",
-                    height: "30px",
+                    position: "absolute",
+                    bottom: "0px",
+                    height: "30%",
+                    width: "350px",
                     borderRadius: "8px",
-                    backgroundColor: "red",
-                    boxShadow: "5px 5px 5px darkred",
-                    cursor: "pointer",
-                    marginRight: "auto",
-                    marginLeft: "auto",
+                    background:
+                      "linear-gradient(0deg, black, black, transparent)",
                   }}
-                  onClick={() => unlikeMatch()}
+                ></div>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "170px",
+                    right: "20px",
+                  }}
+                  onClick={() => nextImg()}
                 >
-                  <p
-                    style={{
-                      color: "white",
-                      fontWeight: "600",
-                      marginLeft: "7px",
-                      paddingTop: "5px",
-                      fontSize: "18px",
-                    }}
-                  >
-                    Unlike
-                  </p>
+                  <RightArrow />
                 </div>
-              )}
+              </div>
+              <div
+                style={{
+                  marginLeft: "30px",
+                  marginRight: "20px",
+                  textAlign: "left",
+                }}
+              >
+                <p style={{ marginBottom: "10px" }}>
+                  Genre :{" "}
+                  {otherProfileData && otherProfileData.gender === "H"
+                    ? "Homme"
+                    : "Femme"}
+                </p>
+                <p style={{ marginBottom: "10px" }}>
+                  Recherche :{" "}
+                  {otherProfileData && otherProfileData.sexuality === "H"
+                    ? "Homme"
+                    : otherProfileData && otherProfileData.sexuality === "F"
+                    ? "Femme"
+                    : "Homme et Femme"}
+                </p>
+
+                <p style={{ marginBottom: "10px" }}>
+                  Popularité : {otherProfileData && otherProfileData.popularity}
+                </p>
+                <p style={{ marginBottom: "10px" }}>
+                  Bio : {otherProfileData && otherProfileData.bio}
+                </p>
+                {otherProfileData && otherProfileData.isOnline === false ? (
+                  <p style={{ marginBottom: "10px" }}>
+                    Dernière visite :
+                    {otherProfileData && otherProfileData.last_visit
+                      ? otherProfileData.last_visit.substring(0, 10)
+                      : "Jamais"}
+                  </p>
+                ) : (
+                  <p style={{ marginBottom: "10px" }}>
+                    Cet utilisateur est connecté
+                  </p>
+                )}
+                <p style={{ marginBottom: "10px" }}>
+                  {otherProfileData &&
+                    otherProfileData.tags.replaceAll(",", " ")}
+                </p>
+                {otherProfileData && otherProfileData.mlv !== "m" ? (
+                  <div
+                    style={{
+                      width: "50px",
+                      height: "30px",
+                      borderRadius: "8px",
+                      backgroundColor: "green",
+                      boxShadow: "5px 5px 5px darkgreen",
+                      cursor: "pointer",
+                      marginRight: "auto",
+                      marginLeft: "auto",
+                    }}
+                    onClick={() => likeMatch()}
+                  >
+                    <p
+                      style={{
+                        color: "white",
+                        fontWeight: "600",
+                        marginLeft: "7px",
+                        paddingTop: "5px",
+                        fontSize: "18px",
+                      }}
+                    >
+                      Like
+                    </p>
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      width: "70px",
+                      height: "30px",
+                      borderRadius: "8px",
+                      backgroundColor: "red",
+                      boxShadow: "5px 5px 5px darkred",
+                      cursor: "pointer",
+                      marginRight: "auto",
+                      marginLeft: "auto",
+                    }}
+                    onClick={() => unlikeMatch()}
+                  >
+                    <p
+                      style={{
+                        color: "white",
+                        fontWeight: "600",
+                        marginLeft: "7px",
+                        paddingTop: "5px",
+                        fontSize: "18px",
+                      }}
+                    >
+                      Unlike
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

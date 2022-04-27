@@ -31,20 +31,22 @@ const UserMenuMessage = ({
         setErrorMsg(err.response.data.message);
       });
 
-      const sortedMatchs = res.data.sort((a, b) => {
-        if (a.message == b.message) return 0;
-        if (a.message == null) {
-          return new Date(b.message.date).getTime();
-        }
-        if (b.message == null) {
-          return null - new Date(a.message.date).getTime();
-        }
-        return (
-          new Date(b.message.date).getTime() -
-          new Date(a.message.date).getTime()
-        );
-      });
-      setMessageList(sortedMatchs);
+      if (res && res.data) {
+        const sortedMatchs = res.data.sort((a, b) => {
+          if (a.message == b.message) return 0;
+          if (a.message == null) {
+            return new Date(b.message.date).getTime();
+          }
+          if (b.message == null) {
+            return null - new Date(a.message.date).getTime();
+          }
+          return (
+            new Date(b.message.date).getTime() -
+            new Date(a.message.date).getTime()
+          );
+        });
+        setMessageList(sortedMatchs);
+      }
     }
   }, [localStorage.getItem("token")]);
 

@@ -69,7 +69,8 @@ const UserMenu = ({
   }
 
   function navigateToUserHome() {
-    if (myProfileData.images[0]) navigate("/userhome");
+    if (myProfileData && myProfileData.images && myProfileData.images[0])
+      navigate("/userhome");
     else setErrorMsg("Remplissez votre profil entièrement");
   }
 

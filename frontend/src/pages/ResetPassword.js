@@ -70,7 +70,7 @@ const ResetPassword = ({ setErrorMsg }) => {
           <TextField
             required
             id="outlined-input"
-            type="text"
+            type="password"
             label="Password"
             value={password}
             onChange={handleChangePassword}
