@@ -75,7 +75,6 @@ const UserMenuMatch = ({
         maxHeight: "calc(100% - 30px)",
         marginTop: "10px",
         display: matchDisplay ? "flex" : "none",
-        justifyContent: "space-between",
         flexFlow: "wrap",
         overflowX: "hidden",
       }}

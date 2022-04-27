@@ -59,7 +59,6 @@ const UserMenuMessage = ({
         margin: "20px",
         marginTop: "10px",
         display: matchDisplay ? "none" : "flex",
-        justifyContent: "space-between",
         maxHeight: "calc(100% - 30px)",
 
         flexFlow: "wrap",

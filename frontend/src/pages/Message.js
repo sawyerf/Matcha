@@ -103,7 +103,7 @@ const Message = ({
         messageToPush.from === myProfileData.username)
     ) {
       let discussionCpy = discussion;
-      discussionCpy.push(messageToPush);
+      discussionCpy && discussionCpy.push(messageToPush);
       setDiscussion([...discussionCpy]);
       setMessageToPush(null);
     }

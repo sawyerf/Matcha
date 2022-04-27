@@ -20,16 +20,19 @@ const useStyles = makeStyles({
     paddingBottom: "20px",
     marginRight: "auto",
     marginLeft: "auto",
+    width: "fit-content",
+    paddingLeft: "20px",
+    paddingRight: "20px",
+    marginTop: "20px",
   },
   textField: {
-    width: "140px",
-    heigt: "40px",
+    width: "100%",
+  },
+  textFieldBio: {
+    width: "80%",
   },
   input: {
     height: "40px",
-  },
-  textFieldBio: {
-    width: "280px",
   },
   inputBio: {},
   profilPlus: {
@@ -211,6 +214,8 @@ const MyProfile = ({
     res.data.bio && setBio(res.data.bio);
     res.data.firstname && setFirstName(res.data.firstname);
     res.data.lastname && setLastName(res.data.lastname);
+    res.data.latitude && setLatitude(res.data.latitude);
+    res.data.longitude && setLongitude(res.data.longitude);
     setGender(
       res.data.gender === "H" ? "Homme" : res.data.gender === "F" ? "Femme" : ""
     );
@@ -347,12 +352,13 @@ const MyProfile = ({
               display: "flex",
               justifyContent: "space-evenly",
               marginTop: "20px",
+              width: "100%",
             }}
           >
-            <div>
+            <div style={{ width: "100%" }}>
               <p style={{ marginBottom: "5px" }}>Addresse e-mail</p>
               <TextField
-                className={classes.textFieldBio}
+                className={classes.textField}
                 placeholder="Addresse e-mail"
                 type="text"
                 onChange={handleChangeEmail}
@@ -402,7 +408,7 @@ const MyProfile = ({
               marginTop: "20px",
             }}
           >
-            <div style={{ marginLeft: "auto", marginRight: "10px" }}>
+            <div style={{ marginRight: "10px", width: "100%" }}>
               <p style={{ marginBottom: "5px" }}>Genre</p>
               <Select
                 value={gender}
@@ -417,7 +423,7 @@ const MyProfile = ({
                 <MenuItem value={"Femme"}>Femme</MenuItem>
               </Select>
             </div>
-            <div style={{ marginRight: "auto" }}>
+            <div style={{ width: "100%" }}>
               <p style={{ marginBottom: "5px" }}>Orientation</p>
               <Select
                 value={orientation}
@@ -473,7 +479,7 @@ const MyProfile = ({
           >
             <p style={{ marginBottom: "5px" }}>Bio</p>
             <TextField
-              className={classes.textFieldBio}
+              className={classes.textField}
               multiline
               rows={5}
               placeholder="Bio"
@@ -503,7 +509,7 @@ const MyProfile = ({
                 marginLeft: "auto",
               }}
             >
-              <div>
+              <div style={{ marginBottom: "5px" }}>
                 <input
                   checked={tags.includes("#music") ? true : false}
                   type="checkbox"
@@ -516,7 +522,7 @@ const MyProfile = ({
                   Musique
                 </label>
               </div>
-              <div>
+              <div style={{ marginBottom: "5px" }}>
                 <input
                   checked={tags.includes("#voyage") ? true : false}
                   type="checkbox"
@@ -529,7 +535,7 @@ const MyProfile = ({
                   Voyage
                 </label>
               </div>
-              <div>
+              <div style={{ marginBottom: "5px" }}>
                 <input
                   checked={tags.includes("#cuisine") ? true : false}
                   type="checkbox"
@@ -542,7 +548,7 @@ const MyProfile = ({
                   Cuisine
                 </label>
               </div>
-              <div>
+              <div style={{ marginBottom: "5px" }}>
                 <input
                   checked={tags.includes("#programmation") ? true : false}
                   type="checkbox"
@@ -562,7 +568,7 @@ const MyProfile = ({
                 marginRight: "auto",
               }}
             >
-              <div>
+              <div style={{ marginBottom: "5px" }}>
                 <input
                   checked={tags.includes("#gaming") ? true : false}
                   type="checkbox"
@@ -575,7 +581,7 @@ const MyProfile = ({
                   Gaming
                 </label>
               </div>
-              <div>
+              <div style={{ marginBottom: "5px" }}>
                 <input
                   checked={tags.includes("#poney") ? true : false}
                   type="checkbox"
@@ -588,7 +594,7 @@ const MyProfile = ({
                   Poney
                 </label>
               </div>
-              <div>
+              <div style={{ marginBottom: "5px" }}>
                 <input
                   checked={tags.includes("#sport") ? true : false}
                   type="checkbox"
@@ -601,7 +607,7 @@ const MyProfile = ({
                   Sport
                 </label>
               </div>
-              <div>
+              <div style={{ marginBottom: "5px" }}>
                 <input
                   checked={tags.includes("#fitness") ? true : false}
                   type="checkbox"
@@ -614,7 +620,7 @@ const MyProfile = ({
                   Fitness
                 </label>
               </div>
-              <div>
+              <div style={{ marginBottom: "5px" }}>
                 <input
                   checked={tags.includes("#danse") ? true : false}
                   type="checkbox"

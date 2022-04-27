@@ -141,9 +141,12 @@ const UserMenu = ({
   };
 
   const readNotif = () => {
-    /* const res = axios.post("/profil/readnotif", {}).catch((err) => {
-      console.log(err);
-    });*/
+    console.log(myProfileData);
+    if (!notifDisplay) {
+      const res = axios.get("/profil/readnotif", {}).catch((err) => {
+        console.log(err);
+      });
+    } else if (notifDisplay) myProfileData.notifs = [];
     setNotifDisplay(!notifDisplay);
   };
 
@@ -175,7 +178,10 @@ const UserMenu = ({
             right: "90px",
             top: "9px",
             cursor: "pointer",
-            color: myProfileData && myProfileData.notifs ? "pink" : "#EEEEEE",
+            color:
+              myProfileData && myProfileData.notifs.length > 0
+                ? "red"
+                : "#EEEEEE",
           }}
           onClick={() => readNotif()}
         />

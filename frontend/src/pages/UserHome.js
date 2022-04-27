@@ -36,7 +36,7 @@ const useStyles = makeStyles({
   },
   select: {
     height: "40px",
-    width: "120px",
+    width: "180px",
   },
 });
 
@@ -51,7 +51,7 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
   const [popularity, setPopularity] = useState([0, 100]);
   const [distance, setDistance] = useState(30);
   const [tags, setTags] = useState([]);
-  const [filter, setFilter] = useState();
+  const [filter, setFilter] = useState(1);
   const [preferenceList, setPreferenceList] = useState([]);
   const [indexPreferenceList, setIndexPreferenceList] = useState(0);
 
@@ -356,6 +356,7 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
               padding: "5px 17px",
               width: "fit-content",
               cursor: "pointer",
+              marginBottom: "20px",
             }}
             onClick={() => reportUser()}
           >
@@ -370,6 +371,7 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
               padding: "5px 17px",
               width: "fit-content",
               cursor: "pointer",
+              height: "fit-content",
             }}
             onClick={() => blockUser()}
           >
@@ -386,7 +388,7 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
           }}
         >
           <div style={{ marginLeft: "20px" }}>
-            <div style={{ display: "flex", width: "230px" }}>
+            <div style={{ display: "flex" }}>
               <p style={{ marginRight: "63px", marginTop: "4px" }}>Age</p>
               <Slider
                 getAriaLabel={() => "Age"}
@@ -398,7 +400,7 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
                 valueLabelDisplay="auto"
               />
             </div>
-            <div style={{ display: "flex", width: "230px" }}>
+            <div style={{ display: "flex" }}>
               <p style={{ marginRight: "20px", marginTop: "4px" }}>
                 Popularité
               </p>
@@ -412,7 +414,7 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
                 valueLabelDisplay="auto"
               />
             </div>
-            <div style={{ display: "flex", width: "230px" }}>
+            <div style={{ display: "flex" }}>
               <p style={{ marginRight: "30px", marginTop: "4px" }}>Distance</p>
               <Slider
                 size="small"
@@ -424,7 +426,13 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
               />
             </div>
           </div>
-          <div style={{ marginTop: "12px", marginLeft: "15px" }}>
+          <div
+            style={{
+              marginTop: "12px",
+              marginLeft: "15px",
+              marginBottom: "15px",
+            }}
+          >
             <div
               style={{
                 justifyContent: "space-between",
