@@ -226,7 +226,7 @@ const bigHistory = async (req, res) => {
         for (const user of users) {
             if (uidsVisits.indexOf(user.uid.toString()) != -1) {
                 user.isVisit = true;
-                user.last_visit = visits[visit];
+                user.visit_you = visits[user.uid.toString()];
             }
             if (uidsMyLiker.indexOf(user.uid) != -1) {
                 user.isLiker = true;
