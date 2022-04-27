@@ -10,7 +10,6 @@ import { isOnline } from '../utils/online';
 import messageModels from '../models/message';
 import { sendNotif } from '../socket';
 
-
 const matchs = async (req, res) => {
     const uidMatchs = await matchModels.selectByUser(req.me.uid);
 
@@ -40,21 +39,6 @@ const matchs = async (req, res) => {
                 delete match.sexuality
             }
             res.status(200).json(matchs);
-        }
-    }
-}
-
-const likes = async (req, res) => {
-    const uidsMyLiker = await likeModels.selectMyLiker(req.me.uid);
-
-    if (uidsMyLiker === false) {
-        res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-    } else {
-        const myLiker = await userModels.selectByUids(uidsMyLiker);
-        if (myLiker == null) {
-            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-        } else {
-            res.status(200).json(myLiker);
         }
     }
 }
@@ -180,31 +164,6 @@ const visit = async (req, res) => {
     }
 }
 
-const myVisits = async (req, res) => {
-    const visits = await historyModels.select(req.me.uid);
-
-    if (visits === false) {
-        res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-    } else {
-        console.log(Object.keys(visits))
-        const users = await userModels.selectByUids(Object.keys(visits));
-        if (users === null) {
-            res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
-        } else {
-            for (const visit of Object.keys(visits)) {
-                const user = users.find((post, index) => {
-                    if (post.uid == visit) return true;
-                })
-                user.last_visit = visits[visit];
-                delete user.uid;
-                delete user.latitude
-                delete user.longitude
-            }
-            res.status(200).json(users);
-        }
-    }
-}
-
 const bigHistory = async (req, res) => {
     const visits = await historyModels.select(req.me.uid);
     const uidsMyLiker = await likeModels.selectMyLiker(req.me.uid);
@@ -247,10 +206,8 @@ const bigHistory = async (req, res) => {
 
 export default {
     matchs,
-    likes,
     offer,
     search,
     visit,
-    myVisits,
     bigHistory,
 }

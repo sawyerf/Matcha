@@ -30,6 +30,7 @@ docker-compose -f docker-compose.yml up -d
 - ~~Notif non lu~~
 - ~~change keypass after~~
 - ~~Tester le reset password (psk keypass = null)~~
+- Changer le password dans la seed
 
 ### Frontend
 - ~~Gerer la gestion d'erreur (botif pour pas validation mail ou pas profil complet)~~
