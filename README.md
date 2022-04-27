@@ -60,6 +60,8 @@ docker-compose -f docker-compose.yml up -d
 - Prendre plus de place pour le otherprofile
 - Photo message sont etire et pas croper
 - Bug affichage message en haut
+- "A Geolocation request can only be fulfilled in a secure context."
+- Rouge plus rouge pour les notifs
 
 ## API
 | Method | url                         | Description             |
