@@ -76,7 +76,7 @@ const addUser = async (newUser) => {
 
 const main = async (max) => {
     let promise;
-    const hash = '$2b$10$cpJIU1MKKjVoDgA3kjo2nOKiTzbm0vjxbepJqIW3Anke/c1NTyKFS'; // await hashPassword('lol');
+    const hash = await hashPassword('Password*0');
 
     for (let i = 0; i < max; i++) {
         promise = addUser(generateUser(hash));

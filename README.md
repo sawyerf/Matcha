@@ -68,7 +68,6 @@ docker-compose -f docker-compose.yml up -d
 - Quand le socket perd la connection il essaye pas de se reconnecter
 - Meme image sur profil que sur offer
 
-
 ## API
 | Method | url                         | Description             |
 |:------:|-----------------------------|-------------------------|

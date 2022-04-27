@@ -4,6 +4,8 @@ import { makeStyles } from "@mui/styles";
 import axios from "axios";
 import RightArrow from "../components/Icons/RightArrow";
 import { useNavigate } from "react-router-dom";
+import RedCross from "../components/Icons/RedCross";
+import GreenHeart from "../components/Icons/GreenHeart";
 
 const useStyles = makeStyles({
   root: {
@@ -92,7 +94,7 @@ const OtherProfile = ({
     <div style={{ display: "flex" }}>
       <div className={classes.root}>
         <div className={classes.card}>
-          <div style={{ paddingLeft: "10px", paddingRight: "10px" }}>
+          <div style={{ }}>
             <div>
               <div style={{ position: "relative", marginBottom: "10px" }}>
                 <div
@@ -104,12 +106,12 @@ const OtherProfile = ({
                 <div
                   style={{
                     position: "absolute",
+                    width: "100%",
                     bottom: "20px",
-                    left: "20px",
                     zIndex: "10",
                   }}
                 >
-                  <div style={{ display: "flex" }}>
+                  <div style={{ display: "flex", marginLeft: "10px" }}>
                     <p
                       style={{
                         color: "white",
@@ -129,6 +131,7 @@ const OtherProfile = ({
                       {otherProfileData && otherProfileData.age}
                     </p>
                   </div>
+                  <div style={{ display: "flex", marginLeft: "10px" }}>
                   <p
                     style={{
                       color: "white",
@@ -139,6 +142,18 @@ const OtherProfile = ({
                   >
                     A {otherProfileData && otherProfileData.distance}km de vous
                   </p>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+                    <div onClick={() => unlikeMatch()}>
+                      <RedCross />
+                    </div>
+                    {otherProfileData && otherProfileData.mlv !== "m" ? (
+                      <div onClick={() => likeMatch()}>
+                        <GreenHeart />
+                      </div>
+                    ) : ( null )}
+                  </div>
+
                 </div>
 
                 <img
@@ -223,59 +238,6 @@ const OtherProfile = ({
                   {otherProfileData &&
                     otherProfileData.tags.replaceAll(",", " ")}
                 </p>
-                {otherProfileData && otherProfileData.mlv !== "m" ? (
-                  <div
-                    style={{
-                      width: "50px",
-                      height: "30px",
-                      borderRadius: "8px",
-                      backgroundColor: "green",
-                      boxShadow: "5px 5px 5px darkgreen",
-                      cursor: "pointer",
-                      marginRight: "auto",
-                      marginLeft: "auto",
-                    }}
-                    onClick={() => likeMatch()}
-                  >
-                    <p
-                      style={{
-                        color: "white",
-                        fontWeight: "600",
-                        marginLeft: "7px",
-                        paddingTop: "5px",
-                        fontSize: "18px",
-                      }}
-                    >
-                      Like
-                    </p>
-                  </div>
-                ) : (
-                  <div
-                    style={{
-                      width: "70px",
-                      height: "30px",
-                      borderRadius: "8px",
-                      backgroundColor: "red",
-                      boxShadow: "5px 5px 5px darkred",
-                      cursor: "pointer",
-                      marginRight: "auto",
-                      marginLeft: "auto",
-                    }}
-                    onClick={() => unlikeMatch()}
-                  >
-                    <p
-                      style={{
-                        color: "white",
-                        fontWeight: "600",
-                        marginLeft: "7px",
-                        paddingTop: "5px",
-                        fontSize: "18px",
-                      }}
-                    >
-                      Unlike
-                    </p>
-                  </div>
-                )}
               </div>
             </div>
           </div>
