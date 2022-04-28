@@ -122,7 +122,7 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
       .catch((err) => {
         setErrorMsg(err.response.data.message);
       });
-    if (res.data[0] && preferenceList !== res.data) {
+    if (res && res.data[0] && preferenceList !== res.data) {
       await setPreferenceList(res.data);
       await setIndexPreferenceList(0);
       await setOtherProfile(res.data[0]);
@@ -160,8 +160,13 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
           setErrorMsg(err.response.data.message);
           if (err.response.data.message === "Bad Token") navigate("/");
         });
-        res.data && setOtherProfile(res.data.offers);
-        setDisplayedImage(res.data.offers.images[0]);
+        res && res.data && res.data.offers && setOtherProfile(res.data.offers);
+        res &&
+          res.data &&
+          res.data.offers &&
+          res.data.offers.images &&
+          res.data.offers.images[0] &&
+          setDisplayedImage(res.data.offers.images[0]);
       }
       fetchData().catch();
     }

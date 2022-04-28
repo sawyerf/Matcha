@@ -145,7 +145,7 @@ function App() {
           {errorMsg ? (
             <div
               style={{
-                position: "absolute",
+                position: "fixed",
                 top: "20px",
                 right: "40px",
                 width: "200px",
