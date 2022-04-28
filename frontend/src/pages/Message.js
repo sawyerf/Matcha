@@ -121,7 +121,7 @@ const Message = ({
           <h3 style={{ marginBottom: "10px" }}>
             Message avec {otherProfileData && otherProfileData.username}
           </h3>
-          <div style={{ overflow: "scroll", height: "85%" }}>
+          <div style={{ overflow: "scroll", overflowX: "hidden", height: "85%" }}>
             {discussion &&
               discussion.map((data, key) => {
                 return (

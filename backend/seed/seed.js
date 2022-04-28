@@ -27,9 +27,20 @@ const generateImage = () => {
         'https://images.unsplash.com/photo-1646963558425-8ac585f362cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
         'https://images.unsplash.com/photo-1646951535217-b6f5874a74e7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDI4fHRvd0paRnNrcEdnfHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
     ];
+    const ret = [];
 
-    return images[(Math.random() * images.length) | 0];
+    while (true) {
+        const img = images[(Math.random() * images.length) | 0];
+
+        if (ret.indexOf(img) == -1) { 
+            ret.push(img);
+            if (ret.length == 2) {
+                return (ret);
+            }
+        }
+    }
 }
+
 const generateUser = (hash) => {
     const gender = ['H', 'F'];
     const sexuality = ['H', 'F', 'HF'];
@@ -51,7 +62,7 @@ const generateUser = (hash) => {
         'latitude':  48.0 + Math.random(),
         'longitude': 2.0 + Math.random(),
         'isOK': true,
-        'images': [generateImage(), generateImage()],
+        'images': generateImage(),
         'validmail': true,
         'keymail': `fake_${username}_keymail`,
         'keypass': `fake_${username}_keymail`,
