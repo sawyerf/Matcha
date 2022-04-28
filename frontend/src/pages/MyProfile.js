@@ -77,6 +77,7 @@ const MyProfile = ({
   const [image3, setImage3] = useState();
   const [image4, setImage4] = useState();
   const [image5, setImage5] = useState();
+  let token = localStorage.getItem("token");
 
   const [imageToUpload1, setImageToUpload1] = useState();
   const [imageToUpload2, setImageToUpload2] = useState();
@@ -205,31 +206,46 @@ const MyProfile = ({
       setErrorMsg(err.response.data.message);
       navigate("/");
     });
-    res.data.email && setEmail(res.data.email);
-    res.data.email && setEmailCpy(res.data.email);
-    res.data.tags && setTags(res.data.tags);
-    res.data.bio && setBio(res.data.bio);
-    res.data.firstname && setFirstName(res.data.firstname);
-    res.data.lastname && setLastName(res.data.lastname);
-    res.data.latitude && setLatitude(res.data.latitude);
-    res.data.longitude && setLongitude(res.data.longitude);
-    setGender(
-      res.data.gender === "H" ? "Homme" : res.data.gender === "F" ? "Femme" : ""
-    );
-    setOrientation(
-      res.data.sexuality === "F" && res.data.gender === "H"
-        ? "Hétérosexuel"
-        : res.data.sexuality === "F" && res.data.gender === "F"
-        ? "Homosexuel"
-        : res.data.sexuality === "H" && res.data.gender === "F"
-        ? "Hétérosexuel"
-        : res.data.sexuality === "H" && res.data.gender === "H"
-        ? "Homosexuel"
-        : "Bisexuel"
-    );
+    res && res.data && res.data.email && setEmail(res.data.email);
+    res && res.data && res.data.email && setEmailCpy(res.data.email);
+    res && res.data && res.data.tags && setTags(res.data.tags);
+    res && res.data && res.data.bio && setBio(res.data.bio);
+    res && res.data && res.data.firstname && setFirstName(res.data.firstname);
+    res && res.data && res.data.lastname && setLastName(res.data.lastname);
+    res && res.data && res.data.latitude && setLatitude(res.data.latitude);
+    res && res.data && res.data.longitude && setLongitude(res.data.longitude);
+    res &&
+      res.data &&
+      res.data.gender &&
+      setGender(
+        res.data.gender === "H"
+          ? "Homme"
+          : res.data.gender === "F"
+          ? "Femme"
+          : ""
+      );
+    res &&
+      res.data &&
+      res.data.sexuality &&
+      res.data.gender &&
+      setOrientation(
+        res.data.sexuality === "F" && res.data.gender === "H"
+          ? "Hétérosexuel"
+          : res.data.sexuality === "F" && res.data.gender === "F"
+          ? "Homosexuel"
+          : res.data.sexuality === "H" && res.data.gender === "F"
+          ? "Hétérosexuel"
+          : res.data.sexuality === "H" && res.data.gender === "H"
+          ? "Homosexuel"
+          : "Bisexuel"
+      );
   }, []);
 
-  useEffect(async () => {
+  useEffect(() => {
+    if (!token) navigate("/");
+  }, [token]);
+
+  useEffect(() => {
     if (
       myProfileData !== null &&
       myProfileData.images &&

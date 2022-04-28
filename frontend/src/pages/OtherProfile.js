@@ -82,6 +82,7 @@ const OtherProfile = ({
         otherProfileData.images &&
         otherProfileData.images[0] &&
         setDisplayedImage(otherProfileData.images[0]);
+      setDisplayedImageNb(0);
       axios.post("/users/visit", {
         username: otherProfileData.username,
       });
