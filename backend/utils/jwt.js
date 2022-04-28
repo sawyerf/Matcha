@@ -28,25 +28,25 @@ const socketToken = async (socket, token) => {
 
     if (user == false) {
         await socket.emit('error', 'Bad Token')
-        return false; // res.status(403).json({ 'error': 1, 'message': 'Bad Token' })
+        return false;
     } else if ((Date.now() - user.iat) / 1000 > 3600 * 24) {
         await socket.emit('error', 'Token expire')
-        return false; // res.status(403).json({ 'error': 1, 'message': 'Token expire' })
+        return false;
     } else {
         const me = await userModels.selectMe(user.uid);
 
         if (me === false) {
             await socket.emit('error', 'SQL Error')
-            return false; // res.status(400).json({ 'error': 1, 'message': 'SQL Error' })
+            return false;
         } else if (me === null) {
             await socket.emit('error', 'User Not Found')
-            return false; // res.status(404).json({ 'error': 1, 'message': 'User Not Found' })
+            return false;
         } else {
             const DateNow = Date.now();
             const isOK = await userModels.setVal(me.uid, 'last_visit', new Date(DateNow).toISOString());
             if (isOK === false) {
                 await socket.emit('error', 'SQL Error')
-                return false; // res.status(400).json({ 'error': 1, 'message': 'SQL Error' })
+                return false;
             } else {
                 return me;
             }
