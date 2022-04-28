@@ -39,6 +39,7 @@ const OtherProfile = ({
     otherProfileData && otherProfileData.images && otherProfileData.images[0]
   );
   const [displayedImageNb, setDisplayedImageNb] = useState(0);
+  let token = localStorage.getItem("token");
 
   const previousImg = () => {
     if (displayedImageNb === 0) return;
@@ -67,6 +68,10 @@ const OtherProfile = ({
     await setRefreshMatchList(!refreshMatchList);
     await navigate("/userhome");
   };
+
+  useEffect(() => {
+    if (!token) navigate("/");
+  }, [token]);
 
   useEffect(() => {
     setDisplayedImage(
