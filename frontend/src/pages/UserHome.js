@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import UserMenu from "../components/UserMenu";
-import Profile from "../components/Profile";
-import { makeStyles, withTheme } from "@mui/styles";
+import { makeStyles } from "@mui/styles";
 import GreenHeart from "../components/Icons/GreenHeart";
 import RedCross from "../components/Icons/RedCross";
 import RightArrow from "../components/Icons/RightArrow";
@@ -46,7 +44,6 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
   const [otherProfil, setOtherProfile] = useState(null);
   const [displayedImage, setDisplayedImage] = useState(null);
   const [displayedImageNb, setDisplayedImageNb] = useState(0);
-  const [matched, setMatched] = useState(false);
   const [age, setAge] = useState([18, 30]);
   const [popularity, setPopularity] = useState([0, 100]);
   const [distance, setDistance] = useState(30);
@@ -54,6 +51,7 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
   const [filter, setFilter] = useState(1);
   const [preferenceList, setPreferenceList] = useState([]);
   const [indexPreferenceList, setIndexPreferenceList] = useState(0);
+  const [mounted, setMounted] = useState(false);
 
   const youMatch = async (liked) => {
     if (preferenceList && preferenceList.length - 1 > indexPreferenceList) {
@@ -151,20 +149,29 @@ const UserHome = ({ setOtherProfileData, setErrorMsg }) => {
       );
   };
 
-  useEffect(async () => {
-    const res = await axios.get("/users/offer").catch((err) => {
-      setErrorMsg(err.response.data.message);
-      if (err.response.data.message === "Bad Token") navigate("/");
-    });
-    res.data && setOtherProfile(res.data.offers);
-    setDisplayedImage(res.data.offers.images[0]);
+  useEffect(() => {
+    setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (mounted === true) {
+      async function fetchData() {
+        const res = await axios.get("/users/offer").catch((err) => {
+          setErrorMsg(err.response.data.message);
+          if (err.response.data.message === "Bad Token") navigate("/");
+        });
+        res.data && setOtherProfile(res.data.offers);
+        setDisplayedImage(res.data.offers.images[0]);
+      }
+      fetchData().catch();
+    }
+  }, [mounted, setErrorMsg, navigate]);
 
   useEffect(() => {
     setDisplayedImage(
       otherProfil && otherProfil.images && otherProfil.images[displayedImageNb]
     );
-  }, [displayedImageNb]);
+  }, [displayedImageNb, otherProfil]);
 
   const seeProfile = (data) => {
     setOtherProfileData(data);

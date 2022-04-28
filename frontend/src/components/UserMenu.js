@@ -81,7 +81,7 @@ const UserMenu = ({
     setDisplayMenu(false);
   }
 
-  useEffect(async () => {
+  useEffect(() => {
     if (localStorage.getItem("token")) {
       setDisplayMenu(true);
       navigate("/myprofile");

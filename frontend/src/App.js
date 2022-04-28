@@ -24,20 +24,24 @@ function App() {
   const [notifMessage, setNotifMessage] = useState("");
   const [messageToPush, setMessageToPush] = useState(null);
   const [notifToPush, setNotifToPush] = useState(null);
+  const token = localStorage.getItem("token");
 
-  useEffect(async () => {
+  useEffect(() => {
     if (localStorage.getItem("token")) {
-      setDisplayMenu(true);
-      const res = await axios.get("/profil/me").catch(function (error) {
-        setErrorMsg(error.response.data.message);
-        setDisplayMenu(false);
-      });
-      res.data && setMyProfileData(res.data);
-      socket.emit("token", localStorage.getItem("token"));
+      async function fetchData() {
+        setDisplayMenu(true);
+        const res = await axios.get("/profil/me").catch(function (error) {
+          setErrorMsg(error.response.data.message);
+          setDisplayMenu(false);
+        });
+        res.data && setMyProfileData(res.data);
+        socket.emit("token", localStorage.getItem("token"));
+      }
+      fetchData().catch();
     }
-  }, [localStorage.getItem("token")]);
+  }, [token]);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (errorMsg !== null) {
       setTimeout(() => {
         setErrorMsg(null);
@@ -45,7 +49,7 @@ function App() {
     }
   }, [errorMsg]);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (notifMessage !== null) {
       setTimeout(() => {
         setNotifMessage(null);
@@ -133,7 +137,6 @@ function App() {
                   socket={socket}
                   messageToPush={messageToPush}
                   setMessageToPush={setMessageToPush}
-                  setErrorMsg={setErrorMsg}
                 />
               }
             />

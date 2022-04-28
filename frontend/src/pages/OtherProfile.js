@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import UserMenu from "../components/UserMenu";
 import { makeStyles } from "@mui/styles";
 import axios from "axios";
 import RightArrow from "../components/Icons/RightArrow";
@@ -69,7 +68,7 @@ const OtherProfile = ({
     await navigate("/userhome");
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     setDisplayedImage(
       otherProfileData &&
         otherProfileData.images &&
@@ -77,7 +76,7 @@ const OtherProfile = ({
     );
   }, [displayedImageNb]);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (otherProfileData) {
       otherProfileData &&
         otherProfileData.images &&
@@ -95,8 +94,15 @@ const OtherProfile = ({
       <div className={classes.root}>
         <div className={classes.card}>
           <div>
-            <div >
-              <div style={{ position: "relative", marginBottom: "10px", boxShadow: "1px 1px 1px 1px #9E9E9E", borderRadius: "8px"}}>
+            <div>
+              <div
+                style={{
+                  position: "relative",
+                  marginBottom: "10px",
+                  boxShadow: "1px 1px 1px 1px #9E9E9E",
+                  borderRadius: "8px",
+                }}
+              >
                 <div
                   style={{ position: "absolute", top: "170px", left: "20px" }}
                   onClick={() => previousImg()}
@@ -113,46 +119,51 @@ const OtherProfile = ({
                 >
                   <div style={{ display: "flex", marginLeft: "10px" }}>
                     <p
-                    style={{
-                      color: "white",
-                      fontWeight: "600",
-                      fontSize: "20px",
-                    }}
+                      style={{
+                        color: "white",
+                        fontWeight: "600",
+                        fontSize: "20px",
+                      }}
                     >
                       {otherProfileData && otherProfileData.username}
                     </p>
                     <p
-                    style={{
-                      color: "white",
-                      fontSize: "16px",
-                      marginTop: "4px",
-                      marginLeft: "10px",
-                    }}
+                      style={{
+                        color: "white",
+                        fontSize: "16px",
+                        marginTop: "4px",
+                        marginLeft: "10px",
+                      }}
                     >
                       {otherProfileData && otherProfileData.age}
                       {otherProfileData && otherProfileData.gender}
-                      {' - '}
-                      {otherProfileData && otherProfileData.sexuality === otherProfileData.gender
-                      ? "Gay"
-                      : otherProfileData && (otherProfileData.sexuality === "HF" || otherProfileData.sexuality === "FH")
-                      ? "Bi"
-                      : "Hétéro"}
-
+                      {" - "}
+                      {otherProfileData &&
+                      otherProfileData.sexuality === otherProfileData.gender
+                        ? "Gay"
+                        : otherProfileData &&
+                          (otherProfileData.sexuality === "HF" ||
+                            otherProfileData.sexuality === "FH")
+                        ? "Bi"
+                        : "Hétéro"}
                     </p>
                   </div>
                   <div style={{ display: "flex", marginLeft: "10px" }}>
-                  <p
-                    style={{
-                      color: "white",
-                      fontSize: "14px",
-                      float: "left",
-                      marginTop: "8px",
-                    }}
-                  >
-                     à {otherProfileData && otherProfileData.distance}km de vous
-                  </p>
+                    <p
+                      style={{
+                        color: "white",
+                        fontSize: "14px",
+                        float: "left",
+                        marginTop: "8px",
+                      }}
+                    >
+                      à {otherProfileData && otherProfileData.distance}km de
+                      vous
+                    </p>
                   </div>
-                  <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-evenly" }}
+                  >
                     <div onClick={() => unlikeMatch()}>
                       <RedCross />
                     </div>
@@ -160,9 +171,8 @@ const OtherProfile = ({
                       <div onClick={() => likeMatch()}>
                         <GreenHeart />
                       </div>
-                    ) : ( null )}
+                    ) : null}
                   </div>
-
                 </div>
 
                 <img
@@ -210,7 +220,6 @@ const OtherProfile = ({
                   textAlign: "left",
                 }}
               >
-
                 <p style={{ marginBottom: "10px" }}>
                   Bio : {otherProfileData && otherProfileData.bio}
                 </p>
@@ -219,7 +228,7 @@ const OtherProfile = ({
                 </p>
                 {otherProfileData && otherProfileData.isOnline === false ? (
                   <p style={{ marginBottom: "10px" }}>
-                    Dernière visite : 
+                    Dernière visite :
                     {otherProfileData && otherProfileData.last_visit
                       ? otherProfileData.last_visit.substring(0, 10)
                       : " Jamais"}
