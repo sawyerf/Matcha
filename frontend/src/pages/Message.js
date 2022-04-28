@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@mui/styles";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
@@ -58,9 +59,11 @@ const Message = ({
   setErrorMsg,
 }) => {
   const classes = useStyles();
+  const navigate = useNavigate();
   const messagesEndRef = useRef(null);
   const [messageToSend, setMessageToSend] = useState("");
   const [discussion, setDiscussion] = useState();
+  let token = localStorage.getItem("token");
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -79,6 +82,10 @@ const Message = ({
     }
     await setMessageToSend("");
   };
+
+  useEffect(() => {
+    if (!token) navigate("/");
+  }, [token]);
 
   useEffect(async () => {
     if (otherProfileData) {
@@ -121,7 +128,9 @@ const Message = ({
           <h3 style={{ marginBottom: "10px" }}>
             Message avec {otherProfileData && otherProfileData.username}
           </h3>
-          <div style={{ overflow: "scroll", overflowX: "hidden", height: "85%" }}>
+          <div
+            style={{ overflow: "scroll", overflowX: "hidden", height: "85%" }}
+          >
             {discussion &&
               discussion.map((data, key) => {
                 return (
