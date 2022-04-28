@@ -16,3 +16,5 @@ services:
     # restart: always
     ports:
       - 8080:8080
+    volumes:
+      - ./database.sql:/var/www/html/adminer.sql:ro
