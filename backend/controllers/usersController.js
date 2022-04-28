@@ -82,7 +82,7 @@ const search = async (req, res) => {
         'minPopularity': 'number',
         'maxPopularity': 'number',
         'maxDistance': 'number',
-        'tags': 'object' // changer ca pour list
+        'tags': 'object'
     }, req.body);
 
     if (isCheck == false) {

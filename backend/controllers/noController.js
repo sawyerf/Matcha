@@ -43,7 +43,6 @@ const resetPass = async (req, res) => {
             if (hashPass == null) {
                 res.status(500).json({ 'error': 1, 'message': 'Error hash' });
             } else {
-                // Attention j'ai pas test2
                 await userModels.setVal(user.uid, 'keypass', null);
                 const isOK = await userModels.setVal(user.uid, 'password', hashPass);
                 if (isOK === false) {

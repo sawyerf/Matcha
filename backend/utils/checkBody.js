@@ -53,7 +53,6 @@ export const checkBody = (check, body) => {
     for (let key in check) {
         if (!(key in body)) return false;
         type = whatType(check[key]);
-        // console.log(key, ' : ', typeof body[key])
         if (type != typeof body[key]) {
             console.log(key, ' : Bad type');
             return false;
