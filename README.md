@@ -27,17 +27,11 @@ npm start
 ```
 
 ## Screen
-
 ![](https://i.imgur.com/6jf3rUA.png)
 ![](https://i.imgur.com/zwyRKI3.png)
+![](https://i.imgur.com/CgPAkxK.png)
 ![](https://i.imgur.com/3b6UD3a.png)
 ![](https://i.imgur.com/I0BRfzH.png)
-![](https://i.imgur.com/Tw3lUfh.png)
-
-## Link
-- https://stackabuse.com/using-postgresql-with-nodejs-and-node-postgres/
-- https://ethereal.email/
-
 
 ## API
 | Method | url                         | Description              |
@@ -71,3 +65,7 @@ npm start
 |        |                             |                          |
 | GET    | [/message/room          ]() | Get all message          |
 | POST   | [/message/send          ]() | Send a message           |
+
+## Link
+- https://stackabuse.com/using-postgresql-with-nodejs-and-node-postgres/
+- https://ethereal.email/
