@@ -232,6 +232,11 @@ const OtherProfile = ({
                 <p style={{ marginBottom: "10px" }}>
                   Popularité : {otherProfileData && otherProfileData.popularity}
                 </p>
+                <p style={{ marginBottom: "10px" }}>
+                  Visité ton profil : {otherProfileData && otherProfileData.visit_you 
+                    ? otherProfileData.visit_you.substring(0, 10)
+                    : "Jamais"}
+                </p>
                 {otherProfileData && otherProfileData.isOnline === false ? (
                   <p style={{ marginBottom: "10px" }}>
                     Dernière visite :

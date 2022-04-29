@@ -40,7 +40,7 @@ const ResetPassword = ({ setErrorMsg }) => {
         navigate("/login");
       })
       .catch((err) => {
-        setErrorMsg("Error ! 1Majuscule, 1Car. spécial, 8Car. mini, 1 chiffre");
+        setErrorMsg(err.response.data.message);
       });
   };
 

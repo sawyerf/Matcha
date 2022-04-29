@@ -1,11 +1,35 @@
 # Matcha
 
-- https://stackabuse.com/using-postgresql-with-nodejs-and-node-postgres/
-- https://ethereal.email/
-
+## Install
+### DB
 ```
 docker-compose -f docker-compose.yml up -d
 ```
+
+- run database.sql
+
+### Backend
+```
+cp .env.example .env
+npm i
+npm run seed
+```
+
+### Frontend
+```
+cp .env.example .env
+npm i
+```
+
+## Run
+```
+npm start
+```
+
+## Link
+- https://stackabuse.com/using-postgresql-with-nodejs-and-node-postgres/
+- https://ethereal.email/
+
 
 ## TODO
 ### Backend

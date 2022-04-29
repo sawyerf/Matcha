@@ -70,13 +70,13 @@ const register = async (req, res) => {
     if (isCheck === false) {
         res.status(400).json({ 'error': 1, 'message': 'Bad Content' })
     } else if (calcAge(req.body.age) < 18) {
-        res.status(200).json({ 'error': 1, 'message': 'You must be 18yo' });
+        res.status(400).json({ 'error': 1, 'message': 'You must be 18yo' });
     } else {
         const isExist = await userModels.exist(req.body.email, req.body.username);
         if (isExist == null) {
             res.status(500).json({ 'error': 1, 'message': 'SQL Error' });
         } else if (isExist === true) {
-            res.status(200).json({ 'error': 1, 'message': 'Email or Username is already use' });
+            res.status(400).json({ 'error': 1, 'message': 'Email or Username is already use' });
         } else {
             const hashPass = await hashPassword(req.body.password);
             if (hashPass == null) {
