@@ -3,6 +3,10 @@
 ## Description
 Projet de creation d'une site de rencontre en express, react et postgre.
 
+- Backend: [@Sawyerf](https://github.com/sawyerf)
+- Frontend: [@Rodik72](https://github.com/Rodik72)
+
+
 ## Install
 ### DB
 ```
