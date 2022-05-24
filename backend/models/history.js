@@ -75,7 +75,7 @@ const del = async (id_visiter, id_visited) => {
     try {
         res = await client.query(
             `DELETE FROM history
-                WHERE (id_visited=$1 AND id_visiter=$2) || (id_visited=$2 AND id_visiter=$1)`,
+                WHERE (id_visited=$1 AND id_visiter=$2) OR (id_visited=$2 AND id_visiter=$1)`,
             [id_visiter, id_visited]
         );
     } catch (error) {
